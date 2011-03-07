@@ -1,0 +1,82 @@
+/* TABLE OF CONTENTS
+=============================================================================
+   1. Globals - Default HTML elements styling.
+  2. Library - Styling for custom elements used throughout the site.
+  3. Template - Styling for structure of the site.
+  4. Page Styles - Styling for page-specific elements.
+=============================================================================*/
+
+
+/* @group Globals
+=============================================================================
+Default HTML elements styling.
+=============================================================================*/
+body {
+  color: ;
+  font: ;
+  /* font-size: 62.5% */ /* Resets 1em to 10px */;
+}
+a, a:visited, a:active {
+}
+a:hover {
+}
+blockquote {
+  font-style: italic;
+  margin-left: 15px;
+}
+strong { font-weight: bold; }
+em { font-style: italic; }
+small { font-size: 30%; }
+h1 {
+}
+h2 {
+}
+h3 {
+}
+/*::selection {
+}
+::-moz-selection {
+}*/
+/* @end */
+
+/* @group Library
+=============================================================================
+Styling for custom elements used throughout the site.
+=============================================================================*/
+.clearfix:after { clear: both; content: "."; display: block; height: 0; visibility: hidden; }
+.clearfix { display: block; }
+img.alignright { margin-left: 15px; }
+img.alignleft { margin-right: 15px; }
+.aligncenter,div.aligncenter { display: block; margin-left: auto; margin-right: auto; }
+.alignleft { float: left; }
+.alignright { float: right; }
+.textleft { text-align: left; }
+.textcenter { text-align: center; }
+.textright { text-align: right; }
+/* @end */
+
+/* @group Template
+=============================================================================
+Styling for structure of the site.
+=============================================================================*/
+#wrapper {
+}
+  header[role=banner] {
+  }
+  #page{
+  }
+  footer[role=site] {
+  }
+/* @end */
+
+/* @group Page Styles
+=============================================================================
+Styling for page-specific elements.
+=============================================================================*/
+/*=== HOME PAGE ===*/
+body.home {
+}
+/*=== 404 PAGE ===*/
+.four-o-four {
+}
+/* @end */
