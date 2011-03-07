@@ -15,3 +15,10 @@ if ( function_exists( 'register_nav_menus' ) ) {
 		)
 	);
 }
+
+/** 
+ * Enable Post Thumbnails
+ */
+if ( function_exists( 'add_theme_support' ) ) { 
+  add_theme_support( 'post-thumbnails' ); 
+}

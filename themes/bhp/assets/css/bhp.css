@@ -21,7 +21,7 @@ a, a:visited, a:active {
   text-decoration: none;
 }
 a:hover {
-  text-decoration: underline;
+  color: #666;
 }
 blockquote {
   font-style: italic;
@@ -42,7 +42,7 @@ h1.logo {
   font-size: 0;
   height: 115px;
   line-height: 0;
-  margin: 0 0 0 -40px;
+  margin: 0 0 0 -37px;
   width: 250px;
   text-indent: -9999px;
 }
@@ -58,10 +58,14 @@ h2 {
 h3 {
   font: 17px/19px 'DeliciousBold', Arial, sans-serif;
 }
-/*::selection {
+::selection {
+  background: #c45469;
+  color: #fff;
 }
 ::-moz-selection {
-}*/
+  background: #c45469;
+  color: #fff;
+}
 /* @end */
 
 /* @group Library
@@ -86,7 +90,11 @@ Styling for structure of the site.
 =============================================================================*/
 #wrapper {
 }
+  header[role=site] a, #page a, footer[role=site] a {
+    -webkit-transition: color 0.5s ease-in-out;
+  }
   header[role=site] {
+    margin-top: 20px;
     margin-bottom: 20px;
   }
     nav#primary-navigation {
@@ -100,6 +108,14 @@ Styling for structure of the site.
         list-style: none;
         text-transform: lowercase;
       }
+      nav#primary-navigation ul li.current-menu-item a {
+        background: rgba(174,21,49,.73);
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        color: #fff;
+        padding: 3px 5px;
+        text-shadow: 0 -1px 0 rgba(0,0,0,.22);
+      }
   #page{
     background: url('../images/dotted-line.png') repeat-x top;
     padding-top: 20px;
@@ -108,9 +124,14 @@ Styling for structure of the site.
     background: url('../images/dotted-line.png') repeat-x top;
     font-size: 12px;
     padding-top: 20px;
+    text-shadow: 0 1px 0 #fff;
   }
     footer[role=site] a {
       color: #c1c1c1;
+      text-decoration: underline;
+    }
+    footer[role=site] a:hover {
+      color: #666;
     }
 /* @end */
 

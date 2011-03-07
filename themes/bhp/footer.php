@@ -6,6 +6,8 @@
   <!-- ### Scripts ### -->
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
   <script src="<?php bloginfo('template_directory'); ?>/assets/js/site.js" type="text/javascript"></script>
+  <?php wp_footer(); ?>
+  
 </div> <!-- #wrapper -->
 
 </body>
