@@ -22,3 +22,100 @@ if ( function_exists( 'register_nav_menus' ) ) {
 if ( function_exists( 'add_theme_support' ) ) { 
   add_theme_support( 'post-thumbnails' ); 
 }
+
+/** 
+ * Register Gallery Post Type
+ */
+add_action('init', 'create_galleries');
+function create_galleries() {
+  $labels = array(
+    'name' => __( 'Galleries' ),
+    'singular_name' => __( 'Gallery' ),
+    'add_new' => __( 'Add New' ),
+    'add_new_item' => __( 'Add New Gallery' ),
+    'edit_item' => __( 'Edit Gallery' ),
+    'new_item' => __( 'New Gallery' ),
+    'view_item' => __( 'View Gallery' ),
+    'search_items' => __( 'Search Gallery' ),
+    'not_found' => __( 'No galleries found' ),
+    'not_found_in_trash' => __( 'No galleries found in Trash' ), 
+    'parent_item_colon' => __( 'Parent Gallery:' ),
+    'menu_name' => __( 'Galleries' )
+  );
+  
+  $args = array(
+    'labels' => $labels,
+    'public' => true,
+    'publicly_queryable' => true,
+    'show_ui' => true, 
+    'show_in_menu' => true, 
+    'query_var' => true,
+    'rewrite' => array( 'slug' => 'gallery' ),
+    'capability_type' => 'post',
+    'has_archive' => true, 
+    'hierarchical' => false,
+    'menu_position' => 4,
+    'menu_icon' => null,
+    'supports' => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' ),
+//    'register_meta_box_cb' => 'book_meta_box',
+    'taxonomies' => array( 'style', 'client' )
+  );
+  
+  register_post_type( 'gallery', $args);
+}
+
+/** 
+ * Register Client Taxonomy
+ */
+add_action('init', 'create_client_taxonomies');
+function create_client_taxonomies() {
+ $labels = array(
+   'name' => __( 'Clients' ),
+   'singular_name' => __( 'Client' ),
+   'search_items' => __( 'Search Clients' ),
+   'all_items' => __( 'All Clients' ),
+   'parent_item' => __( 'Parent Client' ),
+   'parent_item_colon' => __( 'Parent Client:' ),
+   'edit_item' => __( 'Edit Client' ), 
+   'update_item' => __( 'Update Client' ),
+   'add_new_item' => __( 'Add New Client' ),
+   'new_item_name' => __( 'New Client Name' ),
+   'menu_name' => __( 'Clients' ),
+ );
+ 
+ register_taxonomy( 'client', array( 'gallery' ), array(
+   'labels' => $labels,
+   'hierarchical' => true,
+   'show_ui' => true,
+   'query_var' => true,
+   'rewrite' => array( 'slug' => 'client' )
+ ) );
+}
+
+/** 
+ * Register Style Taxonomy
+ */
+add_action('init', 'create_style_taxonomies');
+function create_style_taxonomies() {
+  $labels = array(
+    'name' => __( 'Styles' ),
+    'singular_name' => __( 'Style' ),
+    'search_items' => __( 'Search Styles' ),
+    'all_items' => __( 'All Styles' ),
+    'parent_item' => __( 'Parent Style' ),
+    'parent_item_colon' => __( 'Parent Style:' ),
+    'edit_item' => __( 'Edit Style' ), 
+    'update_item' => __( 'Update Style' ),
+    'add_new_item' => __( 'Add New Style' ),
+    'new_item_name' => __( 'New Style Name' ),
+    'menu_name' => __( 'Styles' ),
+  );
+  
+  register_taxonomy( 'style', array( 'gallery' ), array(
+    'labels' => $labels,
+    'hierarchical' => true,
+    'show_ui' => true,
+    'query_var' => true,
+    'rewrite' => array( 'slug' => 'style' )
+  ) );
+}
