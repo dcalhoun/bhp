@@ -1,6 +1,6 @@
 /* TABLE OF CONTENTS
 =============================================================================
-   1. Globals - Default HTML elements styling.
+  1. Globals - Default HTML elements styling.
   2. Library - Styling for custom elements used throughout the site.
   3. Template - Styling for structure of the site.
   4. Page Styles - Styling for page-specific elements.
@@ -12,13 +12,16 @@
 Default HTML elements styling.
 =============================================================================*/
 body {
-  color: ;
-  font: ;
-  /* font-size: 62.5% */ /* Resets 1em to 10px */;
+  background: url('../images/bg.gif') repeat 0 0;
+  color: #666;
+  font: 15px/19px 'Delicious', Arial, serif;
 }
 a, a:visited, a:active {
+  color: #ae1531;
+  text-decoration: none;
 }
 a:hover {
+  text-decoration: underline;
 }
 blockquote {
   font-style: italic;
@@ -28,10 +31,32 @@ strong { font-weight: bold; }
 em { font-style: italic; }
 small { font-size: 30%; }
 h1 {
+  color: #ae1351;
+  font: 24px/30px 'Arvo', Georgia, serif;
+  text-shadow: 0 1px 0 #fff;
+  text-transform: lowercase;
 }
+h1.logo {
+  background: url('../images/logo-bhp.png') no-repeat 0 0;
+  display: block;
+  font-size: 0;
+  height: 115px;
+  line-height: 0;
+  margin: 0 0 0 -40px;
+  width: 250px;
+  text-indent: -9999px;
+}
+  h1 a {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
 h2 {
+  font: 18px/24px 'Arvo', Georgia, serif;
+  text-shadow: 0 1px 0 #fff;
 }
 h3 {
+  font: 17px/19px 'DeliciousBold', Arial, sans-serif;
 }
 /*::selection {
 }
@@ -61,22 +86,69 @@ Styling for structure of the site.
 =============================================================================*/
 #wrapper {
 }
-  header[role=banner] {
+  header[role=site] {
+    margin-bottom: 20px;
   }
+    nav#primary-navigation {
+      font: 16px/24px 'Arvo', Georgia, serif;
+      margin-top: 55px;
+      text-align: right;
+      text-shadow: 0 1px 0 #fff;
+    }
+      nav#primary-navigation ul li {
+        display: inline;
+        list-style: none;
+        text-transform: lowercase;
+      }
   #page{
+    background: url('../images/dotted-line.png') repeat-x top;
+    padding-top: 20px;
   }
   footer[role=site] {
+    background: url('../images/dotted-line.png') repeat-x top;
+    font-size: 12px;
+    padding-top: 20px;
   }
+    footer[role=site] a {
+      color: #c1c1c1;
+    }
 /* @end */
 
 /* @group Page Styles
 =============================================================================
 Styling for page-specific elements.
 =============================================================================*/
-/*=== HOME PAGE ===*/
+/* @group Home Page*/
 body.home {
 }
-/*=== 404 PAGE ===*/
+/* @end */
+
+/* @group 404 Page */
 .four-o-four {
+}
+/* @end */
+/* @end */
+
+/* @group Font Kits
+=============================================================================
+@font-face kits.
+=============================================================================*/
+@font-face {
+    font-family: 'Delicious';
+    src: url('../fonts/delicious/Delicious-Roman.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'DeliciousItalic';
+    src: url('../fonts/delicious/Delicious-Italic.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'DeliciousBold';
+    src: url('../fonts/delicious/Delicious-Bold.otf');
+    font-weight: normal;
+    font-style: normal;
 }
 /* @end */
