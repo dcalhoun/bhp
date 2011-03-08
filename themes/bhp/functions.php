@@ -24,6 +24,26 @@ if ( function_exists( 'add_theme_support' ) ) {
 }
 
 /** 
+ * Retrieve Images Attached to a Post
+ */
+function get_post_images() {
+  $images = get_children( array(
+                    'post_parent' => $post->ID,
+                    'post_status' => 'attachment',
+                    'post_mime_type' => 'image',
+                    'order' => 'ASC',
+                    'orderby' => 'menu_order ID'));
+  foreach ($images as $image) {
+    $full_img_url = wp_get_attachment_url($image->ID);
+    $split_pos = strpos($full_img_url, 'wp-content');
+    $split_len = (strlen($full_img_url) - $split_pos);
+    $abs_img_url = substr($full_img_url, $split_pos, $split_len);
+    $full_info = @getimagesize(ABSPATH.$abs_img_url);
+    echo '<img src="' . '/' . $abs_img_url . '" title="Image"/>';
+  }
+};
+
+/** 
  * Register Gallery Post Type
  */
 add_action('init', 'create_galleries');
@@ -56,7 +76,7 @@ function create_galleries() {
     'hierarchical' => false,
     'menu_position' => 4,
     'menu_icon' => null,
-    'supports' => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' ),
+    'supports' => array( 'title', 'editor', 'thumbnail', 'comments' ),
 //    'register_meta_box_cb' => 'book_meta_box',
     'taxonomies' => array( 'style', 'client' )
   );
