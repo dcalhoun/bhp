@@ -1,3 +1,8 @@
 jQuery(document).ready(function($) {
-  // do stuff
+  
+  //////////
+  // Initialize Fancybox Galleries
+  //////////
+  $('div.photo a').fancybox();
+  
 });

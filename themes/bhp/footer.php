@@ -6,6 +6,9 @@
   <!-- ### Scripts ### -->
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
   <script src="<?php bloginfo('template_directory'); ?>/assets/js/site.js" type="text/javascript"></script>
+  <script src="<?php bloginfo('template_directory'); ?>/assets/js/jquery.fancybox-1.3.4.pack.js" type="text/javascript"></script>
+  <script src="<?php bloginfo('template_directory'); ?>/assets/js/jquery.easing-1.3.pack.js" type="text/javascript"></script>
+  <script src="<?php bloginfo('template_directory'); ?>/assets/js/jquery.mousewheel-3.0.4.pack.js" type="text/javascript"></script>
   <?php wp_footer(); ?>
   
 </div> <!-- #wrapper -->

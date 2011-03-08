@@ -28,7 +28,7 @@
 <div id="wrapper" class="container_12 clearfix">
   <header role="site" class="grid_12">
     <div class="grid_6 alpha">
-      <h1 class="logo"><a href="<?php home_url('/'); ?>" title="<?php wp_title(); ?>"><?php bloginfo('name'); ?></a></h1>
+      <h1 class="logo"><a href="<?php bloginfo('url'); ?>" title="<?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a></h1>
     </div>
     <?php wp_nav_menu( array( 'container' => 'nav', 'container_id' => 'primary-navigation', 'container_class' => 'grid_6 omega', 'theme_location' => 'primary_navigation' ) ); ?>
   </header>

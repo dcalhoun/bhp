@@ -27,8 +27,9 @@ if ( function_exists( 'add_theme_support' ) ) {
  * Retrieve Images Attached to a Post
  */
 function get_post_images() {
+  global $wp_query;
   $args = array(
-    'post_parent' => $post->ID,
+    'post_parent' => $wp_query->post->ID,
     'post_status' => 'attachment',
     'post_mime_type' => 'image',
     'order' => 'ASC',
@@ -39,9 +40,39 @@ function get_post_images() {
     $image_url = wp_get_attachment_url($image->ID);
     $thumb_url = wp_get_attachment_thumb_url($image->ID);
     //print_r($image);
-    echo '<div id="' . $image->post_name  . '" class="grid_3 photo"><a href="' . $image_url . '" title="' . $image->post_excerpt . '"><img src="' . $thumb_url . '" alt="' . $image->post_title . '"/></a></div>';
+    echo '<div id="' . $image->post_name  . '" class="grid_3 photo"><a href="' . $image_url . '" title="' . $image->post_excerpt . '" rel="fancybox-gallery"><img src="' . $thumb_url . '" alt="' . $image->post_title . '"/></a></div>';
   }
 };
+
+/** 
+ * Register Sidebars
+ */
+function register_widgets() {
+	// Area 1, located at the top of the sidebar.
+	register_sidebar( array(
+		'name' => 'Primary Widget Area',
+		'id' => 'primary-widget-area',
+		'description' => 'The primary widget area.',
+		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
+		'after_widget' => '</li>',
+		'before_title' => '<h3 class="widget-title">',
+		'after_title' => '</h3>',
+	) );
+
+	// Area 2, located below the Primary Widget Area in the sidebar. Empty by default.
+	register_sidebar( array(
+		'name' => 'Secondary Widget Area',
+		'id' => 'secondary-widget-area',
+		'description' => 'The secondary widget area.',
+		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
+		'after_widget' => '</li>',
+		'before_title' => '<h3 class="widget-title">',
+		'after_title' => '</h3>',
+	) );
+}
+
+/** Register sidebars by running twentyten_widgets_init() on the widgets_init hook. */
+add_action( 'widgets_init', 'register_widgets' );
 
 /** 
  * Register Gallery Post Type
@@ -76,13 +107,31 @@ function create_galleries() {
     'hierarchical' => false,
     'menu_position' => 4,
     'menu_icon' => null,
-    'supports' => array( 'title', 'editor', 'thumbnail', 'comments' ),
+    'supports' => array( 'title', 'editor', 'thumbnail' ),
 //    'register_meta_box_cb' => 'book_meta_box',
     'taxonomies' => array( 'style', 'client' )
   );
   
   register_post_type( 'gallery', $args);
 }
+
+/** 
+ * Add Icon to Gallery Post Type
+ */
+add_action( 'admin_head', 'gallery_icon' );
+function gallery_icon() { ?>
+  <style type="text/css" media="screen">
+      #menu-posts-gallery .wp-menu-image {
+          background: url(<?php bloginfo('template_url') ?>/assets/images/images-stack.png) no-repeat 6px -17px !important;
+      }
+    	#menu-posts-gallery:hover .wp-menu-image, #menu-posts-gallery.wp-has-current-submenu .wp-menu-image {
+          background-position:6px 7px!important;
+      }
+      /*.icon32-posts-gallery {
+        background: url(<?php bloginfo('template_url') ?>/assets/images/images-stack.png) no-repeat 6px 7px !important;
+      }*/
+  </style>
+<?php }
 
 /** 
  * Register Client Taxonomy
