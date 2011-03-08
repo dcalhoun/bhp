@@ -27,19 +27,19 @@ if ( function_exists( 'add_theme_support' ) ) {
  * Retrieve Images Attached to a Post
  */
 function get_post_images() {
-  $images = get_children( array(
-                    'post_parent' => $post->ID,
-                    'post_status' => 'attachment',
-                    'post_mime_type' => 'image',
-                    'order' => 'ASC',
-                    'orderby' => 'menu_order ID'));
+  $args = array(
+    'post_parent' => $post->ID,
+    'post_status' => 'attachment',
+    'post_mime_type' => 'image',
+    'order' => 'ASC',
+    'orderby' => 'menu_order ID'
+  );
+  $images = get_children($args);
   foreach ($images as $image) {
-    $full_img_url = wp_get_attachment_url($image->ID);
-    $split_pos = strpos($full_img_url, 'wp-content');
-    $split_len = (strlen($full_img_url) - $split_pos);
-    $abs_img_url = substr($full_img_url, $split_pos, $split_len);
-    $full_info = @getimagesize(ABSPATH.$abs_img_url);
-    echo '<img src="' . '/' . $abs_img_url . '" title="Image"/>';
+    $image_url = wp_get_attachment_url($image->ID);
+    $thumb_url = wp_get_attachment_thumb_url($image->ID);
+    //print_r($image);
+    echo '<div id="' . $image->post_name  . '" class="grid_3 photo"><a href="' . $image_url . '" title="' . $image->post_excerpt . '"><img src="' . $thumb_url . '" alt="' . $image->post_title . '"/></a></div>';
   }
 };
 

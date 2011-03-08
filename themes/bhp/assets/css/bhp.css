@@ -118,7 +118,7 @@ Styling for structure of the site.
       }
   #page{
     background: url('../images/dotted-line.png') repeat-x top;
-    padding-top: 20px;
+    padding: 20px 0;
   }
   footer[role=site] {
     background: url('../images/dotted-line.png') repeat-x top;
