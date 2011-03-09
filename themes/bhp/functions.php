@@ -136,7 +136,7 @@ function gallery_icon() { ?>
 /** 
  * Add Columns to Manage Galleries
  */
-/*add_filter('manage_edit-gallery_columns', 'add_new_gallery_columns');
+add_filter('manage_edit-gallery_columns', 'add_new_gallery_columns');
 function add_new_gallery_columns($gallery_columns) {
   $new_columns['cb'] = '<input type="checkbox" />';
   $new_columns['title'] = _x('Title', 'column name');
@@ -147,57 +147,24 @@ function add_new_gallery_columns($gallery_columns) {
   
   return $new_columns;
 }
-// Add to admin_init function
-add_action('manage_gallery_posts_custom_column', 'manage_gallery_columns', 10, 2);
-
-function manage_gallery_columns($column_name, $id) {
-  global $wpdb;
-  switch ($column_name) {
-  case 'id':
-  	echo $id;
-          break;
-  
-  case 'images':
-  	// Get number of images in gallery
-  	$num_images = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->posts WHERE post_parent = {$id};"));
-  	echo $num_images; 
-  	break;
-  default:
-  	break;
-  } // end switch
-}*/
-
-/** 
- * Add Columns to Manage Galleries
- */
-/*add_filter('manage_edit-gallery_columns', 'add_new_gallery_columns');
-function add_new_gallery_columns($gallery_columns) {
- $new_columns['cb'] = '<input type="checkbox" />';
- $new_columns['title'] = _x('Title', 'column name');
- $new_columns['images'] = __('Images');
- $new_columns['styles'] = __('Styles');
- $new_columns['clients'] = __('Client');  
- $new_columns['date'] = _x('Date', 'column name');
  
- return $new_columns;
-}
- 
-add_action( 'manage_gallery_posts_custom_column' , 'gallery_columns' );
-function gallery_columns( $column ) {
+add_action( 'manage_gallery_posts_custom_column' , 'gallery_columns', 10, 2 );
+function gallery_columns( $column, $id ) {
 
 	global $post;
+	global $wpdb;
 	
 	switch ( $column )
 	{
-		case 'gallery_image_count':
-			// Get number of images in gallery
-			$image_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->posts WHERE post_parent = {$id};"));
-			echo $image_count; 
-			break;
-		default:
-			break;
-		case 'gallery_styles':
-			$terms = get_the_term_list( $post->ID , 'gallery_styles' , '' , ',' , '' );
+    case 'id':
+    	echo $id;
+      break;
+    case 'images':
+    	$image_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->posts WHERE post_parent = {$id};"));
+    	echo $image_count;
+    	break;
+		case 'styles':
+			$terms = get_the_term_list( $post->ID , 'style' , '' , ',' , '' );
 			if ( is_string( $terms ) ) {
 				echo $terms;
 			} else {
@@ -205,17 +172,18 @@ function gallery_columns( $column ) {
 			}
 			
 			break;
-		case 'gallery_clients':
-			$terms = get_the_term_list( $post->ID , 'gallery_clients' , '' , ',' , '' );
+		case 'clients':
+			$terms = get_the_term_list( $post->ID , 'client' , '' , ',' , '' );
 			if ( is_string( $terms ) ) {
 				echo $terms;
 			} else {
 				echo 'Unable to get client';
 			}
-			
+			break;
+		default:
 			break;
 	}
-}*/
+}
  
 /** 
  * Register Client Taxonomy
