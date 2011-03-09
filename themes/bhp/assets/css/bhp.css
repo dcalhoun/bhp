@@ -66,6 +66,52 @@ h3 {
   background: #c45469;
   color: #fff;
 }
+div#gform_wrapper_1 {
+  margin-left: 20px;
+}
+form ul, form ul li {
+  margin: 0;
+}
+form ul li {
+  margin-bottom: 10px;
+  list-style: none;
+}
+div#wrapper input[type=text], div#wrapper input[type=email], div#wrapper input[type=tel], div#wrapper textarea {
+  border: none;
+  background: #ebebeb; /* For IE */
+  background: rgba(235,235,235,.4);
+  color: #666;
+  font: 18px/24px 'Lucide Grande', Arial, sans-serif !important;
+  padding: 7px !important;
+}
+div#wrapper input[type=text]:focus, div#wrapper input[type=email]:focus, div#wrapper input[type=tel]:focus, div#wrapper textarea:focus {
+  background: rgba(235,235,235,1.0);
+}
+div#wrapper input[type=submit] {
+  background: #c25267;
+  border: none;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  color: #fff;
+  font: 18px/23px 'Arvo', Georgia, serif;
+  padding: 2px 30px;
+  text-shadow: 0 1px 0 rgba(0,0,0.5);
+  text-transform: lowercase;
+}
+div#wrapper input[type=submit]:hover {
+  background: #ae3f54;
+  cursor: pointer;
+}
+div#wrapper label.gfield_label {
+  color: #ae1351;
+  font: 17px/23px 'Arvo', Georgia, serif;
+  text-transform: lowercase;
+}
+div#wrapper .gform_footer {
+  margin-top: 5px;
+  padding-top: 0;
+}
+
 /* @end */
 
 /* @group Library
@@ -86,6 +132,9 @@ img.thickborder {
   background: #f1f1f1;
   border: 1px solid #ededed;
   padding: 10px;
+}
+.gform_wrapper .gfield_required {
+  color: #ae1531 !important;
 }
 /* @end */
 
