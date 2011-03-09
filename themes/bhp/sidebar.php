@@ -8,6 +8,7 @@
  */
 ?>
 
+		<aside class="grid_4 omega">
 		<div id="primary" class="widget-area" role="complementary">
 			<ul class="xoxo">
 
@@ -54,3 +55,4 @@
 		</div><!-- #secondary .widget-area -->
 
 <?php endif; ?>
+    </aside>

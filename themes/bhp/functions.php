@@ -40,7 +40,7 @@ function get_post_images() {
     $image_url = wp_get_attachment_url($image->ID);
     $thumb_url = wp_get_attachment_thumb_url($image->ID);
     //print_r($image);
-    echo '<div id="' . $image->post_name  . '" class="grid_3 photo"><a href="' . $image_url . '" title="' . $image->post_excerpt . '" rel="fancybox-gallery"><img src="' . $thumb_url . '" alt="' . $image->post_title . '"/></a></div>';
+    echo '<div id="' . $image->post_name  . '" class="photo fancybox"><a href="' . $image_url . '" title="' . $image->post_excerpt . '" rel="fancybox-gallery"><img src="' . $thumb_url . '" alt="' . $image->post_title . '"/></a></div>';
   }
 };
 
@@ -184,6 +184,42 @@ function gallery_columns( $column, $id ) {
 			break;
 	}
 }
+
+/** 
+ * Taxonomy Term Listing with Featured Image
+ */
+function get_taxonomy_terms_featured_image($taxonomy, $post_type) {
+  // Get list of taxonomy terms
+  $terms = get_terms($taxonomy);
+  
+  // Get first post from each taxonomy term
+  if ($terms) {
+    foreach($terms as $term) {
+      //print_r($term);
+      $slug = $term->slug;
+      $args = array(
+      	'tax_query' => array(
+        		array(
+        			'taxonomy' => 'style',
+        			'field'    => 'slug',
+        			'terms'    => $slug
+        		)
+      		),
+      		'posts_per_page' => 1      		    	  
+      	);
+      	
+      // Loop to get post's featured image
+      $custom_query = new WP_Query($args);
+      if ( $custom_query->have_posts() ) : while ( $custom_query->have_posts() ) : $custom_query->the_post();
+        $image_id = get_post_thumbnail_id();
+        $thumb_url = wp_get_attachment_thumb_url($image_id);
+        echo '<div id="' . $term->slug  . '" class="photo"><a href="' . get_bloginfo('url') . '/' . $taxonomy . '/' . $term->slug . '" title="' . $term->slug . '"><img src="' . $thumb_url . '" alt="' . $image->post_title . '"/></a></div>';        
+      endwhile; endif;
+    }
+  } else {
+    echo '<p>No galleries found.</p>';
+  }
+}
  
 /** 
  * Register Client Taxonomy
@@ -239,4 +275,18 @@ function create_style_taxonomies() {
     'query_var' => true,
     'rewrite' => array( 'slug' => 'style' )
   ) );
+}
+
+/** 
+ * Gravity Forms Scripts
+ */
+if(!is_admin()){
+
+    wp_enqueue_script("gforms_ui_datepicker", plugins_url("gravityforms/js/jquery-ui/ui.datepicker.js"), array("jquery"), "1.3.9", true);
+
+    wp_enqueue_script("gforms_datepicker", plugins_url("gravityforms/js/datepicker.js"), array("gforms_ui_datepicker"), "1.3.9", true);
+
+    wp_enqueue_script("gforms_conditional_logic_lib", plugins_url("gravityforms/js/conditional_logic.js"), array("gforms_ui_datepicker"), "1.3.9", true);
+
+    wp_enqueue_style("gforms_css", plugins_url("gravityforms/css/forms.css"));
 }

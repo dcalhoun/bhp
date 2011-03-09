@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for single gallery posts.
+ * The template for gallery post styles.
  *
  * This is the template that displays all pages by default.
  * Please note that this is the WordPress construct of pages

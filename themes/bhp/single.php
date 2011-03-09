@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for single gallery posts.
+ * The template for displaying single posts.
  *
  * This is the template that displays all pages by default.
  * Please note that this is the WordPress construct of pages
@@ -14,11 +14,10 @@
 
 get_header(); ?>
 <div class="grid_1">&nbsp;</div>
-<div id="page" class="grid_11 textcenter">
-  <div class="grid_1 alpha">&nbsp;</div>
-  <div class="grid_9">
-  <?php get_post_images();?>
-  </div>
-  <div class="grid_1 omega">&nbsp;</div>
+<div id="page" class="grid_11">
+  <section class="grid_7 alpha">
+  <?php get_template_part( 'loop', 'single' ); ?>
+  </section>
+  <?php get_sidebar(); ?>
 </div>
 <?php get_footer(); ?>

@@ -7,8 +7,6 @@
  * http://codex.wordpress.org/Template_Tags to understand
  * the tags used in it.
  *
- * This can be overridden in child themes with loop-page.php.
- *
  * @package WordPress
  * @subpackage By_Heart_Photography
  * @since By Heart Photography 1.0
@@ -17,17 +15,16 @@
 
 <?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
 
-				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+				<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<?php if ( !is_front_page() ) { ?>
 						<h1 class="entry-title"><?php the_title(); ?></h1>
 					<?php } ?>
 
 					<div class="entry-content">
-						<?php the_content(); ?>
-						<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'twentyten' ), 'after' => '</div>' ) ); ?>
-						<?php edit_post_link( __( 'Edit', 'twentyten' ), '<span class="edit-link">', '</span>' ); ?>
+						<?php the_content(); ?>						
+						<?php edit_post_link( __( 'Edit' ), '<span class="edit-link">', '</span>' ); ?>
 					</div><!-- .entry-content -->
-				</div><!-- #post-## -->
+				</article><!-- #post-## -->
 
 				<?php comments_template( '', true ); ?>
 
