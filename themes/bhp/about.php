@@ -12,11 +12,20 @@
 get_header(); ?>
 <div class="grid_1">&nbsp;</div>
 <div id="page" class="grid_11">
+
+<?php if ( has_post_thumbnail() ) { ?>
   <div class="grid_6 alpha">
-  <?php the_post_thumbnail(); ?>
+    <div class="featured-image">
+    <?php the_post_thumbnail(array(439,258), array('class' => 'thickborder')); ?>
+    </div>
   </div>
   <div class="grid_5 omega">
   <?php get_template_part( 'loop', 'page' ); ?>
   </div>
+<?php } else {
+  get_template_part( 'loop', 'page' );
+}
+?>
+
 </div>
 <?php get_footer(); ?>

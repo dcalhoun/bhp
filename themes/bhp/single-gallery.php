@@ -16,9 +16,8 @@ get_header(); ?>
 <div class="grid_1">&nbsp;</div>
 <div id="page" class="grid_11 textcenter">
   <div class="grid_1 alpha">&nbsp;</div>
-  <div class="grid_9">
+  <div class="grid_10 omega">
   <?php get_post_images();?>
   </div>
-  <div class="grid_1 omega">&nbsp;</div>
 </div>
 <?php get_footer(); ?>

@@ -82,6 +82,11 @@ img.alignleft { margin-right: 15px; }
 .textleft { text-align: left; }
 .textcenter { text-align: center; }
 .textright { text-align: right; }
+img.thickborder {
+  background: #f1f1f1;
+  border: 1px solid #ededed;
+  padding: 10px;
+}
 /* @end */
 
 /* @group Template
@@ -111,7 +116,8 @@ Styling for structure of the site.
         nav#primary-navigation ul li a {        
           padding: 3px 5px;
         }
-        nav#primary-navigation ul li.current-menu-item a {
+        nav#primary-navigation ul li.current-menu-item a, 
+        nav#primary-navigation ul li.current_page_parent a {
           background: rgba(174,21,49,.73);
           -moz-border-radius: 3px;
           border-radius: 3px;
@@ -148,12 +154,63 @@ body.home {
 
 /* @group Gallery Grid Pages */
 div.photo {
-  background: #ccc;
+  background: #f1f1f1;
+  border: 1px solid #ededed;
   float: left;
-  height: 200px;
+  height: 130px;
   margin: 0 20px 20px 0;
-  width: 200px;
+  overflow: hidden;
+  padding: 10px;
+  position: relative;
+  -webkit-transition-property: background, border;
+  -webkit-transition-duration: 0.5s;
+  -webkit-transition-timing-function: ease-in-out;
+  width: 198px;  
+  z-index: 0;
 }
+div.photo:hover {
+  background: #c25267;
+  border-color: #b03f55;
+}
+/*div.photo:before, div.photo:after {
+  position: absolute;
+  z-index: -1;
+}
+div.photo:before {
+  content: "";
+  text-align: left;
+  background: transparent;
+  bottom: 9px;
+  right: 10px;
+  width: 50%;
+  height: 40%;
+  -moz-transform: rotate(4deg);
+  -webkit-transform: rotate(4deg);
+  -o-transform: rotate(4deg);
+  transform: rotate(4deg);
+  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
+  -o-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
+  box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
+}
+div.photo:after {
+  content: "";
+  text-align: right;
+  background: transparent;
+  left: 10px;
+  bottom: 9px;
+  width: 50%;
+  height: 40%;
+  -moz-transform: rotate(-4deg);
+  -webkit-transform: rotate(-4deg);
+  -o-transform: rotate(-4deg);
+  transform: rotate(-4deg);
+  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
+  -o-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
+  box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
+}*/
+/* @end */
 
 /* @group 404 Page */
 .four-o-four {
