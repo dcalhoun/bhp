@@ -29,9 +29,11 @@ get_header(); ?>
   </nav>
   <div id="slider-wrapper" class="grid_11 alpha omega">
     <div id="slider">
-      <img src="<?php bloginfo('template_directory'); ?>/assets/images/temp/slide_01.jpg" />
+      <ul id="slides">
+        <li><img src="<?php bloginfo('template_directory'); ?>/assets/images/temp/slide_01.jpg" /></li>
+        <li><img src="<?php bloginfo('template_directory'); ?>/assets/images/temp/slide_01.jpg" /></li>
+      </ul>
     </div>
   </div>
-  <?php get_template_part( 'loop', 'page' ); ?>
 </div>
 <?php get_footer(); ?>

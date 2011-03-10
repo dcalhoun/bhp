@@ -11,9 +11,4 @@ jQuery(document).ready(function($) {
       $(this).find('span.label').animate({bottom:'-44px'},{queue:false,duration:500});
   });*/
   
-  //////////
-  // Initialize Fancybox Galleries
-  //////////
-  $('div.fancybox a').fancybox();
-  
 });
