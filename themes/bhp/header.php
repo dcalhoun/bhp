@@ -25,7 +25,7 @@
 </head>
 
 <body <?php body_class(); ?>>
-<div id="wrapper" class="container_12 clearfix">
+<div id="wrapper" class="container_12 clearfix all-content">
   <header role="site" class="grid_12">
     <div class="grid_4 alpha">
       <h1 class="logo"><a href="<?php bloginfo('url'); ?>" title="<?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a></h1>

@@ -26,7 +26,7 @@
       pager: '#slider-nav',
       pause: true,
       pauseOnPagerHover: true,
-      timeout: 8000,
+      timeout: 6000,
     });
   });
 </script>

@@ -26,6 +26,20 @@ if ( function_exists( 'add_theme_support' ) ) {
 set_post_thumbnail_size( 198, 130, true );
 
 /** 
+ * Removed Post Types from Admin
+ */
+function remove_menus () {
+global $menu;
+	$restricted = array(__('Links'));
+	end ($menu);
+	while (prev($menu)){
+		$value = explode(' ',$menu[key($menu)][0]);
+		if(in_array($value[0] != NULL?$value[0]:"" , $restricted)){unset($menu[key($menu)]);}
+	}
+}
+add_action('admin_menu', 'remove_menus');
+
+/** 
  * Retrieve Images Attached to a Post
  */
 function get_post_images() {
