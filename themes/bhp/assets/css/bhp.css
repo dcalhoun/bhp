@@ -19,6 +19,7 @@ body {
 a, a:visited, a:active {
   color: #ae1531;
   text-decoration: none;
+  -webkit-transition: all 0.4s ease-in-out;
 }
 a:hover {
   color: #666;
@@ -45,6 +46,10 @@ h1.logo {
   margin: 0 0 0 -37px;
   width: 250px;
   text-indent: -9999px;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+h1.logo:hover {
+  opacity: .5;
 }
   h1 a {
     display: block;
@@ -61,10 +66,12 @@ h3 {
 ::selection {
   background: #c45469;
   color: #fff;
+  text-shadow: none;
 }
 ::-moz-selection {
   background: #c45469;
   color: #fff;
+  text-shadow: none;
 }
 div#gform_wrapper_1 {
   margin-left: 20px;
@@ -93,10 +100,11 @@ div#wrapper input[type=submit] {
   -moz-border-radius: 3px;
   border-radius: 3px;
   color: #fff;
-  font: 18px/23px 'Arvo', Georgia, serif;
+  font: 17px/23px 'Arvo', Georgia, serif;
   padding: 2px 30px;
   text-shadow: 0 1px 0 rgba(0,0,0.5);
   text-transform: lowercase;
+  -webkit-transition: all 0.4s ease-in-out
 }
 div#wrapper input[type=submit]:hover {
   background: #ae3f54;
@@ -145,7 +153,6 @@ Styling for structure of the site.
 #wrapper {
 }
   header[role=site] a, #page a, footer[role=site] a {
-    -webkit-transition: color 0.5s ease-in-out;
   }
   header[role=site] {
     margin-top: 20px;
@@ -162,14 +169,15 @@ Styling for structure of the site.
         list-style: none;
         text-transform: lowercase;
       }
-        nav#primary-navigation ul li a {        
+        nav#primary-navigation ul li a {
+          -moz-border-radius: 3px;
+          border-radius: 3px;
           padding: 3px 5px;
         }
+        nav#primary-navigation ul li a:hover, 
         nav#primary-navigation ul li.current-menu-item a, 
         nav#primary-navigation ul li.current_page_parent a {
           background: rgba(174,21,49,.73);
-          -moz-border-radius: 3px;
-          border-radius: 3px;
           color: #fff;
           text-shadow: 0 -1px 0 rgba(0,0,0,.22);
         }
@@ -221,6 +229,28 @@ div.photo:hover {
   background: #c25267;
   border-color: #b03f55;
 }
+  div.photo a {
+    display: block;
+    height: 130px;
+    overflow: hidden;
+    position: relative;
+    width: 198px;
+  }
+  div.photo a span.label {
+    background: rgba(255,255,255,0.85);
+    bottom: -44px;
+    font: 18px/23px 'Arvo', Georgia, serif;
+    left: 0;
+    padding: 10px 0;
+    position: absolute;
+    text-transform: lowercase;
+    -webkit-transition: all 0.4s ease-in-out;
+    width: 198px;
+  }
+  div.photo:hover a span.label {
+    bottom: 0px;
+    color: #ae1531;
+  }
 /*div.photo:before, div.photo:after {
   position: absolute;
   z-index: -1;
