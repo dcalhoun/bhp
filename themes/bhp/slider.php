@@ -32,6 +32,9 @@ get_header(); ?>
       <ul id="slides">
         <li><img src="<?php bloginfo('template_directory'); ?>/assets/images/temp/slide_01.jpg" /></li>
         <li><img src="<?php bloginfo('template_directory'); ?>/assets/images/temp/slide_01.jpg" /></li>
+        <li><img src="<?php bloginfo('template_directory'); ?>/assets/images/temp/slide_01.jpg" /></li>
+        <li><img src="<?php bloginfo('template_directory'); ?>/assets/images/temp/slide_01.jpg" /></li>
+        <li><img src="<?php bloginfo('template_directory'); ?>/assets/images/temp/slide_01.jpg" /></li>
       </ul>
     </div>
   </div>

@@ -88,7 +88,7 @@ div#wrapper input[type=text], div#wrapper input[type=email], div#wrapper input[t
   background: #ebebeb; /* For IE */
   background: rgba(235,235,235,.4);
   color: #666;
-  font: 18px/24px 'Lucide Grande', Arial, sans-serif !important;
+  font: 18px/24px 'Lucide Grande', Lucida, Arial, sans-serif !important;
   padding: 7px !important;
 }
 div#wrapper textarea {
@@ -140,6 +140,7 @@ img.thickborder {
 }
 div#wrapper .gform_wrapper .gfield_error input[type=text], div#wrapper .gform_wrapper .gfield_error input[type=email], div#wrapper .gform_wrapper .gfield_error input[type=tel], div#wrapper .gform_wrapper .gfield_error textarea {
   background: #E6BCBC;
+  color: #790000;
 }
 div#wrapper .gform_footer {
   margin-top: 5px;
@@ -342,8 +343,8 @@ body.home div#slider-wrapper {
       list-style: none;
     }
     body.home div#slider nav#slider-nav {
-      margin: 25px auto 0 auto;
-      width: 75px;
+      margin: 25px 0 0 0;
+      text-align: center;
     }
       body.home div#slider nav#slider-nav a {
         background: #f6c7cf;
