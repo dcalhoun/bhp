@@ -16,12 +16,12 @@ body {
   color: #666;
   font: 15px/19px 'Delicious', Arial, serif;
 }
-a, a:visited, a:active {
+div#wrapper a, div#wrapper a:visited, div#wrapper a:active {
   color: #ae1531;
   text-decoration: none;
   -webkit-transition: all 0.4s ease-in-out;
 }
-a:hover {
+div#wrapper a:hover {
   color: #666;
 }
 blockquote {
@@ -91,6 +91,9 @@ div#wrapper input[type=text], div#wrapper input[type=email], div#wrapper input[t
   font: 18px/24px 'Lucide Grande', Arial, sans-serif !important;
   padding: 7px !important;
 }
+div#wrapper textarea {
+  width: 98%;
+}
 div#wrapper input[type=text]:focus, div#wrapper input[type=email]:focus, div#wrapper input[type=tel]:focus, div#wrapper textarea:focus {
   background: rgba(235,235,235,1.0);
 }
@@ -109,15 +112,6 @@ div#wrapper input[type=submit] {
 div#wrapper input[type=submit]:hover {
   background: #ae3f54;
   cursor: pointer;
-}
-div#wrapper label.gfield_label {
-  color: #ae1351;
-  font: 17px/23px 'Arvo', Georgia, serif;
-  text-transform: lowercase;
-}
-div#wrapper .gform_footer {
-  margin-top: 5px;
-  padding-top: 0;
 }
 
 /* @end */
@@ -144,6 +138,18 @@ img.thickborder {
 .gform_wrapper .gfield_required {
   color: #ae1531 !important;
 }
+div#wrapper .gform_wrapper .gfield_error input[type=text], div#wrapper .gform_wrapper .gfield_error input[type=email], div#wrapper .gform_wrapper .gfield_error input[type=tel], div#wrapper .gform_wrapper .gfield_error textarea {
+  background: #E6BCBC;
+}
+div#wrapper .gform_footer {
+  margin-top: 5px;
+  padding-top: 0;
+}
+div#wrapper label.gfield_label {
+  color: #ae1351;
+  font: 17px/23px 'Arvo', Georgia, serif;
+  text-transform: lowercase;
+}
 /* @end */
 
 /* @group Template
@@ -167,16 +173,18 @@ Styling for structure of the site.
       nav#primary-navigation ul li {
         display: inline;
         list-style: none;
+        margin: 0 0 0 10px;
         text-transform: lowercase;
       }
         nav#primary-navigation ul li a {
           -moz-border-radius: 3px;
           border-radius: 3px;
-          padding: 3px 5px;
+          padding: 3px 8px;
         }
         nav#primary-navigation ul li a:hover, 
         nav#primary-navigation ul li.current-menu-item a, 
         nav#primary-navigation ul li.current_page_parent a {
+          background: rgb(174,21,49); /* For IE */
           background: rgba(174,21,49,.73);
           color: #fff;
           text-shadow: 0 -1px 0 rgba(0,0,0,.22);
@@ -184,7 +192,29 @@ Styling for structure of the site.
   #page{
     background: url('../images/dotted-line.png') repeat-x top;
     padding: 20px 0;
+    position: relative;
   }
+    #page span.edit-link {
+      left: -80px;
+      position: absolute;
+      top: 25px;
+      visibility: hidden;
+    }
+    #page:hover span.edit-link {
+      visibility: visible;
+    }
+      #page span.edit-link a {
+        background: rgb(174,21,49); /* For IE */
+        background: rgba(174,21,49,.73);
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        color: #fff;
+        opacity: .25;
+        padding: 3px 5px;
+      }
+      #page span.edit-link a:hover {
+        opacity: 1.0;
+      }
   footer[role=site] {
     background: url('../images/dotted-line.png') repeat-x top;
     font-size: 12px;
@@ -205,50 +235,100 @@ Styling for structure of the site.
 Styling for page-specific elements.
 =============================================================================*/
 /* @group Home Page*/
-body.home {
+body.home div.floating-hearts {
+  background: url('../images/bg-floating-hearts.png') no-repeat 0 0;
+  height: 254px;
+  margin: -24px 0 0 -19px;
+  width: 90px;
+}
+body.home div#client-testimonials, 
+body.home nav#social-links {
+  margin-bottom: 20px;
+}
+  body.home div#client-testimonials article {
+    background: #f1f1f1;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color: #bbbbbb;
+    font: italic normal 17px/23px Georgia, serif;
+    padding: 10px;
+    position: relative;
+  }
+    body.home div#client-testimonials article span.author {
+      bottom: 10px;
+      font: normal normal 12px/14px 'Delicious', Arial, sans-serif;
+      position: absolute;    
+      right: 20px;
+    }
+body.home nav#social-links ul {
+  margin: 5px 0 0 0;
+}
+body.home nav#social-links ul li {
+  display: inline;
+  margin: 0 10px 0 0;
+}
+  body.home nav#social-links ul li a {
+    background: url('../images/btn-social-links.png') no-repeat 0 0;
+    display: inline-block;
+    height: 54px;
+    text-indent: -9999px;
+    width: 54px;
+  }
+  body.home nav#social-links ul li a.twitter:hover { background-position: 0 -55px; }
+  body.home nav#social-links ul li a.facebook { background-position: -55px 0; }
+  body.home nav#social-links ul li a.facebook:hover { background-position: -55px -55px; }
+  body.home nav#social-links ul li a.flickr { background-position: -111px 0; }
+  body.home nav#social-links ul li a.flickr:hover { background-position: -111px -55px; }
+body.home div#slider {
+  background: #f1f1f1;
+  border: 1px solid #ededed;
+  height: 546px;
+  padding: 10px;
+  position: relative;
+  width: 833px;
+}
+body.home div#slider:before, 
+body.home div#slider:after {
+  position: absolute;
+  z-index: -1;
+}
+body.home div#slider:before {
+  background: transparent;
+  -moz-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -o-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -webkit-box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.47);
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  bottom: 16px;
+  content: "";
+  height: 20%;
+  right: 15px;
+  text-align: left;
+  -moz-transform: rotate(3deg);
+  -webkit-transform: rotate(2deg);
+  -o-transform: rotate(3deg);
+  transform: rotate(3deg);
+  width: 75%;
+}
+body.home div#slider:after {
+  background: transparent;
+  bottom: 16px;
+  -moz-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -o-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -webkit-box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.47);
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  content: "";
+  height: 20%;
+  left: 15px;
+  text-align: right;
+  -moz-transform: rotate(-3deg);
+  -webkit-transform: rotate(-2deg);
+  -o-transform: rotate(-3deg);
+  transform: rotate(-3deg);
+  width: 75%;
 }
 /* @end */
 
 /* @group Gallery Grid Pages */
-div.photo {
-  background: #f1f1f1;
-  border: 1px solid #ededed;
-  height: 130px;
-  overflow: hidden;
-  padding: 10px;
-  position: relative;
-  -webkit-transition-property: background, border;
-  -webkit-transition-duration: 0.5s;
-  -webkit-transition-timing-function: ease-in-out;
-  width: 198px;  
-  z-index: 0;
-}
-div.photo:hover {
-  background: #c25267;
-  border-color: #b03f55;
-}
-  div.photo a {
-    display: block;
-    height: 130px;
-    overflow: hidden;
-    position: relative;
-    width: 198px;
-  }
-  div.photo a span.label {
-    background: rgba(255,255,255,0.85);
-    bottom: -44px;
-    font: 18px/23px 'Arvo', Georgia, serif;
-    left: 0;
-    padding: 10px 0;
-    position: absolute;
-    text-transform: lowercase;
-    -webkit-transition: all 0.4s ease-in-out;
-    width: 198px;
-  }
-  div.photo:hover a span.label {
-    bottom: 0px;
-    color: #ae1531;
-  }
 div.photo-shadow {
   float: left;
   margin: 0 20px 20px 0;
@@ -293,6 +373,45 @@ div.photo-shadow:after {
   transform: rotate(-4deg);
   width: 75%;
 }
+  div.photo {
+    background: #f1f1f1;
+    border: 1px solid #ededed;
+    height: 130px;
+    overflow: hidden;
+    padding: 10px;
+    position: relative;
+    -webkit-transition-property: background, border;
+    -webkit-transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease-in-out;
+    width: 198px;  
+    z-index: 0;
+  }
+  div.photo:hover {
+    background: #c25267;
+    border-color: #b03f55;
+  }
+    div.photo a {
+      display: block;
+      height: 130px;
+      overflow: hidden;
+      position: relative;
+      width: 198px;
+    }
+    div.photo a span.label {
+      background: rgba(255,255,255,0.85);
+      bottom: -44px;
+      font: 18px/23px 'Arvo', Georgia, serif;
+      left: 0;
+      padding: 10px 0;
+      position: absolute;
+      text-transform: lowercase;
+      -webkit-transition: all 0.4s ease-in-out;
+      width: 198px;
+    }
+    div.photo:hover a span.label {
+      bottom: 0px;
+      color: #ae1531;
+    }
 /* @end */
 
 /* @group About Page */
