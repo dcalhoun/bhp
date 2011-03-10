@@ -22,7 +22,7 @@
 
 					<div class="entry-content">
 						<?php the_content(); ?>
-						<?php edit_post_link( __( 'Edit' ), '<span class="edit-link">', '</span>' ); ?>
+						<?php //edit_post_link( __( 'Edit' ), '<span class="edit-link">', '</span>' ); ?>
 					</div><!-- .entry-content -->
 				</article><!-- #post-## -->
 
