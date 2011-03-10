@@ -213,9 +213,7 @@ body.home {
 div.photo {
   background: #f1f1f1;
   border: 1px solid #ededed;
-  float: left;
   height: 130px;
-  margin: 0 20px 20px 0;
   overflow: hidden;
   padding: 10px;
   position: relative;
@@ -251,44 +249,96 @@ div.photo:hover {
     bottom: 0px;
     color: #ae1531;
   }
-/*div.photo:before, div.photo:after {
+div.photo-shadow {
+  float: left;
+  margin: 0 20px 20px 0;
+  position: relative;
+  width: 218px;
+}
+div.photo-shadow:before, div.photo-shadow:after {
   position: absolute;
   z-index: -1;
 }
-div.photo:before {
-  content: "";
-  text-align: left;
+div.photo-shadow:before {
   background: transparent;
-  bottom: 9px;
+  -moz-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -o-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -webkit-box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.47);
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  bottom: 15px;
+  content: "";
+  height: 20%;
   right: 10px;
-  width: 50%;
-  height: 40%;
+  text-align: left;
   -moz-transform: rotate(4deg);
   -webkit-transform: rotate(4deg);
   -o-transform: rotate(4deg);
   transform: rotate(4deg);
-  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
-  -o-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
-  box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
+  width: 75%;
 }
-div.photo:after {
-  content: "";
-  text-align: right;
+div.photo-shadow:after {
   background: transparent;
+  bottom: 15px;
+  -moz-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -o-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -webkit-box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.47);
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  content: "";
+  height: 20%;
   left: 10px;
-  bottom: 9px;
-  width: 50%;
-  height: 40%;
+  text-align: right;
   -moz-transform: rotate(-4deg);
   -webkit-transform: rotate(-4deg);
   -o-transform: rotate(-4deg);
   transform: rotate(-4deg);
-  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
-  -o-box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
-  box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 50px;
-}*/
+  width: 75%;
+}
+/* @end */
+
+/* @group About Page */
+body.page-template-about-php div.featured-image {
+  width: 460px;
+  position: relative;
+}
+body.page-template-about-php div.featured-image:before, 
+body.page-template-about-php div.featured-image:after {
+  position: absolute;
+  z-index: -1;
+}
+body.page-template-about-php div.featured-image:before {
+  background: transparent;
+  -moz-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -o-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -webkit-box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.47);
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  bottom: 16px;
+  content: "";
+  height: 20%;
+  right: 15px;
+  text-align: left;
+  -moz-transform: rotate(3deg);
+  -webkit-transform: rotate(3deg);
+  -o-transform: rotate(3deg);
+  transform: rotate(3deg);
+  width: 75%;
+}
+body.page-template-about-php div.featured-image:after {
+  background: transparent;
+  bottom: 16px;
+  -moz-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -o-box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  -webkit-box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.47);
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.47);
+  content: "";
+  height: 20%;
+  left: 15px;
+  text-align: right;
+  -moz-transform: rotate(-3deg);
+  -webkit-transform: rotate(-3deg);
+  -o-transform: rotate(-3deg);
+  transform: rotate(-3deg);
+  width: 75%;
+}
 /* @end */
 
 /* @group 404 Page */

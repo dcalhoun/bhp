@@ -43,7 +43,7 @@ function get_post_images() {
       $image_url = wp_get_attachment_url($image->ID);
       $thumb_url = wp_get_attachment_thumb_url($image->ID);
       //print_r($image);
-      echo '<div id="' . $image->post_name  . '" class="photo fancybox"><a href="' . $image_url . '" title="' . $image->post_excerpt . '" rel="fancybox-gallery"><img src="' . $thumb_url . '" alt="' . $image->post_title . '" width="198" height="130"/></a></div>';
+      echo '<div class="photo-shadow"><div id="' . $image->post_name  . '" class="photo fancybox"><a href="' . $image_url . '" title="' . $image->post_excerpt . '" rel="fancybox-gallery"><img src="' . $thumb_url . '" alt="' . $image->post_title . '" width="198" height="130"/></a></div></div>';
     }
   } else {
     echo '<p>No images to display.</p>';
@@ -218,7 +218,7 @@ function get_taxonomy_terms_featured_image($taxonomy, $post_type) {
       if ( $custom_query->have_posts() ) : while ( $custom_query->have_posts() ) : $custom_query->the_post();
         $image_id = get_post_thumbnail_id();
         $thumb_url = wp_get_attachment_thumb_url($image_id);
-        echo '<div id="' . $term->slug  . '" class="photo"><a href="' . get_bloginfo('url') . '/' . $taxonomy . '/' . $term->slug . '" title="' . $term->name . '"><img src="' . $thumb_url . '" alt="' . $image->post_title . '" width="198" height="130"/><span class="label">' . $term->name . '</span></a></div>';        
+        echo '<div class="photo-shadow"><div id="' . $term->slug  . '" class="photo"><a href="' . get_bloginfo('url') . '/' . $taxonomy . '/' . $term->slug . '" title="' . $term->name . '"><img src="' . $thumb_url . '" alt="' . $image->post_title . '" width="198" height="130"/><span class="label">' . $term->name . '</span></a></div></div>';        
       endwhile; endif;
     }
   } else {
