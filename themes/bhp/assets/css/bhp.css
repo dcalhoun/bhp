@@ -192,7 +192,7 @@ Styling for structure of the site.
         }
   #page{
     background: url('../images/dotted-line.png') repeat-x top;
-    padding: 20px 0;
+    padding: 25px 0 20px 0;
     position: relative;
   }
     #page span.edit-link {
@@ -247,15 +247,23 @@ body.home div#client-testimonials,
 body.home nav#social-links {
   margin-bottom: 20px;
 }
+body.home div#client-testimonials {
+  background: url('../images/bg-down-arrow.png') no-repeat 560px bottom;
+  padding-bottom: 13px;
+}
   body.home div#client-testimonials article {
     background: #f1f1f1;
     -moz-border-radius: 5px;
     border-radius: 5px;
     color: #bbbbbb;
+    display: block;
     font: italic normal 17px/23px Georgia, serif;
     padding: 10px;
     position: relative;
   }
+    body.home div#client-testimonials article p {
+      margin-bottom: 0;
+    }
     body.home div#client-testimonials article span.author {
       bottom: 10px;
       font: normal normal 12px/14px 'Delicious', Arial, sans-serif;
