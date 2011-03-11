@@ -216,6 +216,13 @@ Styling for structure of the site.
       #page span.edit-link a:hover {
         opacity: 1.0;
       }
+      #page p.no-posts {
+        color: #9C9C9C;
+        font-size: 23px;
+        margin: 20px 0;
+        padding-right: 70px;
+        text-shadow: 0 1px 0 #fff;
+      }
   footer[role=site] {
     background: url('../images/dotted-line.png') repeat-x top;
     color: #8d8d8d;

@@ -54,7 +54,7 @@ function get_post_images() {
       echo '<div class="photo-shadow"><div id="' . $image->post_name  . '" class="photo fancybox"><a href="' . $image_url . '" title="' . $image->post_excerpt . '" rel="fancybox-gallery"><img src="' . $thumb_url . '" alt="' . $image->post_title . '" width="198" height="130"/></a></div></div>';
     }
   } else {
-    echo '<p>No images to display.</p>';
+    echo '<p class="no-posts">Sorry, no images to display.</p>';
   }
 };
 
