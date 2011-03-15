@@ -520,19 +520,19 @@ body.page-template-about-php div.featured-image:after {
 =============================================================================*/
 @font-face {
     font-family: 'Delicious';
-    src: url('../fonts/delicious/Delicious-Roman.otf');
+    src: url('../fonts/delicious/Delicious-Roman.otf'), format('font/opentype');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: 'DeliciousItalic';
-    src: url('../fonts/delicious/Delicious-Italic.otf');
+    src: url('../fonts/delicious/Delicious-Italic.otf'), format('font/opentype');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: 'DeliciousBold';
-    src: url('../fonts/delicious/Delicious-Bold.otf');
+    src: url('../fonts/delicious/Delicious-Bold.otf'), format('font/opentype');
     font-weight: normal;
     font-style: normal;
 }
