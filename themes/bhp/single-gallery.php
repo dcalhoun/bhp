@@ -17,7 +17,7 @@ get_header(); ?>
 <div id="page" class="grid_11 textcenter">
   <div class="grid_1 alpha">&nbsp;</div>
   <div class="grid_10 omega">
-  <?php get_post_images();?>
+  <?php get_post_images_gallery();?>
   </div>
 </div>
 <?php get_footer(); ?>

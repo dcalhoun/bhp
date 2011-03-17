@@ -34,9 +34,9 @@ function my_remove_menu_pages() {
 }
 
 /** 
- * Retrieve Images Attached to a Post
+ * Retrieve Images Attached to a Post to Build a Gallery
  */
-function get_post_images() {
+function get_post_images_gallery() {
   global $wp_query;
   $args = array(
     'post_parent' => $wp_query->post->ID,
@@ -52,6 +52,29 @@ function get_post_images() {
       $thumb_url = wp_get_attachment_thumb_url($image->ID);
       //print_r($image);
       echo '<div class="photo-shadow"><div id="' . $image->post_name  . '" class="photo fancybox"><a href="' . $image_url . '" title="' . $image->post_excerpt . '" rel="fancybox-gallery"><img src="' . $thumb_url . '" alt="' . $image->post_title . '" width="198" height="130"/></a></div></div>';
+    }
+  } else {
+    echo '<p class="no-posts">Sorry, no images to display.</p>';
+  }
+};
+
+/** 
+ * Retrieve Images Attached to a Post to Build a Slideshow
+ */
+function get_post_images_slideshow() {
+  global $wp_query;
+  $args = array(
+    'post_parent' => $wp_query->post->ID,
+    'post_status' => 'attachment',
+    'post_mime_type' => 'image',
+    'order' => 'ASC',
+    'orderby' => 'menu_order ID'
+  );
+  $images = get_children($args);
+  if ( $images ) {
+    foreach ($images as $image) {
+      $image_url = wp_get_attachment_url($image->ID);
+      echo '<li><img src="' . $image_url . '" alt="' . $image->post_title . '" width="833" height="546"/></li>';
     }
   } else {
     echo '<p class="no-posts">Sorry, no images to display.</p>';
