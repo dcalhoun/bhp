@@ -455,11 +455,10 @@ div.photo-shadow:after {
       padding: 10px 0;
       position: absolute;
       text-transform: lowercase;
-      -webkit-transition: all 0.4s ease-in-out;
+/*      -webkit-transition: all 0.4s ease-in-out;*/
       width: 198px;
     }
     div.photo:hover a span.label {
-      bottom: 0px;
       color: #ae1531;
     }
 /* @end */
