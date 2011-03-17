@@ -64,6 +64,9 @@ h2 {
 h3 {
   font: 17px/19px 'DeliciousBold', Arial, sans-serif;
 }
+  h3.widget-title {
+    margin-bottom: 5px;
+  }
 ::selection {
   background: #c45469;
   color: #fff;
@@ -84,7 +87,7 @@ form ul li {
   margin-bottom: 10px;
   list-style: none;
 }
-div#wrapper input[type=text], div#wrapper input[type=email], div#wrapper input[type=tel], div#wrapper textarea {
+div.all-content input[type=text], div.all-content input[type=email], div.all-content input[type=tel], div.all-content textarea {
   border: none;
   background: #ebebeb; /* For IE */
   background: rgba(235,235,235,.4);
@@ -92,13 +95,13 @@ div#wrapper input[type=text], div#wrapper input[type=email], div#wrapper input[t
   font: 18px/24px 'Lucide Grande', Lucida, Arial, sans-serif !important;
   padding: 7px !important;
 }
-div#wrapper textarea {
+div.all-content textarea {
   width: 98%;
 }
-div#wrapper input[type=text]:focus, div#wrapper input[type=email]:focus, div#wrapper input[type=tel]:focus, div#wrapper textarea:focus {
+div.all-content input[type=text]:focus, div.all-content input[type=email]:focus, div.all-content input[type=tel]:focus, div#wrapper textarea:focus {
   background: rgba(235,235,235,1.0);
 }
-div#wrapper input[type=submit] {
+div.all-content input[type=submit] {
   background: #c25267;
   border: none;
   -moz-border-radius: 3px;
@@ -110,7 +113,7 @@ div#wrapper input[type=submit] {
   text-transform: lowercase;
   -webkit-transition: all 0.4s ease-in-out
 }
-div#wrapper input[type=submit]:hover {
+div.all-content input[type=submit]:hover {
   background: #ae3f54;
   cursor: pointer;
 }
@@ -223,6 +226,52 @@ Styling for structure of the site.
         margin: 20px 0;
         padding-right: 70px;
         text-shadow: 0 1px 0 #fff;
+      }
+  aside#sidebar ul li.widget-container {
+    list-style: none;
+    margin: 0 0 10px 0;
+  }
+  aside#sidebar ul li.widget_search {
+    margin: 0 0 20px 0;
+  }
+    aside#sidebar ul li.widget_search label {
+      display: none;
+    }
+    aside#sidebar ul li.widget_search input[type=text] {
+      width: 75%;
+    }
+    aside#sidebar ul li.widget_search input[type=submit] {
+      background: rgb(174,21,49) url('../images/magnifying_glass_16x16.png') no-repeat 9px 9px; /* For IE */
+      background: rgba(174,21,49,.65) url('../images/magnifying_glass_16x16.png') no-repeat 9px 9px;
+      -moz-border-radius: 100px;
+      border-radius: 100px;
+      display: inline-block;
+      height: 35px;
+      padding: 0;
+      text-indent: -9999px;
+      width: 35px;
+    }
+    aside#sidebar ul li.widget_search input[type=submit]:hover {
+      background: rgb(174,21,49) url('../images/magnifying_glass_16x16.png') no-repeat 9px 9px; /* For IE */
+      background: rgba(174,21,49,1.0) url('../images/magnifying_glass_16x16.png') no-repeat 9px 9px;      
+    }
+    aside#sidebar ul li ul li {
+      border: 1px solid #fff;
+      list-style: none;
+      margin: 0;
+    }
+      aside#sidebar ul li ul li a {
+        background: rgb(174,21,49); /* For IE */
+        background: rgba(174,21,49,.65);
+        color: #fff;
+        display: block;
+        height: 20px;
+        padding: 14px 0 10px 15px;
+        width: 200px;
+      }
+      aside#sidebar ul li ul li a:hover {
+        background: rgb(174,21,49); /* For IE */
+        background: rgba(174,21,49,1.0);
       }
   footer[role=site] {
     background: url('../images/dotted-line.png') repeat-x top;

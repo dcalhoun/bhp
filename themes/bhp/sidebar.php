@@ -8,7 +8,7 @@
  */
 ?>
 
-		<aside class="grid_4 omega">
+		<aside id="sidebar" class="grid_3 omega">
 		<div id="primary" class="widget-area" role="complementary">
 			<ul class="xoxo">
 
