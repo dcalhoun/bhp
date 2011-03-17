@@ -20,8 +20,8 @@
   <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
   
     <h1><a href="<?php the_permalink(); ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-    <p class="info"><?php the_time(); ?> by <?php the_author(); ?></p>
-    <?php the_content('Read More &raquo;'); ?>
+    <span class="date"><?php the_time('M d'); ?></span>
+    <?php the_excerpt(); ?>
     
   </article>
   

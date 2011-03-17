@@ -199,6 +199,26 @@ Styling for structure of the site.
     padding: 25px 0 20px 0;
     position: relative;
   }
+    div#page article.post {
+      position: relative;
+    }
+      div#page article.post span.date {
+        background: rgb(174,21,49) /* For IE */;
+        background: rgba(174,21,49,.65);
+        -moz-border-radius: 100px;
+        border-radius: 100px;
+        color: #fff;
+        display: block;
+        font-size: 24px;
+        left: -70px;
+        line-height: 19px;
+        height: 45px;
+        padding: 5px 0 0 0;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        width: 50px;
+      }
     #page span.edit-link {
       left: -80px;
       position: absolute;
