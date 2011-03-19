@@ -115,6 +115,7 @@ div.all-content input[type=submit] {
 }
 div.all-content input[type=submit]:hover {
   background: #ae3f54;
+  color: #fff;
   cursor: pointer;
 }
 
