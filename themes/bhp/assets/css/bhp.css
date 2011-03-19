@@ -308,6 +308,10 @@ Styling for structure of the site.
     footer[role=site] a:hover {
       color: #8d8d8d;
     }
+    footer[role=site] a.admin {
+      color: #666;
+      font-family: 'Delicious', Arial, sans-serif;
+    }
 /* @end */
 
 /* @group Page Styles
