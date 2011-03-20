@@ -524,6 +524,7 @@ div.photo-shadow:after {
     div.photo a span.label {
       background: rgba(255,255,255,0.85);
       bottom: -44px;
+      color: #ae1531;
       font: 18px/23px 'Arvo', Georgia, serif;
       left: 0;
       padding: 10px 0;
@@ -583,7 +584,7 @@ body.page-template-about-php div.featured-image:after {
 /* @end */
 
 /* @group 404 Page */
-.four-o-four {
+.error404 {
 }
 /* @end */
 /* @end */
