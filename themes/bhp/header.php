@@ -5,6 +5,7 @@
   <title><?php bloginfo('site_title'); ?></title>
   <meta name="description" content="<?php bloginfo('description'); ?>" />
   <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
+  <link rel="shortcut icon" href="<?php bloginfo( 'url' ); ?>/favicon.ico" type="image/x-icon" />
   
   <!-- ### Modernizr ### -->
   <script src="<?php bloginfo('template_directory'); ?>/assets/js/modernizr-1.7.min.js" type="text/javascript"></script>

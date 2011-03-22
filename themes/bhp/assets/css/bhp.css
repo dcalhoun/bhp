@@ -20,6 +20,7 @@ div.all-content a, div.all-content a:visited, div.all-content a:active {
   color: #ae1531;
   outline: none;
   text-decoration: none;
+  -moz-transition: all 0.4s ease-in-out;
   -webkit-transition: all 0.4s ease-in-out;
 }
 div.all-content a:hover {
@@ -47,6 +48,7 @@ h1.logo {
   margin: 0 0 0 -37px;
   width: 250px;
   text-indent: -9999px;
+  -moz-transition: all 0.4s ease-in-out;
   -webkit-transition: all 0.4s ease-in-out;
 }
 h1.logo:hover {
@@ -109,9 +111,10 @@ div.all-content input[type=submit] {
   color: #fff;
   font: 17px/23px 'Arvo', Georgia, serif;
   padding: 2px 30px;
-  text-shadow: 0 1px 0 rgba(0,0,0.5);
+  text-shadow: 0 -1px 0 rgba(0,0,0,.5);
   text-transform: lowercase;
-  -webkit-transition: all 0.4s ease-in-out
+  -moz-transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
 }
 div.all-content input[type=submit]:hover {
   background: #ae3f54;
@@ -504,6 +507,9 @@ div.photo-shadow:after {
     overflow: hidden;
     padding: 10px;
     position: relative;
+    -moz-transition-property: background, border;
+    -moz-transition-duration: 0.5s;
+    -moz-transition-timing-function: ease-in-out;
     -webkit-transition-property: background, border;
     -webkit-transition-duration: 0.5s;
     -webkit-transition-timing-function: ease-in-out;
@@ -530,10 +536,13 @@ div.photo-shadow:after {
       padding: 10px 0;
       position: absolute;
       text-transform: lowercase;
+      -moz-transition: bottom 0.4s ease-in-out;
+      -webkit-transition: bottom 0.4s ease-in-out;
       width: 198px;
     }
     div.photo:hover a span.label {
       color: #ae1531;
+      bottom: 0;
     }
 /* @end */
 

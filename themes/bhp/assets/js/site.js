@@ -8,11 +8,11 @@ jQuery(document).ready(function($) {
     $(gallery_page).parent('li').addClass('current_page_parent');
   }
   
-  // Slide gallery titles in on hover
-  $('div.photo').hover(function() {
+  // Slide gallery titles in on hover - IE only
+  /*$('div.photo').hover(function() {
     $(this).find('span.label').animate({bottom:'0'},{queue:false,duration:400});
     }, function(){
       $(this).find('span.label').animate({bottom:'-44px'},{queue:false,duration:400});
-  });
+  });*/
   
 });
