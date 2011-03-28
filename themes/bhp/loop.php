@@ -33,8 +33,7 @@
   <?php endwhile; ?>
   
   <nav class="posts-nav">
-    <span class="next-posts"><?php next_posts_link( 'Older Posts' ) ?></span>
-    <span class="previous-posts"><?php previous_posts_link( 'Newer Posts' ) ?></span>
+    <?php wp_pagenavi(); ?>
   </nav>
   
 <?php else : ?>
