@@ -2,6 +2,10 @@
 function gf_apply_rules(formId, fields, isInit){
     for(var i=0; i < fields.length; i++)
         gf_apply_field_rule(formId, fields[i], isInit);
+
+    if(window["gformCalculateTotalPrice"]){
+        window["gformCalculateTotalPrice"](formId);
+    }
 }
 
 function gf_apply_field_rule(formId, fieldId, isInit){
@@ -15,6 +19,13 @@ function gf_apply_field_rule(formId, fieldId, isInit){
         action = gf_get_field_action(formId, conditionalLogic["field"]);
 
     gf_do_field_action(formId, action, fieldId, isInit);
+
+    //perform conditional logic for the next button
+    if(conditionalLogic["nextButton"]){
+        action = gf_get_field_action(formId, conditionalLogic["nextButton"]);
+        gf_do_next_button_action(formId, action, fieldId, isInit);
+    }
+
 }
 
 function gf_get_field_action(formId, conditionalLogic){
@@ -41,16 +52,24 @@ function gf_is_value_selected(formId, fieldId, value){
     var inputs = jQuery("#input_" + formId + "_" + fieldId + " input");
     if(inputs.length > 0){
         for(var i=0; i< inputs.length; i++){
-            if(jQuery(inputs[i]).val() == value && jQuery(inputs[i]).is(":checked"))
+            if(gf_get_value(jQuery(inputs[i]).val()) == value && jQuery(inputs[i]).is(":checked"))
                 return true;
         }
     }
     else{
-        if(jQuery("#input_" + formId + "_" + fieldId).val() == value)
+        if(gf_get_value(jQuery("#input_" + formId + "_" + fieldId).val()) == value)
             return true;
     }
 
     return false;
+}
+
+function gf_get_value(val){
+    if(!val)
+        return "";
+        
+    var val = val.split("|");
+    return val[0];
 }
 
 function gf_do_field_action(formId, action, fieldId, isInit){
@@ -60,18 +79,28 @@ function gf_do_field_action(formId, action, fieldId, isInit){
     for(var i=0; i < dependent_fields.length; i++){
         var targetId = fieldId == 0 ? "#gform_submit_button_" + formId : "#field_" + formId + "_" + dependent_fields[i];
 
-        if(action == "show"){
-            if(conditional_logic["animation"] && !isInit)
-                jQuery(targetId).slideDown();
-            else
-                jQuery(targetId).show();
+        gf_do_action(action, targetId, conditional_logic["animation"], isInit);
+    }
+}
 
-        }
-        else{
-            if(conditional_logic["animation"] && !isInit)
-                jQuery(targetId).slideUp();
-            else
-                jQuery(targetId).hide();
-        }
+function gf_do_next_button_action(formId, action, fieldId, isInit){
+    var conditional_logic = window["gf_form_conditional_logic"][formId];
+    var targetId = "#gform_next_button_" + formId + "_" + fieldId;
+
+    gf_do_action(action, targetId, conditional_logic["animation"], isInit);
+}
+
+function gf_do_action(action, targetId, useAnimation, isInit){
+    if(action == "show"){
+        if(useAnimation && !isInit)
+            jQuery(targetId).slideDown();
+        else
+            jQuery(targetId).show();
+    }
+    else{
+        if(useAnimation && !isInit)
+            jQuery(targetId).slideUp();
+        else
+            jQuery(targetId).hide();
     }
 }

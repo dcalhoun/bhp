@@ -1,5 +1,4 @@
 <?php
-
 add_action( 'widgets_init', 'gf_register_widget' );
 
 if(!function_exists("gf_register_widget")){
@@ -13,7 +12,7 @@ class GFWidget extends WP_Widget {
 
     function GFWidget() {
         $this->WP_Widget( 'gform_widget', 'Form',
-                            array( 'classname' => 'gform_widget', 'description' => 'Gravity Forms Widget' ),
+                            array( 'classname' => 'gform_widget', 'description' => __('Gravity Forms Widget', "gravityforms") ),
                             array( 'width' => 200, 'height' => 250, 'id_base' => 'gform_widget' )
                             );
     }
@@ -35,8 +34,9 @@ class GFWidget extends WP_Widget {
         //creating form
         $form = RGFormsModel::get_form_meta($instance['form_id']);
 
-        if(!$instance["disable_scripts"])
+        if(empty($instance["disable_scripts"])){
             RGForms::print_form_scripts($form, $instance["ajax"]);
+        }
 
         $form_markup = RGForms::get_form($instance['form_id'], $instance['showtitle'], $instance['showdescription'], false, null, $instance["ajax"]);
 
@@ -60,7 +60,7 @@ class GFWidget extends WP_Widget {
 
     function form( $instance ) {
 
-        $instance = wp_parse_args( (array) $instance, array('title' => "Contact Us", 'tabindex' => '1') );
+        $instance = wp_parse_args( (array) $instance, array('title' => __("Contact Us", "gravityforms"), 'tabindex' => '1') );
         ?>
         <p>
             <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e("Title", "gravityforms"); ?>:</label>

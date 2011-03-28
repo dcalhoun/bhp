@@ -72,6 +72,11 @@ $form = RGFormsModel::get_form_meta($form_id);
         array_push($form["fields"],array("id" => "date_created" , "label" => __("Entry Date", "gravityforms")));
         array_push($form["fields"],array("id" => "ip" , "label" => __("User IP", "gravityforms")));
         array_push($form["fields"],array("id" => "source_url" , "label" => __("Source Url", "gravityforms")));
+        array_push($form["fields"],array("id" => "payment_status" , "label" => __("Payment Status", "gravityforms")));
+        array_push($form["fields"],array("id" => "transaction_id" , "label" => __("Transaction Id", "gravityforms")));
+        array_push($form["fields"],array("id" => "payment_amount" , "label" => __("Payment Amount", "gravityforms")));
+        array_push($form["fields"],array("id" => "payment_date" , "label" => __("Payment Date", "gravityforms")));
+        array_push($form["fields"],array("id" => "created_by" , "label" => __("User", "gravityforms")));
 
         ?>
         <div class="panel-instructions">Drag &amp; drop to order &amp;select which columns are displayed in the entries table.</div>

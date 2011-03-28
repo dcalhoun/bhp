@@ -14,7 +14,7 @@ class GFExport{
             header('Content-Description: File Transfer');
             header("Content-Disposition: attachment; filename=$filename");
             header('Content-Type: text/plain; charset=' . $charset, true);
-
+            ob_clean();
             GFExport::start_export($form);
 
             die();
@@ -33,6 +33,8 @@ class GFExport{
             foreach($forms as &$form){
                 foreach($form["fields"] as &$field){
                     $inputType = RGFormsModel::get_input_type($field);
+
+                    unset($field["pageNumber"]);
 
                     if($inputType == "checkbox")
                         unset($field["inputs"]);
@@ -64,6 +66,9 @@ class GFExport{
                 "forms/form/postAuthor" => array("is_attribute" => true),
                 "forms/form/labelPlacement" => array("is_attribute" => true),
                 "forms/form/confirmation/type" => array("is_attribute" => true),
+                "forms/form/lastPageButton/type" => array("is_attribute" => true),
+                "forms/form/pagination/type" => array("is_attribute" => true),
+                "forms/form/pagination/style" => array("is_attribute" => true),
                 "forms/form/button/type" => array("is_attribute" => true),
                 "forms/form/button/conditionalLogic/actionType" => array("is_attribute" => true),
                 "forms/form/button/conditionalLogic/logicType" => array("is_attribute" => true),
@@ -73,6 +78,7 @@ class GFExport{
                 "forms/form/fields/field/id" => array("is_attribute" => true),
                 "forms/form/fields/field/type" => array("is_attribute" => true),
                 "forms/form/fields/field/inputType" => array("is_attribute" => true),
+                "forms/form/fields/field/displayOnly" => array("is_attribute" => true),
                 "forms/form/fields/field/size" => array("is_attribute" => true),
                 "forms/form/fields/field/isRequired" => array("is_attribute" => true),
                 "forms/form/fields/field/noDuplicates" => array("is_attribute" => true),
@@ -87,6 +93,13 @@ class GFExport{
                 "forms/form/fields/field/conditionalLogic/rules/rule/fieldId" => array("is_attribute" => true),
                 "forms/form/fields/field/conditionalLogic/rules/rule/operator" => array("is_attribute" => true),
                 "forms/form/fields/field/conditionalLogic/rules/rule/value" => array("allow_empty" => true),
+                "forms/form/fields/field/previousButton/type" => array("is_attribute" => true),
+                "forms/form/fields/field/nextButton/type" => array("is_attribute" => true),
+                "forms/form/fields/field/nextButton/conditionalLogic/actionType" => array("is_attribute" => true),
+                "forms/form/fields/field/nextButton/conditionalLogic/logicType" => array("is_attribute" => true),
+                "forms/form/fields/field/nextButton/conditionalLogic/rules/rule/fieldId" => array("is_attribute" => true),
+                "forms/form/fields/field/nextButton/conditionalLogic/rules/rule/operator" => array("is_attribute" => true),
+                "forms/form/fields/field/nextButton/conditionalLogic/rules/rule/value" => array("allow_empty" => true),
                 "forms/form/fields/field/choices/choice/isSelected" => array("is_attribute" => true),
                 "forms/form/fields/field/choices/choice/text" => array("allow_empty" => true),
                 "forms/form/fields/field/choices/choice/value" => array("allow_empty" => true),
@@ -160,6 +173,7 @@ class GFExport{
         <br/>
         <?php
     }
+
     public static function import_file($filepath){
 
         $xmlstr = file_get_contents($filepath);
@@ -167,6 +181,7 @@ class GFExport{
         require_once("xml.php");
 
         $options = array(
+                        "page" => array("unserialize_as_array" => true),
                         "form"=> array("unserialize_as_array" => true),
                         "field"=> array("unserialize_as_array" => true),
                         "rule"=> array("unserialize_as_array" => true),
@@ -180,7 +195,6 @@ class GFExport{
             return 0;   //Error. could not unserialize XML file
         else if(version_compare($forms["version"], self::$min_import_version, "<"))
             return -1;  //Error. XML version is not compatible with current Gravity Forms version
-
 
         //cleaning up generated object
         self::cleanup($forms);
@@ -236,7 +250,7 @@ class GFExport{
         ?>
         <link rel="stylesheet" href="<?php echo GFCommon::get_base_url()?>/css/admin.css"/>
         <div class="wrap">
-            <img alt="<?php _e("Gravity Forms", "gravityforms") ?>" style="margin: 15px 7px 0pt 0pt; float: left;" src="<?php echo GFCommon::get_base_url() ?>/images/gravity-title-icon-32.png"/>
+            <img alt="<?php _e("Gravity Forms", "gravityforms") ?>" style="margin: 15px 7px 0pt 0pt; float: left;" src="<?php echo GFCommon::get_base_url() ?>/images/gravity-import-icon-32.png"/>
             <h2><?php _e("Import Forms", "gravityforms") ?></h2>
 
 
@@ -270,12 +284,12 @@ class GFExport{
         <?php
     }
 
-     public static function export_form_page(){
+    public static function export_form_page(){
 
         ?>
         <link rel="stylesheet" href="<?php echo GFCommon::get_base_url()?>/css/admin.css"/>
         <div class="wrap">
-            <img alt="<?php _e("Gravity Forms", "gravityforms") ?>" style="margin: 15px 7px 0pt 0pt; float: left;" src="<?php echo GFCommon::get_base_url() ?>/images/gravity-title-icon-32.png"/>
+            <img alt="<?php _e("Gravity Forms", "gravityforms") ?>" style="margin: 15px 7px 0pt 0pt; float: left;" src="<?php echo GFCommon::get_base_url() ?>/images/gravity-export-icon-32.png"/>
             <h2><?php _e("Export Forms", "gravityforms") ?></h2>
             <?php
             self::export_links();
@@ -354,7 +368,7 @@ class GFExport{
         <link rel="stylesheet" href="<?php echo GFCommon::get_base_url()?>/css/admin.css"/>
 
         <div class="wrap">
-            <img alt="<?php _e("Gravity Forms", "gravityforms") ?>" style="margin: 15px 7px 0pt 0pt; float: left;" src="<?php echo GFCommon::get_base_url() ?>/images/gravity-title-icon-32.png"/>
+            <img alt="<?php _e("Gravity Forms", "gravityforms") ?>" style="margin: 15px 7px 0pt 0pt; float: left;" src="<?php echo GFCommon::get_base_url() ?>/images/gravity-export-icon-32.png"/>
             <h2><?php _e("Export Form Entries", "gravityforms") ?></h2>
             <?php
             self::export_links();
@@ -440,14 +454,20 @@ class GFExport{
         array_push($form["fields"],array("id" => "date_created" , "label" => __("Entry Date", "gravityforms")));
         array_push($form["fields"],array("id" => "ip" , "label" => __("User IP", "gravityforms")));
         array_push($form["fields"],array("id" => "source_url" , "label" => __("Source Url", "gravityforms")));
+        array_push($form["fields"],array("id" => "payment_status" , "label" => __("Payment Status", "gravityforms")));
+        array_push($form["fields"],array("id" => "payment_date" , "label" => __("Payment Date", "gravityforms")));
+        array_push($form["fields"],array("id" => "transaction_id" , "label" => __("Transaction Id", "gravityforms")));
 
         $entry_count = RGFormsModel::get_lead_count($form_id, "", null, null, $start_date, $end_date);
-        $page_size = 2;
+
+        $page_size = 200;
         $offset = 0;
 
         //Adding BOM marker for UTF-8
-        $lines=chr(239) . chr(187) . chr(191);
-        
+        $lines= chr(239) . chr(187) . chr(191);
+
+        echo $entry_count . "\n";
+
         //writing header
         foreach($fields as $field_id){
             $field = RGFormsModel::get_field($form, $field_id);

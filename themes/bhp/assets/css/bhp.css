@@ -32,7 +32,7 @@ blockquote {
 }
 strong { font-weight: bold; }
 em { font-style: italic; }
-small { font-size: 30%; }
+small { font-size: 80%; }
 h1 {
   color: #ae1351;
   font: 24px/30px 'Arvo', Georgia, serif;
@@ -204,25 +204,32 @@ Styling for structure of the site.
     position: relative;
   }
     div#page article.post {
+      margin-bottom: 50px;
       position: relative;
     }
-      div#page article.post span.date {
-        background: rgb(174,21,49) /* For IE */;
-        background: rgba(174,21,49,.65);
-        -moz-border-radius: 100px;
-        border-radius: 100px;
+      div#page article.post div.date {
+        background: url('../images/bg-date-heart.png') no-repeat 0 0;
         color: #fff;
         display: block;
         font-size: 24px;
-        left: -70px;
-        line-height: 19px;
-        height: 45px;
-        padding: 5px 0 0 0;
+        left: -80px;
+        height: 46px;
+        padding: 15px 0 0 5px;
         position: absolute;
         text-align: center;
-        top: 0;
-        width: 50px;
+        top: -10px;
+        width: 60px;
       }
+        div#page article.post span.month {
+          display: block;
+          font-size: 14px;
+          line-height: 12px;
+          text-transform: uppercase;
+        }
+        div#page article.post span.day {
+          font-size: 24px;
+          line-height: 20px;
+        }
     #page span.edit-link {
       left: -80px;
       position: absolute;

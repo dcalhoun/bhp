@@ -20,9 +20,13 @@
   <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
   
     <h1><a href="<?php the_permalink(); ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-    <p class="info"><?php the_time(); ?> by <?php the_author(); ?></p>
+    <div class="date">
+      <span class="month"><?php the_time('M'); ?></span>
+      <span class="day"><?php the_time('d'); ?></span>
+    </div>
     <?php the_content('Read More &raquo;'); ?>
-    <?php //edit_post_link( __( 'Edit' ), '<span class="edit-link">', '</span>' ); ?>
+    
+    <?php comments_template( '', true ); ?>
     
   </article>
   

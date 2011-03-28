@@ -3,8 +3,17 @@
 //INITIALIZING PAGE
 //-------------------------------------------------
 var gforms_dragging = 0;
-
+var gforms_original_json;
 jQuery(document).ready(function() {
+    gforms_original_json = jQuery.toJSON(form);
+
+    window.onbeforeunload = function(){
+        UpdateFormObject();
+        if (gforms_original_json != jQuery.toJSON(form)){
+            return "You have unsaved changes.";
+        }
+    }
+
     jQuery('#gform_fields').sortable({
         axis: 'y',
         cancel: '#field_settings',
@@ -13,6 +22,18 @@ jQuery(document).ready(function() {
     InitializeForm(form);
 });
 
+
+function TogglePageBreakSettings(){
+    if(HasPageBreak()){
+        jQuery("#gform_last_page_settings").show();
+        jQuery("#gform_pagination").show();
+    }
+    else
+    {
+        jQuery("#gform_last_page_settings").hide();
+        jQuery("#gform_pagination").hide();
+    }
+}
 
 function UpdateFormProperty(name, value){
     jQuery("#gform_" + name).html(value);
@@ -23,16 +44,43 @@ function UpdateLabelPlacement(){
     jQuery("#gform_fields").removeClass("top_label").removeClass("left_label").removeClass("right_label").addClass(placement);
 }
 
+function SetDisableQuantity(isChecked){
+    SetFieldProperty('disableQuantity', isChecked);
+    if(isChecked)
+        jQuery(".field_selected .ginput_quantity_label, .field_selected .ginput_quantity").hide();
+    else
+        jQuery(".field_selected .ginput_quantity_label, .field_selected .ginput_quantity").show();
+}
+
+function GetCurrentCurrency(){
+    <?php
+    require_once("currency.php");
+    $current_currency = RGCurrency::get_currency(GFCommon::get_currency());
+    ?>
+    var currency = new Currency(<?php echo GFCommon::json_encode($current_currency)?>);
+    return currency;
+}
+
+function SetBasePrice(number){
+    if(!number)
+        number = 0;
+
+    var currency = GetCurrentCurrency();
+    var price = currency.toMoney(number);
+    if(price == false)
+        price = 0;
+
+    jQuery("#field_base_price").val(price);
+
+    SetFieldProperty('basePrice', price);
+    jQuery(".field_selected .ginput_product_price, .field_selected .ginput_shipping_price").html(price);
+}
+
 function SetAddressType(isInit){
     field = GetSelectedField();
 
     if(field["type"] != "address")
         return;
-
-    /*var addressType = jQuery("#field_address_type").val();
-    var country = jQuery("#field_address_country_" + addressType);
-    jQuery("#field_address_default_country_" + addressType).val(country);
-*/
 
     SetAddressProperties();
     jQuery(".gfield_address_type_container").hide();
@@ -121,6 +169,17 @@ function ToggleLimitEntry(isInit){
     }
 }
 
+function TogglePasswordStrength(isInit){
+    var speed = isInit ? "" : "slow";
+
+    if(jQuery("#gfield_password_strength_enabled").is(":checked")){
+        jQuery("#gfield_min_strength_container").show(speed);
+    }
+    else{
+        jQuery("#gfield_min_strength_container").hide(speed);
+    }
+}
+
 
 function ToggleSchedule(isInit){
     var speed = isInit ? "" : "slow";
@@ -147,12 +206,41 @@ function ToggleCategory(isInit){
     }
 }
 
-function SetPostContentTemplate(){
-    SetFieldProperty("postContentTemplate", jQuery("#field_post_content_template").val());
+function SetCustomFieldTemplate(){
+    var enabled = jQuery("#gfield_customfield_content_enabled").is(":checked");
+    SetFieldProperty("customFieldTemplate", enabled ? jQuery("#field_customfield_content_template").val() : null);
+    SetFieldProperty("customFieldTemplateEnabled", enabled );
 }
 
-function SetPostTitleTemplate(){
-    SetFieldProperty("postTitleTemplate", jQuery("#field_post_title_template").val());
+
+function SetCategoryInitialItem(){
+    var enabled = jQuery("#gfield_post_category_initial_item_enabled").is(":checked");
+    SetFieldProperty("categoryInitialItem", enabled ? jQuery("#field_post_category_initial_item").val() : null);
+    SetFieldProperty("categoryInitialItemEnabled", enabled );
+}
+
+function TogglePostCategoryInitialItem(isInit){
+    var speed = isInit ? "" : "slow";
+
+    if(jQuery("#gfield_post_category_initial_item_enabled").is(":checked")){
+        jQuery("#gfield_post_category_initial_item_container").show(speed);
+
+        if(!isInit){
+            jQuery("#field_post_category_initial_item").val('<?php _e("Select a category")?>');
+        }
+    }
+    else{
+        jQuery("#gfield_post_category_initial_item_container").hide(speed);
+        jQuery("#field_post_category_initial_item").val('');
+    }
+
+}
+
+function PopulateContentTemplate(fieldName){
+    if(jQuery("#" + fieldName).val().length == 0){
+        var field = GetSelectedField();
+        jQuery("#" + fieldName).val("{" + field.label + ":" + field.id + "}");
+    }
 }
 
 function TogglePostContentTemplate(isInit){
@@ -160,6 +248,7 @@ function TogglePostContentTemplate(isInit){
 
     if(jQuery("#gfield_post_content_enabled").is(":checked")){
         jQuery("#gfield_post_content_container").show(speed);
+        PopulateContentTemplate("field_post_content_template");
     }
     else{
         jQuery("#gfield_post_content_container").hide(speed);
@@ -170,9 +259,22 @@ function TogglePostTitleTemplate(isInit){
     var speed = isInit ? "" : "slow";
     if(jQuery("#gfield_post_title_enabled").is(":checked")){
         jQuery("#gfield_post_title_container").show(speed);
+        PopulateContentTemplate("field_post_title_template");
     }
     else{
         jQuery("#gfield_post_title_container").hide(speed);
+    }
+}
+
+function ToggleCustomFieldTemplate(isInit){
+    var speed = isInit ? "" : "slow";
+
+    if(jQuery("#gfield_customfield_content_enabled").is(":checked")){
+        jQuery("#gfield_customfield_content_container").show(speed);
+        PopulateContentTemplate("field_customfield_content_template");
+    }
+    else{
+        jQuery("#gfield_customfield_content_container").hide(speed);
     }
 }
 
@@ -201,16 +303,37 @@ function ToggleInputName(isInit){
 
 function ToggleChoiceValue(isInit){
     var speed = isInit ? "" : "slow";
+    var field = GetSelectedField();
+    var suffix = field.enablePrice ? "_and_price" : "";
+    var container = jQuery('#gfield_settings_choices_container');
+
+    //removing all classes
+    container.removeClass("choice_with_price choice_with_value choice_with_value_and_price");
+
     if(jQuery('#field_choice_values_enabled').is(":checked")){
-        jQuery('#gfield_settings_choices_container').addClass("choice_with_value");
+        container.addClass("choice_with_value" + suffix);
     }
-    else{
-        jQuery('#gfield_settings_choices_container').removeClass("choice_with_value");
+    else if(field.enablePrice){
+        container.addClass("choice_with_price");
     }
 }
 
 function GetConditionalObject(objectType){
-    return objectType == "field" ? GetSelectedField() : form.button;
+    switch(objectType){
+        case "page" :
+        case "field" :
+            return GetSelectedField();
+        break;
+
+        case "next_button" :
+            var field = GetSelectedField();
+            return field["nextButton"];
+        break;
+
+        default:
+            return form.button;
+        break;
+    }
 }
 
 function ToggleConditionalLogic(isInit, objectType){
@@ -277,6 +400,36 @@ function ToggleButton(isInit){
 }
 
 
+function TogglePageButton(button_name, isInit){
+    var isText = jQuery("#" + button_name + "_button_text").is(":checked");
+    show_element = isText ? "#" + button_name + "_button_text_container" : "#" + button_name + "_button_image_container"
+    hide_element = isText ? "#" + button_name + "_button_image_container"  : "#" + button_name + "_button_text_container";
+
+    if(isInit){
+        jQuery(hide_element).hide();
+        jQuery(show_element).show();
+    }
+    else{
+        jQuery(hide_element).hide();
+        jQuery(show_element).fadeIn(800);
+     }
+}
+
+function SetPageButton(button_name){
+    field = GetSelectedField();
+    var buttonType = jQuery("#" + button_name + "_button_image").is(":checked") ? "image" : "text";
+    field[button_name + "Button"]["type"] = buttonType;
+    if(buttonType == "image"){
+        field[button_name + "Button"]["text"] = "";
+        field[button_name + "Button"]["imageUrl"] = jQuery("#" + button_name + "_button_image_url").val();
+    }
+    else{
+        field[button_name + "Button"]["text"] = jQuery("#" + button_name + "_button_text_input").val();
+        field[button_name + "Button"]["imageUrl"] = "";
+    }
+}
+
+
 function ToggleCustomField(isInit){
 
     var isExisting = jQuery("#field_custom_existing").is(":checked");
@@ -328,12 +481,95 @@ function HasPostTitleField(){
     return false;
 }
 
+function HasCustomField(){
+    for(var i=0; i<form.fields.length; i++){
+        var type = form.fields[i].type;
+        if(type == "post_custom_field")
+            return true;
+    }
+    return false;
+}
+
+function HasPageBreak(){
+    for(var i=0; i<form.fields.length; i++){
+        var type = form.fields[i].type;
+        if(type == "page")
+            return true;
+    }
+    return false;
+}
+
+
 function SetButtonConditionalLogic(isChecked){
     form.button.conditionalLogic = isChecked ? new ConditionalLogic() : null;
 }
 
+function SetNextButtonConditionalLogic(isChecked){
+    var field = GetSelectedField();
+
+    field.nextButton.conditionalLogic = isChecked ? new ConditionalLogic() : null;
+}
+
+function ValidateForm(){
+    var error = "";
+    if(jQuery.trim(form.title).length == 0){
+        error = "<?php _e("Please enter a Title for this form. When adding the form to a page or post, you will have the option to hide the title.", "gravityforms") ?>";
+    }
+    else{
+        var last_page_break = -1;
+        for(var i=0; i<form["fields"].length; i++){
+            var field = form["fields"][i];
+            switch(field["type"]){
+                case "page" :
+                    if(i == last_page_break + 1 || i == form["fields"].length-1)
+                    error = "<?php _e("Your form currently has one ore more pages without any fields in it. Blank pages are a result of Page Breaks that are positioned as the first or last field in the form or right after to each other. Please adjust your Page Breaks and try again.", "gravityforms") ?>";
+
+                    last_page_break = i;
+                break;
+
+                case "product" :
+                    if(jQuery.trim(field["label"]).length == 0)
+                        error = "<?php _e("Your form currently has a product field with a blank label. \\nPlease enter a label for all product fields.", "gravityforms") ?>";
+                break;
+            }
+        }
+    }
+    if(error){
+        jQuery("#please_wait_container").hide();
+        alert(error);
+        return false;
+    }
+    return true;
+}
+
 function SaveForm(){
+
     jQuery("#please_wait_container").show();
+
+    UpdateFormObject();
+
+    if(!ValidateForm()){
+        return false;
+    }
+
+    var mysack = new sack("<?php echo admin_url("admin-ajax.php")?>" );
+    mysack.execute = 1;
+    mysack.method = 'POST';
+    mysack.setVar( "action", "rg_save_form" );
+    mysack.setVar( "rg_save_form", "<?php echo wp_create_nonce("rg_save_form") ?>" );
+    mysack.setVar( "id", form.id );
+    mysack.setVar( "form", jQuery.toJSON(form) );
+    mysack.encVar( "cookie", document.cookie, false );
+    mysack.onError = function() { alert('<?php _e("Ajax error while saving form", "gravityforms") ?>' )};
+    mysack.runAJAX();
+
+    //updating original json. used when verifying if there has been any changes unsaved changed before leaving the page
+    gforms_original_json = jQuery.toJSON(form);
+
+    return true;
+}
+
+function UpdateFormObject(){
 
     form.title = jQuery("#form_title_input").val();
     form.description = jQuery("#form_description_input").val();
@@ -343,17 +579,20 @@ function SaveForm(){
     form.confirmation.url = jQuery("#form_confirmation_url").val() == "http://" ? "" : jQuery("#form_confirmation_url").val();
     form.confirmation.pageId = jQuery("#form_confirmation_page").val();
     form.confirmation.queryString = jQuery("#form_redirect_querystring").val();
+    form.confirmation.disableAutoformat = jQuery("#form_disable_autoformatting").is(":checked");
 
     if(jQuery("#form_confirmation_redirect").is(":checked") && form.confirmation.url.length > 0){
         form.confirmation.type = "redirect";
         form.confirmation.pageId = "";
         form.confirmation.message = "";
+        form.confirmation.disableAutoformat = false;
     }
     else if(jQuery("#form_confirmation_show_page").is(":checked") && form.confirmation.pageId != ""){
         form.confirmation.type = "page";
         form.confirmation.message = "";
         form.confirmation.url = "";
         form.confirmation.queryString = "";
+        form.confirmation.disableAutoformat = false;
     }
     else{
         form.confirmation.type = "message";
@@ -379,17 +618,63 @@ function SaveForm(){
         form.useCurrentUserAsAuthor = jQuery('#gfield_current_user_as_author').is(":checked");
         form.postCategory = jQuery('#field_post_category').val();
         form.postStatus = jQuery('#field_post_status').val();
+    }
 
-        if(jQuery("#gfield_post_content_enabled").is(":checked") && HasPostContentField()){
-            form.postContentTemplateEnabled = true;
-            form.postContentTemplate = jQuery("#field_post_content_template").val();
+    if(jQuery("#gfield_post_content_enabled").is(":checked") && HasPostContentField()){
+        form.postContentTemplateEnabled = true;
+        form.postContentTemplate = jQuery("#field_post_content_template").val();
+    }
+
+    if(jQuery("#gfield_post_title_enabled").is(":checked")  && HasPostTitleField()){
+        form.postTitleTemplateEnabled = true;
+        form.postTitleTemplate = jQuery("#field_post_title_template").val();
+    }
+
+    if(jQuery("#gform_last_page_settings").is(":visible")){
+        form.lastPageButton = new Button();
+        form.lastPageButton.type = jQuery("#last_page_button_text").is(":checked") ? "text" : "image";
+        if(form.lastPageButton.type == "image"){
+            form.lastPageButton.text = "";
+            form.lastPageButton.imageUrl = jQuery("#last_page_button_image_url").val();
         }
-
-        if(jQuery("#gfield_post_title_enabled").is(":checked")  && HasPostTitleField()){
-            form.postTitleTemplateEnabled = true;
-            form.postTitleTemplate = jQuery("#field_post_title_template").val();
+        else{
+            form.lastPageButton.text = jQuery("#last_page_button_text_input").val();
+            form.lastPageButton.imageUrl = "";
         }
     }
+    else{
+        form.lastPageButton = null;
+    }
+
+    if(jQuery("#gform_pagination").is(":visible")){
+        form["pagination"] = new Object();
+        var type = jQuery("input[name=pagination_type]:checked").val();
+        form["pagination"]["type"] = type;
+
+        var pageNames = jQuery(".gform_page_names input");
+        form["pagination"]["pages"] = new Array();
+        for(var i=0; i<pageNames.length; i++){
+            form["pagination"]["pages"].push(jQuery(pageNames[i]).val());
+        }
+
+        if(type == "percentage"){
+            form["pagination"]["style"] = jQuery("#percentage_style").val();
+            form["pagination"]["backgroundColor"] = form["pagination"]["style"] == "custom" ? jQuery("#percentage_style_custom_bgcolor").val() : null;
+            form["pagination"]["color"] = form["pagination"]["style"] == "custom" ? jQuery("#percentage_style_custom_color").val() : null;
+        }
+        else{
+            form["pagination"]["backgroundColor"] = null;
+            form["pagination"]["color"] = null;
+        }
+
+        form["firstPageCssClass"] = jQuery("#first_page_css_class").val();
+    }
+    else{
+        form["pagination"] = null;
+        form["firstPageCssClass"] = null;
+    }
+
+
 
     form.limitEntries = jQuery("#gform_limit_entries").is(":checked");
     if(form.limitEntries){
@@ -427,18 +712,6 @@ function SaveForm(){
 
     SortFields();
 
-    var mysack = new sack("<?php echo admin_url("admin-ajax.php")?>" );
-    mysack.execute = 1;
-    mysack.method = 'POST';
-    mysack.setVar( "action", "rg_save_form" );
-    mysack.setVar( "rg_save_form", "<?php echo wp_create_nonce("rg_save_form") ?>" );
-    mysack.setVar( "id", form.id );
-    mysack.setVar( "form", jQuery.toJSON(form) );
-    mysack.encVar( "cookie", document.cookie, false );
-    mysack.onError = function() { alert('<?php _e("Ajax error while setting post template", "gravityforms") ?>' )};
-    mysack.runAJAX();
-
-    return true;
 }
 
 function EndInsertForm(formId){
@@ -506,9 +779,12 @@ function DeleteField(fieldId){
 }
 function EndDeleteField(fieldId){
 
-    //removing conditional logic rules that are based on the deleted field
+    var product_dependencies = new Array();
+    var first_product = "";
+
     for(var i=0; i<form.fields.length; i++){
 
+        //removing conditional logic rules that are based on the deleted field
         if(form.fields[i]["conditionalLogic"]){
             for(var j=0; j < form.fields[i]["conditionalLogic"]["rules"].length; j++){
                 if(form.fields[i]["conditionalLogic"]["rules"][j]["fieldId"] == fieldId){
@@ -519,6 +795,18 @@ function EndDeleteField(fieldId){
             if(form.fields[i]["conditionalLogic"]["rules"].length == 0)
                 form.fields[i]["conditionalLogic"] = false;
         }
+
+
+        //Getting first product and compiling a list of options and quantities dependent on this field
+        if(form.fields[i]["type"] == "product" && form.fields[i]["id"] != fieldId && first_product != "")
+            first_product = form.fields[i]["id"];
+        else if(form.fields[i]["productField"] == fieldId)
+            product_dependencies.push(i);
+    }
+
+    //Updating all options and quantities that were linked to the deleted product so that the are linked to another product
+    for(var i=0; i<product_dependencies.length; i++){
+        form.fields[product_dependencies[i]]["productField"] = first_product;
     }
 
     //removing notification routing associated with this field
@@ -543,27 +831,17 @@ function EndDeleteField(fieldId){
             //moving field_settings outside the field before it is deleted
             jQuery("#field_settings").insertBefore("#gform_fields");
 
-            disableFloat = true; //disables floating menu (to fix bug where menu gets stuck at the bottom of screen)
             jQuery('#field_' + fieldId).hide('slow',
                 function(){
                     jQuery('#field_' + fieldId).remove();
-
-                    //pre-setting float menu so that it doesn't get stuck at the bottom
-                    jQuery("#floatMenu").css("top", menuYloc);
-                    offset = menuYloc+jQuery(document).scrollTop()+"px";
-                    jQuery("#floatMenu").css("top",offset);
-                    disableFloat = false; //enabling floating menu
                 }
             );
 
-
-
-
             HideSettings("field_settings");
-            return;
+            break;
         }
     }
-
+    TogglePageBreakSettings();
 }
 
 
@@ -591,6 +869,7 @@ function InitializeForm(form){
     jQuery("#form_confirmation_message").text(form.confirmation.message);
     jQuery("#form_confirmation_url").val(form.confirmation.url == "" ? "http://" : form.confirmation.url);
     jQuery("#form_confirmation_page").val(form.confirmation.pageId);
+    jQuery("#form_disable_autoformatting").attr("checked", form.confirmation.disableAutoformat ? true : false);
 
     var hasQueryString = (form.confirmation.queryString != undefined && form.confirmation.queryString.length > 0);
     jQuery("#form_redirect_querystring").val(hasQueryString ? form.confirmation.queryString : "");
@@ -621,6 +900,12 @@ function InitializeForm(form){
     jQuery("#gform_schedule_end_minute").val(form.scheduleEndMinute ? form.scheduleEndMinute : "00");
     jQuery("#gform_schedule_end_ampm").val(form.scheduleEndAmpm ? form.scheduleEndAmpm : "am");
 
+    jQuery("#last_page_button_text").attr("checked", !form.lastPageButton || form.lastPageButton.type != "image");
+    jQuery("#last_page_button_image").attr("checked", form.lastPageButton && form.lastPageButton.type == "image");
+    jQuery("#last_page_button_text_input").val(form.lastPageButton ? form.lastPageButton.text : "<?php _e("Previous", "gravityforms") ?>");
+    jQuery("#last_page_button_image_url").val(form.lastPageButton ? form.lastPageButton.imageUrl : "");
+    TogglePageButton('last_page', true);
+
     if(form.postStatus)
         jQuery('#field_post_status').val(form.postStatus);
 
@@ -646,7 +931,6 @@ function InitializeForm(form){
     }
     TogglePostContentTemplate(true);
 
-
     if(form.postTitleTemplateEnabled){
         jQuery('#gfield_post_title_enabled').attr("checked", "checked");
         jQuery('#field_post_title_template').val(form.postTitleTemplate);
@@ -658,15 +942,27 @@ function InitializeForm(form){
     TogglePostTitleTemplate(true);
 
     jQuery("#gform_heading").bind("click", function(){FieldClick(this);});
+    jQuery("#gform_last_page_settings").bind("click", function(){FieldClick(this);});
+    jQuery("#gform_pagination").bind("click", function(){FieldClick(this);});
     jQuery(".gfield").bind("click", function(){FieldClick(this);});
 
-    jQuery("#field_settings, #form_settings").tabs({selected:0});
+    var paginationType = form["pagination"] && form["pagination"]["type"] ? form["pagination"]["type"] : "percentage";
+    jQuery("#pagination_type_steps").attr("checked", paginationType == "steps");
+    jQuery("#pagination_type_percentage").attr("checked", paginationType == "percentage");
+    jQuery("#pagination_type_none").attr("checked", paginationType == "none");
+
+    jQuery("#first_page_css_class").val(form["firstPageCssClass"]);
+
+    jQuery("#field_settings, #form_settings, #last_page_settings, #pagination_settings").tabs({selected:0});
 
     ToggleButton(true);
     ToggleConfirmation(true);
     ToggleSchedule(true);
     ToggleLimitEntry(true);
     InitializeFormConditionalLogic();
+
+    TogglePageBreakSettings();
+    InitPaginationOptions(true);
 
     InitializeFields();
 }
@@ -675,18 +971,30 @@ function GetInputType(field){
 }
 
 function SetDefaultValues(field){
-    switch(GetInputType(field)){
+
+    var inputType = GetInputType(field);
+    switch(inputType){
         case "section" :
             field.label = "<?php _e("Section Break", "gravityforms"); ?>";
             field.inputs = null;
             field["displayOnly"] = true;
-            break;
+        break;
+
+        case "page" :
+            field.label = "";
+            field.inputs = null;
+            field["displayOnly"] = true;
+            field["nextButton"] = new Button();
+            field["nextButton"]["text"] = "<?php _e("Next", "gravityforms") ?>";
+            field["previousButton"] = new Button()
+            field["previousButton"]["text"] = "<?php _e("Previous", "gravityforms") ?>";
+        break;
 
         case "html" :
             field.label = "<?php _e("HTML Block", "gravityforms"); ?>";;
             field.inputs = null;
             field["displayOnly"] = true;
-            break;
+        break;
 
         case "name" :
             if(!field.label)
@@ -696,13 +1004,13 @@ function SetDefaultValues(field){
             switch(field.nameFormat)
             {
                 case "extended" :
-                    field.inputs = [new Input(field.id + 0.2, '<?php echo apply_filters("gform_name_prefix_{$_GET["id"]}", apply_filters("gform_name_prefix", __("Prefix", "gravityforms"))); ?>'), new Input(field.id + 0.3, '<?php echo apply_filters("gform_name_first_{$_GET["id"]}",apply_filters("gform_name_first",__("First", "gravityforms"))); ?>'), new Input(field.id + 0.6, '<?php echo apply_filters("gform_name_last_{$_GET["id"]}", apply_filters("gform_name_last",__("Last", "gravityforms"))); ?>'), new Input(field.id + 0.8, '<?php echo apply_filters("gform_name_suffix_{$_GET["id"]}", apply_filters("gform_name_suffix",__("Suffix", "gravityforms"))); ?>')];
+                    field.inputs = [new Input(field.id + 0.2, '<?php echo apply_filters("gform_name_prefix_{$_GET["id"]}", apply_filters("gform_name_prefix", __("Prefix", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>'), new Input(field.id + 0.3, '<?php echo apply_filters("gform_name_first_{$_GET["id"]}",apply_filters("gform_name_first",__("First", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>'), new Input(field.id + 0.6, '<?php echo apply_filters("gform_name_last_{$_GET["id"]}", apply_filters("gform_name_last",__("Last", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>'), new Input(field.id + 0.8, '<?php echo apply_filters("gform_name_suffix_{$_GET["id"]}", apply_filters("gform_name_suffix",__("Suffix", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>')];
                 break;
                 case "simple" :
                     field.inputs = null;
                 break;
                 default :
-                    field.inputs = [new Input(field.id + 0.3, '<?php echo apply_filters("gform_name_first_{$_GET["id"]}", apply_filters("gform_name_first",__("First", "gravityforms"))); ?>'), new Input(field.id + 0.6, '<?php echo apply_filters("gform_name_last_{$_GET["id"]}", apply_filters("gform_name_last",__("Last", "gravityforms"))); ?>')];
+                    field.inputs = [new Input(field.id + 0.3, '<?php echo apply_filters("gform_name_first_{$_GET["id"]}", apply_filters("gform_name_first",__("First", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>'), new Input(field.id + 0.6, '<?php echo apply_filters("gform_name_last_{$_GET["id"]}", apply_filters("gform_name_last",__("Last", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>')];
                 break;
             }
             break;
@@ -736,10 +1044,11 @@ function SetDefaultValues(field){
                 field.choices = new Array(new Choice("<?php _e("First Choice", "gravityforms"); ?>"), new Choice("<?php _e("Second Choice", "gravityforms"); ?>"), new Choice("<?php _e("Third Choice", "gravityforms"); ?>"));
             break;
         case "address" :
+
             if(!field.label)
                 field.label = "<?php _e("Address", "gravityforms"); ?>";
-            field.inputs = [new Input(field.id + 0.1, '<?php echo apply_filters("gform_address_street_{$_GET["id"]}", apply_filters("gform_address_street",__("Street Address", "gravityforms"))); ?>'), new Input(field.id + 0.2, '<?php echo apply_filters("gform_address_street2_{$_GET["id"]}", apply_filters("gform_address_street2",__("Address Line 2", "gravityforms"))); ?>'), new Input(field.id + 0.3, '<?php echo apply_filters("gform_address_city_{$_GET["id"]}", apply_filters("gform_address_city",__("City", "gravityforms"))); ?>'),
-                            new Input(field.id + 0.4, '<?php echo apply_filters("gform_address_state_{$_GET["id"]}", apply_filters("gform_address_state",__("State / Province", "gravityforms"))); ?>'), new Input(field.id + 0.5, '<?php echo apply_filters("gform_address_zip_{$_GET["id"]}", apply_filters("gform_address_zip",__("Zip / Postal Code", "gravityforms"))); ?>'), new Input(field.id + 0.6, '<?php echo apply_filters("gform_address_country_{$_GET["id"]}", apply_filters("gform_address_country",__("Country", "gravityforms"))); ?>')];
+            field.inputs = [new Input(field.id + 0.1, '<?php echo apply_filters("gform_address_street_{$_GET["id"]}", apply_filters("gform_address_street",__("Street Address", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>'), new Input(field.id + 0.2, '<?php echo apply_filters("gform_address_street2_{$_GET["id"]}", apply_filters("gform_address_street2",__("Address Line 2", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>'), new Input(field.id + 0.3, '<?php echo apply_filters("gform_address_city_{$_GET["id"]}", apply_filters("gform_address_city",__("City", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>'),
+                            new Input(field.id + 0.4, '<?php echo apply_filters("gform_address_state_{$_GET["id"]}", apply_filters("gform_address_state",__("State / Province", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>'), new Input(field.id + 0.5, '<?php echo apply_filters("gform_address_zip_{$_GET["id"]}", apply_filters("gform_address_zip",__("Zip / Postal Code", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>'), new Input(field.id + 0.6, '<?php echo apply_filters("gform_address_country_{$_GET["id"]}", apply_filters("gform_address_country",__("Country", "gravityforms"), $_GET["id"]), $_GET["id"]); ?>')];
             break;
         case "email" :
             field.inputs = null;
@@ -773,6 +1082,12 @@ function SetDefaultValues(field){
             field.inputs = null;
             if(!field.label)
                 field.label = "<?php _e("Website", "gravityforms"); ?>";
+            break;
+        case "password" :
+            field.inputs = null;
+            field["displayOnly"] = true;
+            if(!field.label)
+                field.label = "<?php _e("Password", "gravityforms"); ?>";
             break;
         case "fileupload" :
             field.inputs = null;
@@ -826,6 +1141,97 @@ function SetDefaultValues(field){
             field.label = "<?php _e("Captcha", "gravityforms"); ?>";
 
             break;
+        case "singleproduct" :
+        case "product" :
+            field.label = '<?php _e("Product Name", "gravityforms")?>';
+            field.inputs = null;
+
+            if(!field.inputType)
+                field.inputType = "singleproduct";
+
+            if(field.inputType == "singleproduct"){
+                field.inputs = [new Input(field.id + 0.1, '<?php echo __("Name", "gravityforms"); ?>'), new Input(field.id + 0.2, '<?php echo __("Price", "gravityforms"); ?>'), new Input(field.id + 0.3, '<?php echo __("Quantity", "gravityforms"); ?>')];
+                field.enablePrice = null;
+            }
+
+            productDependentFields = GetFieldsByType(["option", "quantity"]);
+            for(var i=0; i<productDependentFields.length; i++){
+                if(!productDependentFields[i]["productField"])
+                    productDependentFields[i]["productField"] = field.id;
+            }
+            break;
+        case "singleshipping" :
+        case "shipping" :
+            field.label = '<?php _e("Shipping", "gravityforms")?>';
+            field.inputs = null;
+
+            if(!field.inputType)
+                field.inputType = "singleshipping";
+
+            if(field.inputType == "singleshipping")
+                field.enablePrice = null;
+
+            break;
+        case "total" :
+            field.label = '<?php _e("Total", "gravityforms")?>';
+            field.inputs = null;
+
+            break;
+
+        case "option" :
+             field.label = '<?php _e("Option", "gravityforms")?>';
+
+            if(!field.inputType)
+                field.inputType = "select";
+
+            if(!field.choices)
+                field.choices = new Array(new Choice("<?php _e("First Option", "gravityforms"); ?>"), new Choice("<?php _e("Second Option", "gravityforms"); ?>"), new Choice("<?php _e("Third Option", "gravityforms"); ?>"));
+
+            field["enablePrice"] = true;
+
+            productFields = GetFieldsByType(["product"]);
+            if(productFields.length > 0)
+                field["productField"] = productFields[0]["id"];
+
+            break;
+        case "donation" :
+
+            field.label = '<?php _e("Donation", "gravityforms")?>';
+
+            if(!field.inputType)
+                field.inputType = "donation";
+
+
+            field.inputs = null;
+            field.enablePrice = null;
+
+
+            break;
+
+        case "price" :
+
+            field.label = '<?php _e("Price", "gravityforms")?>';
+
+            if(!field.inputType)
+                field.inputType = "price";
+
+            field.inputs = null;
+            field["enablePrice"] = null;
+
+            break;
+
+        case "quantity" :
+             field.label = '<?php _e("Quantity", "gravityformspaypal")?>';
+
+            if(!field.inputType)
+                field.inputType = "number";
+
+            productFields = GetFieldsByType(["product"]);
+            if(productFields.length > 0)
+                field["productField"] = productFields[0]["id"];
+
+            break;
+
         default :
             field.inputs = null;
             if(!field.label)
@@ -833,6 +1239,17 @@ function SetDefaultValues(field){
             break;
         break;
      }
+
+    if(window["SetDefaultValues_" + inputType])
+        field = window["SetDefaultValues_" + inputType](field);
+}
+function GetFieldsByType(types){
+    var fields = new Array();
+    for(var i=0; i<form["fields"].length; i++){
+        if(IndexOf(types, form["fields"][i]["type"]) >= 0)
+            fields.push(form["fields"][i]);
+    }
+    return fields;
 }
 
 function CreateField(id, type){
@@ -873,11 +1290,46 @@ function GetNextFieldId(){
     return parseFloat(max) + 1;
 }
 
+function CanFieldBeAdded(type){
+    switch(type){
+        case "shipping" :
+            if(GetFieldsByType(["shipping"]).length > 0){
+                alert("<?php _e("Only one Shipping field can be added to the form", "gravityforms") ?>");
+                return false;
+            }
+        break;
+
+        case "post_content" :
+            if(GetFieldsByType(["post_content"]).length > 0){
+                alert("<?php _e("Only one Post Content field can be added to the form", "gravityforms") ?>");
+                return false;
+            }
+        break;
+        case "post_title" :
+            if(GetFieldsByType(["post_title"]).length > 0){
+                alert("<?php _e("Only one Post Title field can be added to the form", "gravityforms") ?>");
+                return false;
+            }
+        break;
+        case "post_excerpt" :
+            if(GetFieldsByType(["post_excerpt"]).length > 0){
+                alert("<?php _e("Only one Post Excerpt field can be added to the form", "gravityforms") ?>");
+                return false;
+            }
+        break;
+    }
+    return true;
+}
+
 function StartAddField(type){
+
+    if(! CanFieldBeAdded(type))
+        return;
+
     var nextId = GetNextFieldId();
     var field = CreateField(nextId, type);
 
-    var mysack = new sack("<?php echo admin_url("admin-ajax.php")?>" );
+    var mysack = new sack("<?php echo admin_url("admin-ajax.php")?>?id=" + form.id);
     mysack.execute = 1;
     mysack.method = 'POST';
     mysack.setVar( "action", "rg_add_field" );
@@ -916,12 +1368,15 @@ function EndAddField(field, fieldString){
     //Closing editors
     HideSettings("field_settings");
     HideSettings("form_settings");
+    HideSettings("last_page_settings");
 
     //Select current field
     newFieldElement.addClass("field_selected");
 
     //initializes new field with default data
     SetFieldSize(field.size);
+
+    TogglePageBreakSettings();
 
     InitializeFields();
 
@@ -940,6 +1395,34 @@ function StartChangeCaptchaType(captchaType){
     field["captchaType"] = captchaType;
     SetFieldProperty('captchaType', captchaType);
     jQuery("#field_settings").slideUp(function(){StartChangeInputType(field["type"], field);});
+}
+
+function StartChangeProductType(type){
+    field = GetSelectedField();
+    if(type != "singleproduct")
+        field["enablePrice"] = true;
+    else
+        field["enablePrice"] = null;
+
+    return StartChangeInputType(type, field);
+}
+
+function StartChangeDonationType(type){
+    field = GetSelectedField();
+    if(type != "donation")
+        field["enablePrice"] = true;
+    else
+        field["enablePrice"] = null;
+
+    return StartChangeInputType(type, field);
+}
+
+function StartChangeShippingType(type){
+    field = GetSelectedField();
+    if(type != "singleshipping")
+        field["enablePrice"] = true;
+
+    return StartChangeInputType(type, field);
 }
 
 function StartChangeInputType(type, field){
@@ -1006,7 +1489,7 @@ function InitializeFields(){
     );
 
 
-    jQuery("#field_settings, #form_settings, .captcha_message, .form_delete_icon").bind("click", function(event){event.stopPropagation();});
+    jQuery("#field_settings, #form_settings, #last_page_settings, #pagination_settings, .captcha_message, .form_delete_icon").bind("click", function(event){event.stopPropagation();});
 
    UpdateLabelPlacement();
 }
@@ -1021,8 +1504,24 @@ function FieldClick(field){
 
     if(jQuery(field).hasClass("field_selected"))
     {
+        var element_id = "";
+        switch(field.id){
+            case "gform_heading" :
+                element_id = "#form_settings";
+                jQuery('.gf_form_toolbar_settings a').removeClass("gf_toolbar_active");
+            break;
 
-        var element_id = field.id == "gform_heading" ? "#form_settings" : "#field_settings";
+            case "gform_last_page_settings" :
+                element_id = "#last_page_settings";
+            break;
+
+            case "gform_pagination" :
+                element_id = "#pagination_settings";
+            break;
+
+            default:
+                element_id = "#field_settings";
+        }
         jQuery(element_id).slideUp(function(){jQuery(field).removeClass("field_selected").addClass("field_hover"); HideSettings("field_settings");});
 
         return;
@@ -1035,24 +1534,114 @@ function FieldClick(field){
     jQuery(field).removeClass("field_hover").addClass("field_selected");
 
     //if this is a field (not the form title), load appropriate field type settings
-    if(field.id != "gform_heading"){
+    if(field.id == "gform_heading"){
 
-        //hide form settings
-        HideSettings("form_settings");
-
-        //selects current field
-        LoadFieldSettings();
-
-    }
-    else{
         //hide field settings
         HideSettings("field_settings");
+        HideSettings("last_page_settings");
+        HideSettings("pagination_settings");
 
         InitializeFormConditionalLogic();
 
         //Displaying form settings
         ShowSettings("form_settings");
+
+        //highlighting toolbar item
+        jQuery('.gf_form_toolbar_settings a').addClass("gf_toolbar_active");
+
     }
+    else if(field.id == "gform_last_page_settings"){
+
+        //hide field settings
+        HideSettings("field_settings");
+        HideSettings("form_settings");
+        HideSettings("pagination_settings");
+
+        //Displaying form settings
+        ShowSettings("last_page_settings");
+    }
+    else if(field.id == "gform_pagination"){
+               //hide field settings
+        HideSettings("field_settings");
+        HideSettings("form_settings");
+        HideSettings("last_page_settings");
+
+        InitPaginationOptions();
+
+        //Displaying pagination settings
+        ShowSettings("pagination_settings");
+
+    }
+    else{
+
+        //hide form settings
+        HideSettings("form_settings");
+        HideSettings("last_page_settings");
+        HideSettings("pagination_settings");
+
+        //selects current field
+        LoadFieldSettings();
+    }
+}
+
+function TogglePercentageStyle(isInit){
+    var speed = isInit ? "" : "slow";
+
+    if(jQuery("#percentage_style").val() == 'custom'){
+        jQuery('.percentage_custom_container').show(speed);
+    }
+    else{
+        jQuery('.percentage_custom_container').hide(speed);
+    }
+}
+
+function InitPaginationOptions(isInit){
+    var speed = isInit ? "" : "slow";
+
+    var pages = GetFieldsByType(["page"]);
+    pages.push(new Array());
+    var str = "<ul class='gform_page_names'>";
+
+    var pageNameFields = jQuery(".gform_page_names input");
+    for(var i=0; i<pages.length; i++){
+        var pageName = form["pagination"] && form["pagination"]["pages"] && form["pagination"]["pages"][i] ? form["pagination"]["pages"][i].replace("'", "&#39") : "";
+        if(pageNameFields.length > i && pageNameFields[i].value)
+            pageName = pageNameFields[i].value;
+
+        str += "<li><label class='inline' for='gform_pagename_" + i + "' ><?php _e("Page", "gravityforms") ?> " + (i+1) + "</label> <input type='text' class='fieldwidth-4' id='gform_pagename_" + i + "' value='" + pageName + "' /></li>";
+    }
+    str+="</ul>";
+
+    jQuery("#page_names_container").html(str);
+
+    if(jQuery("#pagination_type_none").is(":checked")){
+        jQuery(".gform_page_names input").val("");
+
+        jQuery("#page_names_setting").hide(speed);
+        jQuery("#percentage_style_setting").hide(speed);
+    }
+    else if(jQuery("#pagination_type_percentage").is(":checked")){
+        var style = form["pagination"] && form["pagination"]["style"] ? form["pagination"]["style"] : "blue";
+        jQuery("#percentage_style").val(style);
+
+        if(style == "custom" && form["pagination"]["backgroundColor"]){
+            jQuery("#percentage_style_custom_bgcolor").val(form["pagination"]["backgroundColor"]);
+            SetColorPickerColor("percentage_style_custom_bgcolor", form["pagination"]["backgroundColor"] , "");
+        }
+        if(style == "custom" && form["pagination"]["color"]){
+            jQuery("#percentage_style_custom_color").val(form["pagination"]["color"]);
+            SetColorPickerColor("percentage_style_custom_color", form["pagination"]["color"] , "");
+        }
+
+        jQuery("#page_names_setting").show(speed);
+        jQuery("#percentage_style_setting").show(speed);
+    }
+    else{
+        jQuery("#percentage_style_setting").hide(speed);
+        jQuery("#page_names_setting").show(speed);
+    }
+
+    TogglePercentageStyle(isInit);
 }
 
 function InitializeFormConditionalLogic(){
@@ -1081,6 +1670,7 @@ function CustomFieldExists(name){
 }
 
 function LoadFieldSettings(){
+
 
     //loads settings
     field = GetSelectedField();
@@ -1118,11 +1708,36 @@ function LoadFieldSettings(){
     jQuery('#field_captcha_theme').val(field.captchaTheme == undefined ? "red" : field.captchaTheme);
     jQuery('#field_captcha_language').val(field.captchaLanguage == undefined ? "en" : field.captchaLanguage);
 
+    jQuery("#gfield_password_strength_enabled").attr("checked", field.passwordStrengthEnabled == true);
+    jQuery("#gfield_min_strength").val(field.minPasswordStrength == undefined ? "" : field.minPasswordStrength);
+    TogglePasswordStrength(true);
+
+    jQuery("#gfield_email_confirm_enabled").attr("checked", field.emailConfirmEnabled == true);
+
+    jQuery("#option_field_type").val(field.inputType);
+    var productFieldType = jQuery("#product_field_type");
+    productFieldType.val(field.inputType);
+    if(has_entry(field.id))
+        productFieldType.attr("disabled", true);
+    else
+        productFieldType.removeAttr("disabled");
+
+    jQuery("#donation_field_type").val(field.inputType);
+    jQuery("#quantity_field_type").val(field.inputType);
+
+    if(field["inputType"] == "singleproduct" || field["inputType"] == "singleshipping"){
+        var basePrice = field.basePrice == undefined ? "" : field.basePrice;
+        jQuery("#field_base_price").val(field.basePrice == undefined ? "" : field.basePrice);
+        SetBasePrice(basePrice);
+    }
+
+    jQuery("#field_disable_quantity").attr("checked", field.disableQuantity == true);
+    SetDisableQuantity(field.disableQuantity == true);
 
     var isPassword = field.enablePasswordInput ? true : false
     jQuery("#field_password").attr("checked", isPassword);
 
-    jQuery("#field_maxlen").val(field.maxLength);
+    jQuery("#field_maxlen").val(typeof field.maxLength == "undefined" ? "" : field.maxLength);
 
     var addressType = field.addressType == undefined ? "international" : field.addressType;
     jQuery('#field_address_type').val(addressType);
@@ -1156,9 +1771,17 @@ function LoadFieldSettings(){
     jQuery("#field_custom_new").attr("checked", !customFieldExists);
     ToggleCustomField(true);
 
+    jQuery('#gfield_customfield_content_enabled').attr("checked", field.customFieldTemplateEnabled ? true : false);
+    jQuery('#field_customfield_content_template').val(field.customFieldTemplateEnabled ? field.customFieldTemplate : "");
+    ToggleCustomFieldTemplate(true);
+
     jQuery("#gfield_category_all").attr("checked", field.displayAllCategories);
     jQuery("#gfield_category_select").attr("checked", !field.displayAllCategories);
     ToggleCategory(true);
+
+    jQuery('#gfield_post_category_initial_item_enabled').attr("checked", field.categoryInitialItemEnabled ? true : false);
+    jQuery('#field_post_category_initial_item').val(field.categoryInitialItemEnabled ? field.categoryInitialItem : "");
+    TogglePostCategoryInitialItem(true);
 
     jQuery("#field_date_input_type").val(field["dateType"] == "datefield" ? "datefield" : "datepicker");
     jQuery("#gfield_calendar_icon_url").val(field["calendarIconUrl"] == undefined ? "" : field["calendarIconUrl"]);
@@ -1176,15 +1799,29 @@ function LoadFieldSettings(){
     ToggleInputName(true);
 
     var canHaveConditionalLogic = GetFirstRuleField() > 0;
-    if(canHaveConditionalLogic){
-        jQuery("#field_conditional_logic").attr("checked", field.conditionalLogic ? true : false);
-        jQuery("#field_conditional_logic").removeAttr("disabled");
-        ToggleConditionalLogic(true, "field");
+    if(field["type"] == "page"){
+        LoadFieldConditionalLogic(canHaveConditionalLogic, "next_button");
+        LoadFieldConditionalLogic(canHaveConditionalLogic, "page");
     }
     else{
-        jQuery("#field_conditional_logic").attr("disabled", "disabled").attr("checked", false);
-        jQuery("#field_conditional_logic_container").show().html("<span class='instruction'><?php _e("To use conditional logic, please create a drop down, checkbox or multiple choice field.", "gravityforms") ?></span>");
+        LoadFieldConditionalLogic(canHaveConditionalLogic, "field");
     }
+
+    if(field.nextButton){
+        jQuery("#next_button_text").attr("checked", field.nextButton.type != "image");
+        jQuery("#next_button_image").attr("checked", field.nextButton.type == "image");
+        jQuery("#next_button_text_input").val(field.nextButton.text);
+        jQuery("#next_button_image_url").val(field.nextButton.imageUrl);
+    }
+
+    if(field.previousButton){
+        jQuery("#previous_button_text").attr("checked", field.previousButton.type != "image");
+        jQuery("#previous_button_image").attr("checked", field.previousButton.type == "image");
+        jQuery("#previous_button_text_input").val(field.previousButton.text);
+        jQuery("#previous_button_image_url").val(field.previousButton.imageUrl);
+    }
+    TogglePageButton("next", true);
+    TogglePageButton("previous", true);
 
     jQuery(".gfield_category_checkbox").each(function(){
         if(field["choices"]){
@@ -1209,10 +1846,12 @@ function LoadFieldSettings(){
 
     //displays appropriate settings
     jQuery(".field_setting").hide();
-    jQuery(fieldSettings[field.type]).show();
 
+    var allSettings = fieldSettings[field.type];
     if(field.inputType)
-        jQuery(fieldSettings[field.inputType]).show();
+        allSettings += "," + fieldSettings[field.inputType];
+
+    jQuery(allSettings).show();
 
     //hide post category drop down if post category field is in the form
     for(var i=0; i<form.fields.length; i++){
@@ -1248,13 +1887,74 @@ function LoadFieldSettings(){
         }
     }
 
+    //Display custom field template for texareas and text fields
+    if(field["type"] == "post_custom_field" && field["inputType"] == "textarea" || field["inputType"] == "text"){
+        jQuery(".customfield_content_template_setting").show();
+    }
+
+    jQuery(document).trigger('gform_load_field_settings', [field, form]);
+
     jQuery("#field_settings").appendTo(".field_selected").tabs("select", 0);
     ShowSettings("field_settings");
+
+    SetProductField(field);
+}
+
+function LoadFieldConditionalLogic(isEnabled, objectType){
+    var obj = GetConditionalObject(objectType);
+    if(isEnabled){
+        jQuery("#" + objectType + "_conditional_logic").attr("checked", obj.conditionalLogic ? true : false);
+        jQuery("#" + objectType + "_conditional_logic").removeAttr("disabled");
+        ToggleConditionalLogic(true, objectType);
+
+
+    }
+    else{
+        jQuery("#" + objectType + "_conditional_logic").attr("disabled", "disabled").attr("checked", false);
+        jQuery("#" + objectType + "_conditional_logic_container").show().html("<span class='instruction'><?php _e("To use conditional logic, please create a drop down, checkbox or multiple choice field.", "gravityforms") ?></span>");
+    }
+}
+
+function SetProductField(field){
+    var product_field_container = jQuery(".product_field_setting");
+
+    //ignore product field if it is not configured for the current field
+    if(!product_field_container.is(":visible"))
+        return;
+
+    var productFields = new Array();
+    for(var i=0; i<form["fields"].length; i++){
+        if(form["fields"][i]["type"] == "product")
+            productFields.push(form["fields"][i]);
+    }
+
+    if(productFields.length <= 1){
+        jQuery(".product_field_setting").hide();
+    }
+    else{
+        var product_field = jQuery("#product_field");
+        product_field.html("");
+        var is_selected = false;
+        for(var i=0; i<productFields.length; i++){
+            selected = "";
+            if(productFields[i]["id"] == field["productField"]){
+                selected = "selected='selected'";
+                is_selected = true;
+            }
+            product_field.append("<option value='" + productFields[i]["id"] + "' " + selected + ">" + productFields[i]["label"] + "</option>");
+        }
+
+        //Adds existing product field if it is not found in the list (to prevent confusion)
+        if(!is_selected && field["productField"] != "")
+            product_field.append("<option value='" + field["productField"] + "' selected='selected'>[<?php _e("Deleted Field", "gravityforms") ?>]</option>");
+
+    }
 }
 
 function CreateConditionalLogic(objectType, obj){
     if(!obj.conditionalLogic)
         obj.conditionalLogic = new ConditionalLogic();
+
 
     var hideSelected = obj.conditionalLogic.actionType == "hide" ? "selected='selected'" :"";
     var showSelected = obj.conditionalLogic.actionType == "show" ? "selected='selected'" :"";
@@ -1262,8 +1962,16 @@ function CreateConditionalLogic(objectType, obj){
     var anySelected = obj.conditionalLogic.logicType == "any" ? "selected='selected'" :"";
     var imagesUrl = '<?php echo GFCommon::get_base_url() . "/images"?>';
 
+    var objText;
+    if(objectType == "field")
+        objText = "<?php _e("this field if", "gravityforms") ?>";
+    else if(objectType == "page")
+        objText = "<?php _e("this page", "gravityforms") ?>";
+    else
+        objText = "<?php _e("this form button", "gravityforms") ?>";
+
     var str = "<select id='" + objectType + "_action_type' onchange='SetConditionalProperty(\"" + objectType + "\", \"actionType\", jQuery(this).val());'><option value='show' " + showSelected + "><?php _e("Show", "gravityforms") ?></option><option value='hide' " + hideSelected + "><?php _e("Hide", "gravityforms") ?></option></select>";
-    str += objectType == "field" ? " <?php _e("this field if", "gravityforms") ?> " : " <?php _e("form button if", "gravityforms") ?> ";
+    str += objText;
     str += "<select id='" + objectType + "_logic_type' onchange='SetConditionalProperty(\"" + objectType + "\", \"logicType\", jQuery(this).val());'><option value='all' " + allSelected + "><?php _e("All", "gravityforms") ?></option><option value='any' " + anySelected + "><?php _e("Any", "gravityforms") ?></option></select>";
     str += " <?php _e("of the following match:", "gravityforms") ?> ";
 
@@ -1347,7 +2055,7 @@ function GetRuleValues(objectType, ruleIndex, selectedFieldId, selectedValue){
 
     var isAnySelected = false;
     var field = GetFieldById(selectedFieldId);
-    if(field){
+    if(field && field.choices){
         for(var i=0; i<field.choices.length; i++){
             var choiceValue = typeof field.choices[i].value == "undefined" || field.choices[i].value == null ? field.choices[i].text : field.choices[i].value;
             var isSelected = choiceValue == selectedValue;
@@ -1381,7 +2089,7 @@ function CreateInputNames(field){
     var field_str = "";
     if(!field["inputs"] || field["type"] == "checkbox"){
         field_str = "<label for='field_input_name' class='inline'><?php _e("Parameter Name:", "gravityforms"); ?> </label>";
-        field_str += "<input type='text' value=" + field["inputName"] + " id='field_input_name' onkeyup='SetInputName(this.value);'/>";
+        field_str += "<input type='text' value='" + field["inputName"] + "' id='field_input_name' onkeyup='SetInputName(this.value);'/>";
     }
     else{
         field_str = "<table><tr><td><strong>Field</strong></td><td><strong>Parameter Name</strong></td></tr>";
@@ -1415,6 +2123,9 @@ function LoadBulkChoices(field){
     var choice;
     for(var i=0; i<field.choices.length; i++){
         choice = field.choices[i].text == field.choices[i].value ? field.choices[i].text : field.choices[i].text + "|" + field.choices[i].value;
+        if(field.enablePrice && field.choices[i]["price"] != "")
+            choice += "|:" + field.choices[i]["price"];
+
         choices.push(choice);
     }
 
@@ -1426,19 +2137,29 @@ function GetFieldChoices(field){
     if(field.choices == undefined)
         return "";
 
+    var currency = GetCurrentCurrency();
     var str = "";
     for(var i=0; i<field.choices.length; i++){
         var checked = field.choices[i].isSelected ? "checked" : "";
-        var type = field.type == 'checkbox' ? 'checkbox' : 'radio';
-        var value = field.enableChoiceValue ? field.choices[i].value : field.choices[i].text;
 
-        str += "<li><input type='" + type + "' class='gfield_choice_" + type + "' name='choice_selected' id='choice_selected_" + i + "' " + checked + " onclick='SetFieldChoice(" + i + ");' /><input type='text' id='choice_text_" + i + "' value=\"" + field.choices[i].text.replace("\"", "&quot;") + "\" onkeyup=\"SetFieldChoice(" + i + ");\" class='field-choice-input field-choice-text' /><input type='text' id='choice_value_" + i + "' value=\"" + value.replace("\"", "&quot;") + "\" onkeyup=\"SetFieldChoice(" + i + ");\" class='field-choice-input field-choice-value' />";
-        str += "<img src='" + imagesUrl + "/add.png' class='add_field_choice' title='add another choice' alt='add another choice' style='cursor:pointer; margin:0 3px;' onclick=\"InsertFieldChoice(" + (i+1) + ");\" />";
+        var type = GetInputType(field) == 'checkbox' ? 'checkbox' : 'radio';
+
+        var value = field.enableChoiceValue ? field.choices[i].value : field.choices[i].text;
+        var price = field.choices[i].price ? currency.toMoney(field.choices[i].price) : "";
+        if(!price)
+            price = "";
+
+        str += "<li><input type='" + type + "' class='gfield_choice_" + type + "' name='choice_selected' id='choice_selected_" + i + "' " + checked + " onclick='SetFieldChoice(" + i + ");' />";
+        str +=     "<input type='text' id='choice_text_" + i + "' value=\"" + field.choices[i].text.replace(/"/g, "&quot;") + "\" onkeyup=\"SetFieldChoice(" + i + ");\" class='field-choice-input field-choice-text' />";
+        str +=     "<input type='text' id='choice_value_" + i + "' value=\"" + value.replace(/"/g, "&quot;") + "\" onkeyup=\"SetFieldChoice(" + i + ");\" class='field-choice-input field-choice-value' />";
+        str +=     "<input type='text' id='choice_price_" + i + "' value=\"" + price.replace(/"/g, "&quot;") + "\" onchange=\"SetFieldChoice(" + i + ");\" class='field-choice-input field-choice-price' />";
+        str +=     "<img src='" + imagesUrl + "/add.png' class='add_field_choice' title='add another choice' alt='add another choice' style='cursor:pointer; margin:0 3px;' onclick=\"InsertFieldChoice(" + (i+1) + ");\" />";
 
         if(field.choices.length > 1 )
             str += "<img src='" + imagesUrl + "/remove.png' title='remove this choice' alt='remove this choice' class='delete_field_choice' style='cursor:pointer;' onclick=\"DeleteFieldChoice(" + i + ");\" />";
 
         str += "</li>";
+
     }
     return str;
 }
@@ -1454,6 +2175,8 @@ function SetFieldChoices(){
 function SetFieldChoice(index){
     text = jQuery("#choice_text_" + index).val();
     value = jQuery("#choice_value_" + index).val();
+    price = jQuery("#choice_price_" + index).val();
+
     var element = jQuery("#choice_selected_" + index);
     isSelected = element.is(":checked");
 
@@ -1461,6 +2184,16 @@ function SetFieldChoice(index){
 
     field.choices[index].text = text;
     field.choices[index].value = field.enableChoiceValue ? value : text;
+
+    if(field.enablePrice){
+        var currency = GetCurrentCurrency();
+        var price = currency.toMoney(price);
+        if(!price)
+            price = "";
+
+        field.choices[index]["price"] = price;
+        jQuery("#choice_price_" + index).val(price);
+    }
 
     //set field selections
     jQuery("#field_choices :radio, #field_choices :checkbox").each(function(index){
@@ -1523,8 +2256,17 @@ function InsertBulkChoices(choices){
 
     var enableValue = false;
     for(var i=0; i<choices.length; i++){
-        text_value = choices[i].split("|");
-        field.choices.push(new Choice(text_value[0], text_value[text_value.length -1]));
+        text_price = choices[i].split("|:");
+
+        text_value = text_price[0];
+        price = "";
+        if(text_price.length > 1){
+            var currency = GetCurrentCurrency();
+            price = currency.toMoney(text_price[1]);
+        }
+
+        text_value = text_value.split("|");
+        field.choices.push(new Choice(jQuery.trim(text_value[0]), jQuery.trim(text_value[text_value.length -1]), jQuery.trim(price)));
 
         if(text_value.length > 1)
             enableValue = true;
@@ -1800,10 +2542,47 @@ function SetFieldDescription(description){
     SetFieldProperty('description', description);
 }
 
+function SetPasswordStrength(isEnabled){
+    if(isEnabled){
+        jQuery(".field_selected .gfield_password_strength").show();
+    }
+    else{
+        jQuery(".field_selected .gfield_password_strength").hide();
+
+        //resetting min strength
+        jQuery("#gfield_min_strength").val("");
+        SetFieldProperty('minPasswordStrength', "");
+    }
+
+    SetFieldProperty('passwordStrengthEnabled', isEnabled);
+}
+
+function SetEmailConfirmation(isEnabled){
+    if(isEnabled){
+        jQuery(".field_selected .ginput_single_email").hide();
+        jQuery(".field_selected .ginput_confirm_email").show();
+    }
+    else{
+        jQuery(".field_selected .ginput_confirm_email").hide();
+        jQuery(".field_selected .ginput_single_email").show();
+    }
+
+    SetFieldProperty('emailConfirmEnabled', isEnabled);
+}
+
+
 function SetFieldRequired(isRequired){
     var required = isRequired ? "*" : "";
     jQuery(".field_selected .gfield_required").html(required);
     SetFieldProperty('isRequired', isRequired);
+}
+
+function IndexOf(ary, item){
+    for(var i=0; i<ary.length; i++)
+        if(ary[i] == item)
+            return i;
+
+    return -1;
 }
 
 function LoadMessageVariables(){

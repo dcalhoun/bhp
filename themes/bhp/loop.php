@@ -20,8 +20,13 @@
   <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
   
     <h1><a href="<?php the_permalink(); ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-    <span class="date"><?php the_time('M d'); ?></span>
-    <?php the_excerpt(); ?>
+    <div class="date">
+      <span class="month"><?php the_time('M'); ?></span>
+      <span class="day"><?php the_time('d'); ?></span>
+    </div>
+    <?php the_content('Read the rest...'); ?>
+    
+    <a href="<?php the_permalink(); ?>#comments" title="Leave a comment"><?php comments_number('Leave a comment', '1 Comment', '% Comments'); ?></a>
     
   </article>
   

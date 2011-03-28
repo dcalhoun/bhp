@@ -1,5 +1,6 @@
 <?php
 class GFEntryDetail{
+
     public static function lead_detail_page(){
         global $wpdb;
         global $current_user;
@@ -149,11 +150,19 @@ class GFEntryDetail{
                                 <div id="minor-publishing" style="padding:10px;">
                                     <br/>
                                     <?php _e("Entry Id", "gravityforms"); ?>: <?php echo absint($lead["id"]) ?><br/><br/>
-                                    <?php _e("Submitted on", "gravityforms"); ?>: <?php echo esc_html(GFCommon::format_date($lead["date_created"], false)) ?>
-                                    <br/>
-                                    <br/>
+                                    <?php _e("Submitted on", "gravityforms"); ?>: <?php echo esc_html(GFCommon::format_date($lead["date_created"], false, "Y/m/d")) ?>
+                                    <br/><br/>
                                     <?php _e("User IP", "gravityforms"); ?>: <?php echo $lead["ip"] ?>
                                     <br/><br/>
+                                    <?php
+                                    if(!empty($lead["created_by"]) && $usermeta = get_userdata($lead["created_by"])){
+                                        ?>
+                                        <?php _e("User", "gravityforms"); ?>: <a href="user-edit.php?user_id=<?php echo absint($lead["created_by"]) ?>" alt="<?php _e("View user profile", "gravityforms"); ?>" title="<?php _e("View user profile", "gravityforms"); ?>"><?php echo esc_html($usermeta->user_login) ?></a>
+                                        <br/><br/>
+                                        <?php
+                                    }
+                                    ?>
+
                                     <?php _e("Embed Url", "gravityforms"); ?>: <a href="<?php echo esc_url($lead["source_url"]) ?>" target="_blank" alt="<?php echo esc_url($lead["source_url"]) ?>" title="<?php echo esc_url($lead["source_url"]) ?>">.../<?php echo esc_html(GFCommon::truncate_url($lead["source_url"]))?></a>
                                     <br/><br/>
                                     <?php
@@ -164,8 +173,31 @@ class GFEntryDetail{
                                         <br/><br/>
                                         <?php
                                     }
-                                    ?>
 
+                                    if(!empty($lead["payment_status"])){
+                                        echo $lead["transaction_type"] != 2 ? __("Payment Status", "gravityforms") : __("Subscription Status", "gravityforms"); ?>: <?php echo $lead["payment_status"] ?>
+                                        <br/><br/>
+                                        <?php
+                                        if(!empty($lead["payment_date"])){
+                                            echo $lead["transaction_type"] == 1 ? __("Payment Date", "gravityforms") : __("Start Date", "gravityforms") ?>: <?php echo GFCommon::format_date($lead["payment_date"], false, "Y/m/d", $lead["transaction_type"] == 1) ?>
+                                            <br/><br/>
+                                            <?php
+                                        }
+
+                                        if(!empty($lead["transaction_id"])){
+                                            echo $lead["transaction_type"] == 1 ? __("Transaction Id", "gravityforms") : __("Subscriber Id", "gravityforms"); ?>: <?php echo $lead["transaction_id"]?>
+                                            <br/><br/>
+                                            <?php
+                                        }
+
+                                        if(strlen($lead["payment_amount"]) > 0){
+                                            echo $lead["transaction_type"] == 1 ? __("Payment Amount", "gravityforms") : __("Subscription Amount", "gravityforms"); ?>: <?php echo GFCommon::to_money($lead["payment_amount"], $lead["currency"]) ?>
+                                            <br/><br/>
+                                            <?php
+                                        }
+                                    }
+                                    do_action("gform_entry_info", $form["id"], $lead);
+                                    ?>
                                 </div>
                                 <div id="major-publishing-actions">
                                     <div id="delete-action">
@@ -303,7 +335,8 @@ class GFEntryDetail{
 
                             case "captcha":
                             case "html":
-                                //ignore captcha field
+                            case "password":
+                                //ignore certain fields
                             break;
 
                             default :
@@ -456,12 +489,12 @@ class GFEntryDetail{
                 <?php
                 $count = 0;
                 $field_count = sizeof($form["fields"]);
+                $has_product_fields = false;
                 foreach($form["fields"] as $field){
-                    $count++;
-                    $is_last = $count >= $field_count ? true : false;
-
                     switch(RGFormsModel::get_input_type($field)){
                         case "section" :
+                            $count++;
+                            $is_last = $count >= $field_count ? true : false;
                             ?>
                             <tr>
                                 <td colspan="2" class="entry-view-section-break<?php echo $is_last ? " lastrow" : ""?>"><?php echo esc_html(GFCommon::get_label($field))?></td>
@@ -471,13 +504,26 @@ class GFEntryDetail{
 
                         case "captcha":
                         case "html":
+                        case "password":
                             //ignore captcha field
                         break;
 
+
                         default :
+                            //ignore product fields as they will be grouped together at the end of the grid
+                            if(GFCommon::is_product_field($field["type"])){
+                                $has_product_fields = true;
+                                continue;
+                            }
+
                             $value = RGFormsModel::get_lead_field_value($lead, $field);
-                            $display_value = GFCommon::get_lead_field_display($field, $value);
+                            $display_value = GFCommon::get_lead_field_display($field, $value, $lead["currency"]);
+
+                            $display_value = apply_filters("gform_entry_field_value", $display_value, $field, $lead, $form);
+
                             if($display_empty_fields || !empty($display_value) || $display_value === "0"){
+                                $count++;
+                                $is_last = $count >= $field_count && !$has_product_fields ? true : false;
                                 ?>
                                 <tr>
                                     <td colspan="2" class="entry-view-field-name"><?php echo esc_html(GFCommon::get_label($field))?></td>
@@ -490,10 +536,106 @@ class GFEntryDetail{
                         break;
                     }
                 }
+
+                $products = array();
+                if($has_product_fields){
+                    $products = GFCommon::get_product_fields($form, $lead);
+                    if(!empty($products["products"])){
+                        ?>
+                        <tr>
+                            <td colspan="2" class="entry-view-field-name"><?php echo apply_filters("gform_order_label_{$form["id"]}", apply_filters("gform_order_label", __("Order", "gravityforms"), $form["id"]), $form["id"]) ?></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="entry-view-field-value lastrow">
+                                <table class="entry-products" cellspacing="0" width="97%">
+
+                                      <colgroup>
+                                          <col class="entry-products-col1">
+                                          <col class="entry-products-col2">
+                                          <col class="entry-products-col3">
+                                          <col class="entry-products-col4">
+                                      </colgroup>
+
+                                    <thead>
+                                        <th scope="col"><?php _e("Product", "gravityforms") ?></th>
+                                        <th scope="col" class="textcenter"><?php _e("Qty", "gravityforms") ?></th>
+                                        <th scope="col"><?php _e("Unit Price", "gravityforms") ?></th>
+                                        <th scope="col"><?php _e("Price", "gravityforms") ?></th>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+
+                                        $total = 0;
+                                        foreach($products["products"] as $product){
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <div class="product_name"><?php echo esc_html($product["name"])?></div>
+                                                    <ul class="product_options">
+                                                        <?php
+                                                        $price = GFCommon::to_number($product["price"]);
+                                                        if(is_array($product["options"])){
+                                                            $count = sizeof($product["options"]);
+                                                            $index = 1;
+                                                            foreach($product["options"] as $option){
+                                                                $price += GFCommon::to_number($option["price"]);
+                                                                $class = $index == $count ? " class='lastitem'" : "";
+                                                                $index++;
+                                                                ?>
+                                                                <li<?php echo $class?>><?php echo $option["option_label"]?></li>
+                                                                <?php
+                                                            }
+                                                        }
+                                                        $subtotal = floatval($product["quantity"]) * $price;
+                                                        $total += $subtotal;
+                                                        ?>
+                                                    </ul>
+                                                </td>
+                                                <td class="textcenter"><?php echo $product["quantity"] ?></td>
+                                                <td><?php echo GFCommon::to_money($price, $lead["currency"]) ?></td>
+                                                <td><?php echo GFCommon::to_money($subtotal, $lead["currency"]) ?></td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        $total += floatval($products["shipping"]["price"]);
+                                    ?>
+                                    </tbody>
+                                    <tfoot>
+                                        <?php
+                                        if(!empty($products["shipping"]["name"])){
+                                        ?>
+                                            <tr>
+                                                <td colspan="2" rowspan="2" class="emptycell">&nbsp;</td>
+                                                <td class="textright shipping"><?php echo $products["shipping"]["name"] ?></td>
+                                                <td class="shipping_amount"><?php echo GFCommon::to_money($products["shipping"]["price"], $lead["currency"])?>&nbsp;</td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
+                                        <tr>
+                                            <?php
+                                            if(empty($products["shipping"]["name"])){
+                                            ?>
+                                                <td colspan="2" class="emptycell">&nbsp;</td>
+                                            <?php
+                                            }
+                                            ?>
+                                            <td class="textright grandtotal"><?php _e("Total", "gravityforms") ?></td>
+                                            <td class="grandtotal_amount"><?php echo GFCommon::to_money($total, $lead["currency"])?></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <?php
+                    }
+                }
                 ?>
             </tbody>
         </table>
         <?php
     }
+
 }
 ?>
