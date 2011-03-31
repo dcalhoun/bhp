@@ -230,6 +230,10 @@ Styling for structure of the site.
           font-size: 24px;
           line-height: 20px;
         }
+    #page a.more-link {
+      display: block;
+      margin-top: 10px;
+    }
     #page span.edit-link {
       left: -80px;
       position: absolute;
@@ -258,9 +262,23 @@ Styling for structure of the site.
         padding-right: 70px;
         text-shadow: 0 1px 0 #fff;
       }
+      #page div.wp-pagenavi span, #page div.wp-pagenavi a {
+        background: rgb(174,21,49); /* For IE */
+        background: rgba(174,21,49,.73);
+        border: 1px solid background: rgb(174,21,49);
+        color: #fff;
+        margin-right: 5px;
+        padding: 3px 5px;
+      }
+      #page div.wp-pagenavi span:hover, #page div.wp-pagenavi a:hover {
+        opacity: 1.0;
+      }
   aside#sidebar ul li.widget-container {
     list-style: none;
     margin: 0 0 10px 0;
+  }
+  aside#sidebar ul li.widget_categories h3 {
+    display: none;
   }
   aside#sidebar ul li.widget_search {
     margin: 0 0 20px 0;

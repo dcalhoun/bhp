@@ -26,6 +26,14 @@ if ( function_exists( 'add_theme_support' ) ) {
 set_post_thumbnail_size( 198, 130, true );
 
 /** 
+ * Change excerpt length
+ */
+ function new_excerpt_length($length) {
+ 	return 300;
+ }
+ add_filter('excerpt_length', 'new_excerpt_length');
+
+/** 
  * Removed Post Types from Admin
  */
 add_action( 'admin_init', 'my_remove_menu_pages' ); 

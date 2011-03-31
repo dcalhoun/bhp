@@ -24,6 +24,12 @@
       <span class="month"><?php the_time('M'); ?></span>
       <span class="day"><?php the_time('d'); ?></span>
     </div>
+    <?php
+      $image_id = get_post_thumbnail_id();  
+      $image_url = wp_get_attachment_image_src($image_id,'large');
+      $image_url = $image_url[0];
+      echo getThumb($image_url, 620, 275);
+    ?>
     <?php the_content('Read the rest...'); ?>
     
     <a href="<?php the_permalink(); ?>#comments" title="Leave a comment"><?php comments_number('Leave a comment', '1 Comment', '% Comments'); ?></a>
