@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: http://www.gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 1.5
+Version: 1.5.1
 Author: rocketgenius
 Author URI: http://www.rocketgenius.com
 
@@ -860,9 +860,9 @@ class RGForms{
     }
 
     public static function get_addon_info($api, $action, $args){
-        if($action == "plugin_information" && empty($api) && strpos($args->slug, "gravity") !== false ){
+        if($action == "plugin_information" && empty($api) && !rgempty("rg", $_GET)){
             $request_url = GRAVITY_MANAGER_URL . "/api.php?op=get_plugin&slug={$args->slug}";
-            $raw_response = wp_remote_post($request_url, $options);
+            $raw_response = wp_remote_post($request_url);
 
             if ( is_wp_error( $raw_response ) || $raw_response['response']['code'] != 200)
                 return false;
@@ -1230,6 +1230,16 @@ function rgpost($name){
 }
 }
 
+if(!function_exists("rgar")){
+function rgar($array, $name){
+    if(isset($array[$name]))
+        return $array[$name];
+
+    return '';
+}
+}
+
+
 if(!function_exists("rgempty")){
 function rgempty($name, $array = null){
     if(!$array)
@@ -1239,5 +1249,4 @@ function rgempty($name, $array = null){
     return empty($val);
 }
 }
-
 ?>
