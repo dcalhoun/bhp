@@ -61,7 +61,7 @@ function get_post_images_gallery() {
       $image_url = wp_get_attachment_url($image->ID);
       $thumb_url = wp_get_attachment_thumb_url($image->ID);
       //print_r($image);
-      echo '<div class="photo-shadow"><div id="' . $image->post_name  . '" class="photo fancybox"><a href="' . $image_url . '" title="' . $image->post_excerpt . '" rel="fancybox-gallery"><img style="height:'. $height .'px; width:'. $width .'px" src="' . get_bloginfo('template_directory') . '/phpthumb/phpThumb.php?src='. $image_url . '&w=' . $width . '&h=' . $height . '&q=90&zc=1" alt="' . $image->post_title . '" width="198" height="130"/></a></div></div>';
+      echo '<div class="photo-shadow"><div id="' . $image->post_name  . '" class="photo fancybox"><a href="' . $image_url . '" title="' . $image->post_excerpt . '" rel="fancybox-gallery"><img style="height:'. $height .'px; width:'. $width .'px" src="' . get_bloginfo('template_directory') . '/phpthumb/phpThumb.php?src='. $thumb_url . '&w=' . $width . '&h=' . $height . '&q=90&zc=1" alt="' . $image->post_title . '" width="198" height="130"/></a></div></div>';
     }
   } else {
     echo '<p class="no-posts">Sorry, no images to display.</p>';
@@ -365,4 +365,18 @@ if(!is_admin()){
     wp_enqueue_script("gforms_conditional_logic_lib", plugins_url("gravityforms/js/conditional_logic.js"), array("gforms_ui_datepicker"), "1.3.9", true);
 
     wp_enqueue_style("gforms_css", plugins_url("gravityforms/css/forms.css"));
+}
+
+/** 
+ * Function for phpThumb
+ */
+function getThumb($image, $width = null, $height = null) {
+  if($width && $height) {
+    $img = '<img style="height:'. $height .'px; width:'. $width .'px"src="'. home_url( '/' ) .'wp-content/plugins/image-resize/phpthumb/phpThumb.php?src='. $image . '&w='. $width .'&h='. $height .'&q=90&zc=1" />';
+  } elseif ($width) {
+    $img = '<img style="width:'. $width .'px"src="'. home_url( '/' ) .'wp-content/plugins/image-resize/phpthumb/phpThumb.php?src='. $image . '&w='. $width .'&q=90" />';    
+  } elseif($height) {
+    $img = '<img style="height:'. $height .'px; width:'. $width .'px"src="'. home_url( '/' ) .'wp-content/plugins/image-resize/phpthumb/phpThumb.php?src='. $image . '&h='. $height .'&q=90&" />';     
+  }
+  return $img;
 }
