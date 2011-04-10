@@ -20,10 +20,9 @@ if ( function_exists( 'register_nav_menus' ) ) {
  * Enable Post Thumbnails
  */
 if ( function_exists( 'add_theme_support' ) ) { 
-  add_theme_support( 'post-thumbnails' ); 
+  add_theme_support( 'post-thumbnails' );
+  set_post_thumbnail_size( 198, 132, true );
 }
-
-set_post_thumbnail_size( 198, 130, true );
 
 /** 
  * Change excerpt length
@@ -55,13 +54,13 @@ function get_post_images_gallery() {
   );
   $images = get_children($args);
   $width = 198;
-  $height = 130;
+  $height = 132;
   if ( $images ) {
     foreach ($images as $image) {
       $image_url = wp_get_attachment_url($image->ID);
       $thumb_url = wp_get_attachment_thumb_url($image->ID);
       //print_r($image);
-      echo '<div class="photo-shadow"><div id="' . $image->post_name  . '" class="photo fancybox"><a href="' . $image_url . '" title="' . $image->post_excerpt . '" rel="fancybox-gallery"><img style="height:'. $height .'px; width:'. $width .'px" src="' . get_bloginfo('template_directory') . '/phpthumb/phpThumb.php?src='. $thumb_url . '&w=' . $width . '&h=' . $height . '&q=90&zc=1" alt="' . $image->post_title . '" width="198" height="130"/></a></div></div>';
+      echo '<div class="photo-shadow"><div id="' . $image->post_name  . '" class="photo fancybox"><a href="' . $image_url . '" title="' . $image->post_excerpt . '" rel="fancybox-gallery"><img style="height:'. $height .'px; width:'. $width .'px" src="' . get_bloginfo('template_directory') . '/phpthumb/phpThumb.php?src='. $thumb_url . '&w=' . $width . '&h=' . $height . '&q=90&zc=1" alt="' . $image->post_title . '" width="198" height="132"/></a></div></div>';
     }
   } else {
     echo '<p class="no-posts">Sorry, no images to display.</p>';
@@ -120,7 +119,7 @@ function register_widgets() {
 	) );
 }
 
-/** Register sidebars by running twentyten_widgets_init() on the widgets_init hook. */
+/** Register sidebarss. */
 add_action( 'widgets_init', 'register_widgets' );
 
 /** 
@@ -240,7 +239,7 @@ function get_taxonomy_terms_featured_image($taxonomy, $post_type) {
   // Get list of taxonomy terms
   $terms = get_terms($taxonomy);
   $width = 198;
-  $height = 130;
+  $height = 132;
   
   // Get first post from each taxonomy term
   if ($terms) {
@@ -264,7 +263,7 @@ function get_taxonomy_terms_featured_image($taxonomy, $post_type) {
         $image_id = get_post_thumbnail_id();
         $thumb_url = wp_get_attachment_thumb_url($image_id);
         $image_url = wp_get_attachment_url($image_id);
-        echo '<div class="photo-shadow"><div id="' . $term->slug  . '" class="photo"><a href="' . get_bloginfo('url') . '/' . $taxonomy . '/' . $term->slug . '" title="' . $term->name . '"><img style="height:'. $height .'px; width:'. $width .'px" src="' . get_bloginfo('template_directory') . '/phpthumb/phpThumb.php?src='. $image_url . '&w=' . $width . '&h=' . $height . '&q=100&zc=1" alt="' . $image->post_title . '"/><span class="label">' . $term->name . '</span></a></div></div>';
+        echo '<div class="photo-shadow"><div id="' . $term->slug  . '" class="photo"><a href="' . get_bloginfo('url') . '/' . $taxonomy . '/' . $term->slug . '" title="' . $term->name . '"><img style="height:'. $height .'px; width:'. $width .'px" src="' . get_bloginfo('template_directory') . '/phpthumb/phpThumb.php?src='. $thumb_url . '&w=' . $width . '&h=' . $height . '&q=100&zc=1" alt="' . $image->post_title . '"/><span class="label">' . $term->name . '</span></a></div></div>';
       endwhile; endif;
     }
   } else {

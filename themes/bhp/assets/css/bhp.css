@@ -478,9 +478,38 @@ body.home div#slider-wrapper {
       body.home div#slider nav#slider-nav a.activeSlide {
         background: #ae1531;
       }
+body.home .no-posts {
+  left: 290px;
+  position: absolute;
+  top: 250px;
+}
 /* @end */
 
 /* @group Gallery Grid Pages */
+a.back-to-galleries {
+  background: rgb(174,21,49); /* For IE */
+  background: rgba(174,21,49,.73);
+  border-radius: 3px;
+  color: #fff !important;
+  font: 13px/17px 'Arvo', Georgia, serif;
+  margin-left: -20px;
+  padding: 6px 6px;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.22);
+  text-transform: lowercase;
+}
+a.back-to-galleries:hover {
+  background: rgba(174,21,49,.6);
+}
+/*a.back-to-galleries:before {
+  background: transparent url('../images/btn-arrow-left.png') no-repeat 0 0 !important;
+  content: '';
+  display: block;
+  height: 29px;
+  left: -27px;
+  padding: 0;
+  position: absolute;
+  width: 14px;
+}*/
 div.photo-shadow {
   float: left;
   margin: 0 20px 20px 0;
@@ -528,7 +557,7 @@ div.photo-shadow:after {
   div.photo {
     background: #f1f1f1;
     border: 1px solid #ededed;
-    height: 130px;
+    height: 132px;
     overflow: hidden;
     padding: 10px;
     position: relative;
@@ -547,7 +576,7 @@ div.photo-shadow:after {
   }
     div.photo a {
       display: block;
-      height: 130px;
+      height: 132px;
       overflow: hidden;
       position: relative;
       width: 198px;
