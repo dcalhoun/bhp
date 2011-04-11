@@ -230,6 +230,9 @@ Styling for structure of the site.
           font-size: 24px;
           line-height: 20px;
         }
+      a.comment-count {
+        
+      }
     #page a.more-link {
       display: block;
       margin-top: 10px;
