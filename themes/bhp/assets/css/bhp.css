@@ -166,6 +166,9 @@ div#wrapper label.gfield_label {
 	line-height: normal; 
 	font-family: 'Pictos', sans-serif;
 }
+img.post-thumbnail {
+  margin-bottom: 20px;
+}
 /* @end */
 
 /* @group Template
@@ -242,7 +245,7 @@ Styling for structure of the site.
       a.comment-count {
         display: block;
         font-size: 24px;
-        left: -50px;
+        left: -60px;
         position: absolute;
         text-align: center;
       }
@@ -281,16 +284,21 @@ Styling for structure of the site.
         padding-right: 70px;
         text-shadow: 0 1px 0 #fff;
       }
+      #page div.wp-pagenavi {
+        margin-bottom: 15px;
+        text-align: center;
+      }
       #page div.wp-pagenavi span, #page div.wp-pagenavi a {
-        background: rgb(174,21,49); /* For IE */
-        background: rgba(174,21,49,.73);
-        border: 1px solid background: rgb(174,21,49);
-        color: #fff;
+        background: transparent;
+        border: 1px solid rgb(174,21,49);
+        color: #ae1f33;
         margin-right: 5px;
         padding: 3px 5px;
       }
-      #page div.wp-pagenavi span:hover, #page div.wp-pagenavi a:hover {
-        opacity: 1.0;
+      #page div.wp-pagenavi span, #page div.wp-pagenavi a:hover {
+        border: 1px solid rgb(174,21,49);
+        background: rgb(174,21,49);
+        color: #fff;
       }
   aside#sidebar ul li.widget-container {
     list-style: none;

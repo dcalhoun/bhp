@@ -369,13 +369,13 @@ if(!is_admin()){
 /** 
  * Function for phpThumb
  */
-function getThumb($image, $width = null, $height = null) {
+function getThumb($image, $class = 'phpthumb-image', $width = null, $height = null) {
   if($width && $height) {
-    $img = '<img style="height:'. $height .'px; width:'. $width .'px"src="'. home_url( '/' ) .'wp-content/plugins/image-resize/phpthumb/phpThumb.php?src='. $image . '&w='. $width .'&h='. $height .'&q=90&zc=1" />';
+    $img = '<img style="height:'. $height .'px; width:'. $width .'px"src="'. home_url( '/' ) .'wp-content/plugins/image-resize/phpthumb/phpThumb.php?src='. $image . '&w='. $width .'&h='. $height .'&q=90&zc=1" class="' . $class . '" />';
   } elseif ($width) {
-    $img = '<img style="width:'. $width .'px"src="'. home_url( '/' ) .'wp-content/plugins/image-resize/phpthumb/phpThumb.php?src='. $image . '&w='. $width .'&q=90" />';    
+    $img = '<img style="width:'. $width .'px"src="'. home_url( '/' ) .'wp-content/plugins/image-resize/phpthumb/phpThumb.php?src='. $image . '&w='. $width .'&q=90" class="' . $class . '" />';    
   } elseif($height) {
-    $img = '<img style="height:'. $height .'px; width:'. $width .'px"src="'. home_url( '/' ) .'wp-content/plugins/image-resize/phpthumb/phpThumb.php?src='. $image . '&h='. $height .'&q=90&" />';     
+    $img = '<img style="height:'. $height .'px; width:'. $width .'px"src="'. home_url( '/' ) .'wp-content/plugins/image-resize/phpthumb/phpThumb.php?src='. $image . '&h='. $height .'&q=90&" class="' . $class . '" />';     
   }
   return $img;
 }
