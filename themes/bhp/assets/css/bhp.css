@@ -17,14 +17,15 @@ body {
   font: 15px/19px 'Delicious', Arial, serif;
 }
 div.all-content a, div.all-content a:visited, div.all-content a:active {
-  color: #ae1531;
+  color: #ae1f33;
+/*  border-bottom: 1px solid rgba(174,31,51,0);*/
   outline: none;
   text-decoration: none;
   -moz-transition: all 0.4s ease-in-out;
   -webkit-transition: all 0.4s ease-in-out;
 }
 div.all-content a:hover {
-  color: #666;
+/*  border-bottom: 1px solid #ae1f33;*/
 }
 blockquote {
   font-style: italic;
@@ -159,6 +160,12 @@ div#wrapper label.gfield_label {
   font: 17px/23px 'Arvo', Georgia, serif;
   text-transform: lowercase;
 }
+.pictos {
+	font-weight: normal; 
+	font-style: normal;
+	line-height: normal; 
+	font-family: 'Pictos', sans-serif;
+}
 /* @end */
 
 /* @group Template
@@ -186,6 +193,7 @@ Styling for structure of the site.
         text-transform: lowercase;
       }
         nav#primary-navigation ul li a {
+          color: #666;
           -moz-border-radius: 3px;
           border-radius: 3px;
           padding: 3px 8px;
@@ -217,6 +225,7 @@ Styling for structure of the site.
         padding: 15px 0 0 5px;
         position: absolute;
         text-align: center;
+        text-shadow: 0 -1px 0 rgba(0,0,0,.22);
         top: -10px;
         width: 60px;
       }
@@ -231,7 +240,14 @@ Styling for structure of the site.
           line-height: 20px;
         }
       a.comment-count {
-        
+        display: block;
+        font-size: 24px;
+        left: -50px;
+        position: absolute;
+        text-align: center;
+      }
+      a.comment-count:hover {
+        opacity: 0.75;
       }
     #page a.more-link {
       display: block;
@@ -688,5 +704,12 @@ body.page-template-about-php div.featured-image:after {
        url('../fonts/delicious/delicious-italic-webfont.svg#webfonthwFZabLs') format('svg');
   font-weight: normal;
   font-style: normal;
+}
+@font-face {
+	font-family: 'Pictos';
+	src: url('pictos-web.eot');
+	src: local('☺'), url('../fonts/pictos/pictos-web.woff') format('woff'), url('../fonts/pictos/pictos-web.ttf') format('truetype'), url('../fonts/pictos/pictos-web.svg#webfontphKv1xv9') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
 /* @end */

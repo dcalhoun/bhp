@@ -24,7 +24,7 @@
       <span class="month"><?php the_time('M'); ?></span>
       <span class="day"><?php the_time('d'); ?></span>
     </div>
-    <a href="<?php the_permalink(); ?>#comments" title="Leave a comment" class="comment-count"><?php comments_number('Leave a comment', '1 Comment', '% Comments'); ?></a>
+    <a href="<?php the_permalink(); ?>#comments" title="Leave a comment" class="comment-count"><span class="pictos">w</span><?php comments_number('0', '1', '%'); ?></a>
     <?php
       $image_id = get_post_thumbnail_id();  
       $image_url = wp_get_attachment_image_src($image_id,'large');
