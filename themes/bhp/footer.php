@@ -22,10 +22,12 @@
 <script src="<?php bloginfo('template_directory'); ?>/assets/js/jquery.cycle.min.js" type="text/javascript"></script>
 <script>
   jQuery(document).ready(function($){
-    $('#slider ul').after('<nav id="slider-nav">').cycle({
+    $('#slider ul')/*.after('<a href="#" class="slider-arrow prev">Prev</a><a href="#" class="slider-arrow next">Next</a>')*/.after('<nav id="slider-nav">').cycle({
+      next: '.next',
       pager: '#slider-nav',
       pause: true,
       pauseOnPagerHover: true,
+      prev: '.prev',
       timeout: 6000,
     });
   });

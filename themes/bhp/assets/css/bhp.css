@@ -91,7 +91,7 @@ form ul li {
   list-style: none;
 }
 div.all-content input[type=text], div.all-content input[type=email], div.all-content input[type=tel], div.all-content textarea {
-  border: none;
+  border: 1px solid rgb(235,235,235);
   background: #ebebeb; /* For IE */
   background: rgba(235,235,235,.4);
   color: #666;
@@ -102,7 +102,7 @@ div.all-content textarea {
   width: 98%;
 }
 div.all-content input[type=text]:focus, div.all-content input[type=email]:focus, div.all-content input[type=tel]:focus, div#wrapper textarea:focus {
-  background: rgba(235,235,235,1.0);
+  background: rgb(235,235,235);
 }
 div.all-content input[type=submit] {
   background: #c25267;
@@ -291,9 +291,10 @@ Styling for structure of the site.
       #page div.wp-pagenavi span, #page div.wp-pagenavi a {
         background: transparent;
         border: 1px solid rgb(174,21,49);
+        border-radius: 50px;
         color: #ae1f33;
         margin-right: 5px;
-        padding: 3px 5px;
+        padding: 0px 7px 3px 7px;
       }
       #page div.wp-pagenavi span, #page div.wp-pagenavi a:hover {
         border: 1px solid rgb(174,21,49);
@@ -487,6 +488,23 @@ body.home div#slider-wrapper {
       padding: 0;
       list-style: none;
     }
+    body.home div#slider a.slider-arrow {
+      display: none;
+      position: absolute;
+      -moz-transition: all 0.4s ease-in-out;
+      -webkit-transition: all 0.4s ease-in-out;
+      top: 265px;
+      z-index: 99;
+    }
+    body.home div#slider:hover a.slider-arrow {
+      display: block;
+    }
+      body.home div#slider a.prev {
+        left: 25px;
+      }
+      body.home div#slider a.next {
+        right: 25px;
+      }
     body.home div#slider nav#slider-nav {
       display: block;
       margin: 25px 0 0 0;

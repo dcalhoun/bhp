@@ -26,7 +26,7 @@
     </div>
     <?php the_content('Read More &raquo;'); ?>
     
-    <?php comments_template( '', true ); ?>
+    <?php //comments_template( '', true ); ?>
     
   </article>
   
