@@ -1,2 +1,4 @@
 *.DS_Store
+uploads
+uploads/*
 themes/bhp/phpthumb/cache
