@@ -1,4 +1,5 @@
 *.DS_Store
 uploads
 uploads/*
+uploads.tar.gz
 themes/bhp/phpthumb/cache
