@@ -417,10 +417,12 @@ body.home nav#social-links ul li {
 }
   body.home nav#social-links ul li a {
     background: url('../images/btn-social-links.png') no-repeat 0 0;
+    display: inline; /* for IE 7 */
     display: inline-block;
     height: 54px;
     text-indent: -9999px;
     width: 54px;
+    zoom: 1; /* for IE 7 */
   }
   body.home nav#social-links ul li a.twitter:hover { background-position: 0 -55px; }
   body.home nav#social-links ul li a.facebook { background-position: -55px 0; }
@@ -627,6 +629,7 @@ div.photo-shadow:after {
       width: 198px;
     }
     div.photo a span.label {
+      background: #fff; /* older browsers */
       background: rgba(255,255,255,0.85);
       bottom: -44px;
       color: #ae1531;
