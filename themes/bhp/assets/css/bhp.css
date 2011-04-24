@@ -417,12 +417,14 @@ body.home nav#social-links ul li {
 }
   body.home nav#social-links ul li a {
     background: url('../images/btn-social-links.png') no-repeat 0 0;
-    display: inline; /* for IE 7 */
     display: inline-block;
+    *display: inline; /* for IE 7 */
     height: 54px;
+    *line-height: 0; /* for IE 7 */
     text-indent: -9999px;
+    *text-indent: 0; /* for IE 7 */
     width: 54px;
-    zoom: 1; /* for IE 7 */
+    *zoom: 1; /* for IE 7 */
   }
   body.home nav#social-links ul li a.twitter:hover { background-position: 0 -55px; }
   body.home nav#social-links ul li a.facebook { background-position: -55px 0; }
