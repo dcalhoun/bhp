@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
   <meta charset="<?php bloginfo( 'charset' ); ?>" />
-  <title><?php bloginfo('site_title'); ?></title>
+  <title> <?php wp_title('|', 1, 'right'); ?><?php bloginfo('name'); ?></title>
   <meta name="description" content="<?php bloginfo('description'); ?>" />
   <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
   <link rel="shortcut icon" href="<?php bloginfo( 'url' ); ?>/favicon.ico" type="image/x-icon" />
