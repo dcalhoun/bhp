@@ -1,30 +1,41 @@
 === Plugin Name ===
 Contributors: fredericktownes
-Tags: user experience, cache, caching, page cache, css cache, js cache, db cache, disk cache, disk caching, database cache, http compression, gzip, deflate, minify, CDN, content delivery network, media library, performance, speed, multiple hosts, CSS, merge, combine, unobtrusive javascript, compress, optimize, optimizer, JavaScript, JS, cascading style sheet, plugin, yslow, YUI, google, google rank, google page speed, S3, CloudFront, AWS, Amazon Web Services, cloud files, rackspace, batcache, wp cache, wp super cache, w3 total cache, buddypress
+Tags: user experience, cache, caching, page cache, css cache, js cache, db cache, disk cache, disk caching, database cache, http compression, gzip, deflate, minify, cdn, content delivery network, media library, performance, speed, multiple hosts, css, merge, combine, unobtrusive javascript, compress, optimize, optimizer, javascript, js, cascading style sheet, plugin, yslow, yui, google, google rank, google page speed, mod_pagespeed, s3, cloudfront, aws, amazon web services, cloud files, rackspace, cotendo, max cdn, limelight, cloudflare, microsoft, microsoft azure, iis, nginx, apache, varnish, xcache, apc, eacclerator, wincache, mysql, w3 total cache, batcache, wp cache, wp super cache, buddypress
 Requires at least: 2.8
-Tested up to: 3.0.2
-Stable tag: 0.9.1.3
+Tested up to: 3.2
+Stable tag: 0.9.2.1
 
-Easily optimize the speed and user experience of your site with caching: browser, page, object, database, minify and content delivery network support.
+Improve site performance and user experience via caching: browser, page, object, database, minify and content delivery network support.
 
 == Description ==
 
-The fastest and most complete WordPress performance optimization plugin. Trusted by many popular sites like: mashable.com, smashingmagazine.com, makeuseof.com, kiss925.com, pearsonified.com, lockergnome.com, tutsplus.com, johnchow.com, ilovetypography.com, webdesignerdepot.com, css-tricks.com, yoast.com and others &mdash; W3 Total Cache improves the user experience of your site by improving your server performance, caching every aspect of your site, reducing the download times and providing transparent content delivery network (CDN) integration.
+The **most complete** WordPress performance framework.
+
+Recommended by web hosts like: MediaTemple, Host Gator, Page.ly and WP Engine and countless more.
+
+Trusted by countless sites like: mattcutts.com, mashable.com, smashingmagazine.com, makeuseof.com, yoast.com, kiss925.com, pearsonified.com, lockergnome.com, johnchow.com, ilovetypography.com, webdesignerdepot.com, css-tricks.com and tens of thousands of others.
+
+W3 Total Cache improves the user experience of your site by improving your server performance, caching every aspect of your site, reducing the download times and providing transparent content delivery network (CDN) integration.
+
+An inside look:
+
+http://www.youtube.com/watch?v=rkmrQP8S5KY
 
 Benefits:
 
 * At least 10x improvement in overall site performance (Grade A in [YSlow](http://developer.yahoo.com/yslow/) or significant [Google Page Speed](http://code.google.com/speed/page-speed/) improvements) **when fully configured**
-* Improve conversion rates and "[site performance](http://googlewebmastercentral.blogspot.com/2009/12/your-sites-performance-in-webmaster.html)" which [affect your site's rank](http://googlewebmastercentral.blogspot.com/2010/04/using-site-speed-in-web-search-ranking.html) on Google.com
-* "Instant" second page views (browser caching after first page view)
-* Optimized progressive render (pages start rendering immediately)
-* Reduced page load time: increased visitor time on site (visitors view more pages)
-* Improved web server performance (sustain high traffic periods)
+* Improved conversion rates and "[site performance](http://googlewebmastercentral.blogspot.com/2009/12/your-sites-performance-in-webmaster.html)" which [affect your site's rank](http://googlewebmastercentral.blogspot.com/2010/04/using-site-speed-in-web-search-ranking.html) on Google.com
+* "Instant" subsequent page views: browser caching
+* Optimized progressive render: pages start rendering quickly
+* Reduced page load time: increased visitor time on site; visitors view more pages
+* Improved web server performance; sustain high traffic periods
 * Up to 80% bandwidth savings via minify and HTTP compression of HTML, CSS, JavaScript and feeds
 
 Features:
 
 * Compatible with shared hosting, virtual private / dedicated servers and dedicated servers / clusters
 * Transparent content delivery network (CDN) integration with Media Library, theme files and WordPress itself
+* Mobile support: custom caching of pages by referrer or groups of user agents including theme switching for groups of referrers or user agents
 * Caching of (minified and compressed) pages and posts in memory or on disk or on CDN (mirror only)
 * Caching of (minified and compressed) CSS and JavaScript in memory, on disk or on CDN
 * Caching of feeds (site, categories, tags, comments, search results) in memory or on disk or on CDN (mirror only)
@@ -120,11 +131,11 @@ That depends on how you use your site and where most of your readers read your s
 * [Amazon Cloudfront](http://bit.ly/ao1sGt)
 * [Rackspace Cloud Files](http://bit.ly/9hpX8T)
 * [MaxCDN](http://bit.ly/acaXXt)
-* [Cotendo](http://bit.ly/bnVs0a)
-* [VPS NET](http://bit.ly/d5hfFt)
-* [Akamai](http://bit.ly/a5GBLV)
+* [VPS NET (Level 3)](http://bit.ly/d5hfFt)
 * [EdgeCast](http://bit.ly/bIjSWC)
+* [Cotendo](http://bit.ly/bnVs0a)
 * [Limelight Networks](http://bit.ly/aCW04j)
+* [Akamai](http://bit.ly/a5GBLV)
 * [SimpleCDN](http://bit.ly/93EAKK)
 
 = What if I don't want to work with a CDN right now, is there any other use for this feature? =
@@ -238,8 +249,74 @@ Install the plugin to read the full FAQ.
 
 == Press: Mentions, Tutorials &amp; Reviews ==
 
+**May 2011:**
+
+* [Use W3 Total Cache to Speed Up Your WordPress Site](http://www.ostraining.com/blog/wordpress/w3-total-cache/), Steve Burge
+
+**April 2011:**
+
+* [Setting Up and Optimizing W3 Total Cache](http://tentblogger.com/w3-total-cache/), John Saddington
+* [How To Configure The Various W3TC Plugin Settings For Your WordPress Blog](http://www.makeuseof.com/tag/configure-w3tc-plugin-wordpress/), James Bruce
+* [Speeding Up Your WordPress Website: 11 Ways to Improve Your Load Time](http://wpmu.org/speeding-up-your-wordpress-website-11-ways-to-improve-your-load-time/), Siobhan Ambrose
+* [Recipe for Baked WordPress](http://carpeaqua.com/2011/04/05/recipe-for-baked-wordpress/), Justin Williams
+* [WordPress + W3 Total Cache + CDN story](http://translate.google.com/translate?hl=en&sl=auto&tl=en&u=http%3A%2F%2Fblog.gaspanik.com%2Factivate-cdn-option-on-w3totalcache), Mori Masako
+* [SETTING UP W3 TOTAL CACHE PART 1](http://www.geekforhim.com/setting-up-w3-total-cache-part-1/), Matthew Snider
+* [SETTING UP W3 TOTAL CACHE PART 2](http://www.geekforhim.com/setting-up-w3-total-cache-part-2/), Matthew Snider
+
+**March 2011:**
+
+* [WPML with W3TC for Fast and Efficient Multilingual Websites](http://wpml.org/2011/03/wpml-with-w3tc/), Amir
+
+**February 2011:**
+
+* [Optimizing WordPress with Nginx, Varnish, W3 Total Cache, Amazon S3, and Memcached (With Benchmarks)](http://danielmiessler.com/blog/optimizing-wordpress-with-nginx-varnish-w3-total-cache-amazon-s3-and-memcached), Daniel Miessler
+* [My WordPress site loads in 2 seconds… does yours?](http://labsecrets.com/blog/2011/02/14/my-wordpress-site-loads-in-two-seconds-does-yours/)
+
+**January 2011:**
+
+* [11 Important Steps to Optimize WordPress and Increase Performance](http://www.bernskiold.com/2011/01/10/11-important-steps-to-optimize-wordpress-and-increase-performance/), Erik Bernskiold
+* [Speed up WordPress with the W3 Total Cache Plugin](http://wplift.com/speed-up-wordpress-with-the-w3-total-cache-plugin), Oliver Dale
+* [How to Make Your Blog Load Faster than ProBlogger](http://www.problogger.net/archives/2011/01/04/how-to-make-your-blog-load-faster-than-problogger/), Pro Blogger
+* [WP Honors Winner, Free Plugin Category](http://wpcandy.com/reports/the-2010-wphonors-award-winners), WPCandy.com
+
+**December 2010:**
+
+* [Best blog plugins](http://www.blog.web6.org/best-blog-plugins/)
+* [How To Make Your WordPress Blog Load Faster(http://www.johnchow.com/how-to-make-your-wordpress-blog-load-faster/), John Chow
+* [Unleash the Power of WordPress Using Plugin Combos](http://freelancefolder.com/unleash-the-power-of-wordpress-using-plugin-combos/), Paul de Wouters
+* [Rackspace Cloud Files for WordPress](http://sporkmarketing.com/blog/1095/rackspace-cloud-files-wordpress/), Jason Lancaster
+
+**November 2010:**
+
+* [Make your blog super fast with W3 Total Cache plugin](http://laspas.gr/2010/11/26/make-blog-super-fast-w3-total-cache-plugin/), Stratos Laspas
+* [10 WordPress Plugins I’m Thankful For (And Cannot Live Without)](http://wpmu.org/10-wordpress-plugins-im-thankful-for-and-cannot-live-without/), Sarah Gooding
+* [Subjective Results of Installing W3 Total Cache Plugin](http://www.codyhatch.com/administriva/subjective-results-of-installing-w3-total-cache-plugin/), Cody Hatch
+* [13 Plugins Your WordPress Site Might Need](http://www.jonbishop.com/2010/11/13-plugins-your-wordpress-site-might-need/), Jon Bishop
+* [Best WordPress Plugins that Marketers Use](http://www.nicoleonthenet.com/6390/best-wordpress-plugins-marketers-use/), Nicole Dean
+* [WordPress Fat-Loss Diet to Speed Up & Ease Load](http://superbeachbody.com/12528/wordpress-fat-loss-diet-to-speed-up-ease-load/), Erhald Bergman
+* [10 WordPress Plugins I'm Thankful For (And Cannot Live Without)](http://wpmu.org/10-wordpress-plugins-im-thankful-for-and-cannot-live-without/), Sarah Gooding
+* [Subjective Results of Installing W3 Total Cache Plugin](http://www.codyhatch.com/administriva/subjective-results-of-installing-w3-total-cache-plugin/), Cody Hatch
+* [W3 Total Cache Plugin](http://www.xenritech.com/w3-total-cache-plugin.html/)
+
+**October 2010:**
+
+* [20 Wordpress Plugins for Successful Internet Marketers](http://www.incomediary.com/20-wordpress-plugins-for-successful-internet-marketers/), Michael Dunlop
+* [Failure Under Load](http://blog.hybridindie.com/2010/10/20/failure-load/), John Brien
+* [W3 Total Cache and site response time (as measured by Pingdom)](http://www.pauldavidolson.com/blog/2010/w3-total-cache-and-site-response-time-as-measured-by-pingdom/), Paul David Olson
+* [Overhauling WordPress Performance](http://brianegan.com/overhauling-wordpress-performance/), Brian Egan
+* [How to Make WordPress Run Faster](http://www.stevecoursen.com/498/how-to-make-wordpress-run-faster/), Stephen Coursen
+* [Give Your Wordpress Blog Lightning Fast Speeds With W3 Total Cache](http://www.makeuseof.com/tag/give-wordpress-blog-lightning-fast-speeds-w3-total-cache/), Steven Campbell
+* [W3 Total Cache and site response time (as measured by Pingdom)](http://www.pauldavidolson.com/blog/2010/w3-total-cache-and-site-response-time-as-measured-by-pingdom/), Paul David Olson
+* [11 Ways to Make Your WordPress Site Faster and Leaner](http://wpmu.org/11-ways-to-make-your-wordpress-site-faster-and-leaner/), Sarah Gooding
+* [The Top 10 of Your Top 5 Plugins](http://weblogtoolscollection.com/archives/2010/10/04/the-top-10-of-your-top-5-plugins/), James Huff
+* [Integrating memcached to wordpress](http://www.ruchirablog.com/intergrating-memcached-to-wordpress/), Ruchira Sahan
+* [Make WordPress Faster (on the Rackspace Cloud)](http://www.mattytemple.com/2010/10/make-wordpress-faster-on-the-rackspace-cloud/), Matt Temple
+
 **September 2010:**
 
+* [Review: W3 Total Cache [WordPress Plugin]](http://sokkz.com/2010/09/29/review-w3-total-cache-wordpress-plugin/)
+* [Plugins to Power-Up Your WordPress Installation](http://www.afiffattouh.com/web-design/plugins-to-power-up-your-wordpress-installation), Afif Fattouh
+* [Reduce Page Loading Time by 300% With W3 Total Cache](http://c3mdigital.com/2010/09/reduce-page-loading-time-w3-total-cache/), Chris Olbekson
 * [Performance Unleashed: How To Optimize Websites For Speed](http://diythemes.com/thesis/improve-website-pagespeed/), Willie Jackson
 * [5 Best WordPress Plugins To Improve The Loading Speed Of a Blog](http://www.gadgetcage.com/2010/09/5-best-wordpress-plugins-to-improve-the-loading-speed-of-a-blog.html/)
 * [WordPress Fat-Loss Diet to Speed Up & Ease Load](http://www.daljinskapodrska.com/wordpress-fat-loss-diet-to-speed-up-ease-load/)
@@ -361,6 +438,53 @@ It's quite difficult to recall all of the innovators that have shared their thou
 Please reach out to all of these people and support their projects if you're so inclined.
 
 == Changelog ==
+
+= 0.9.2.1 =
+* Fixed bug with existing installation upgrades: set minify to manual mode by default
+* Fixed bug with unsuccessful transfer queue button
+* Fixed bug with background in lightbox
+* Fixed bug with handling of local http requests being blocked on some hosts
+* Disabled CDN for minify files when auto mode is selected and the CDN method is origin push
+
+= 0.9.2 =
+* Added support for nginx web server
+* Added support for CloudFlare
+* Added origin pull support for Amazon Cloudfront
+* Added Microsoft Azure Storage support for CDN
+* Added WinCache opcode cache support
+* Added additional minifier engines for HTML, CSS and JS including: HTMLtidy, CSStidy, Closure Compiler, YUI Compressor
+* Added Google Page Speed integration
+* Added support for @import processing
+* Added controls for page cache purging policy
+* Added auto mode for minify (not compatible with CDN)
+* Added support for set cookie domain setting
+* Added reliability improvements for Amazon Web Services
+* Added referrer group management for uniquely caching these cases
+* Added Amazon S3 bucket location selection control
+* Added support CNAMEs confguration support for Amazon Cloudfront
+* Added purge tool
+* Added support of custom wp-config.php location
+* Added cache busting support
+* Improved object caching performance when no plugins are active
+* Improved non-blocking JS embedding implementation
+* Improved reliability of CDN export operations
+* Improved implementation of headers for all cache engines
+* Improved minify help (recommendations) tool
+* Improved handling of .htaccess directive changes
+* Improved support of IIS web server
+* Improved varnish support
+* Fixed bugs with API changes with Rackspace Cloudfiles
+* Fixed bugs with origin push content delivery network methods
+* Fixed bug with HTML encoding
+* Fixed bug with emptying cache for various cache keys
+* Fixed bug with rejected CDN file support
+* Fixed bug with HTTPS mode in WP Admin
+* Fixed bug with relative document root for disk enhanced page cache
+* Fixed bug with trailing slash for disk enhanced page cache
+* Fixed bug with minify template group settings being lost upon upgrade
+* Fixed division by zero error
+* Fixed bug with object cache clones
+* Moved browser cache rules to site root instead of document root
 
 = 0.9.1.3 =
 * Improved error messages with AWS S3 CDN

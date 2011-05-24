@@ -1,7 +1,7 @@
 <?php
 class GFCommon{
 
-    public static $version = "1.5.1";
+    public static $version = "1.5.2.1";
     public static $tab_index = 1;
 
     public static function get_selection_fields($form, $selected_field_id){
@@ -424,6 +424,11 @@ class GFCommon{
                     case "total" :
                         $value = GFCommon::to_money($value);
                     break;
+
+                    case "post_category" :
+                        $ary = explode(":", $value);
+                        $value = count($ary) > 0 ? $ary[0] : "";
+                    break;
                 }
 
                 $text = str_replace($match[0], $value , $text);
@@ -654,7 +659,7 @@ class GFCommon{
                                                         <ul style="margin:0">';
 
                                                             $price = self::to_number($product["price"]);
-                                                            if(is_array($product["options"])){
+                                                            if(is_array(rgar($product,"options"))){
                                                                 foreach($product["options"] as $option){
                                                                     $price += self::to_number($option["price"]);
                                                                     $field_data .= '<li style="padding:4px 0 4px 0">' . $option["option_label"] .'</li>';
@@ -734,6 +739,12 @@ class GFCommon{
         $subject = GFCommon::replace_variables(rgget("subject", $form["notification"]), $form, $lead, false, false);
         $message = GFCommon::replace_variables(rgget("message", $form["notification"]), $form, $lead, false, false, !rgget("disableAutoformat", $form["notification"]));
         $message = do_shortcode($message);
+
+        $version_info = self::get_version_info();
+        $is_expired = !rgempty("expiration_time", $version_info) && $version_info["expiration_time"] < time();
+        if(!$version_info["is_valid_key"] && $is_expired){
+            $message .= "<br/><br/>Your Gravity Forms License Key has expired. In order to continue receiving support and software updates you must renew your license key. You can do so by following the renewal instructions on the Gravity Forms Settings page in your WordPress Dashboard or by <a href='http://www.gravityhelp.com/renew-license/?key=" . self::get_key() . "'>clicking here</a>.";
+        }
 
         $from = rgempty("fromField", $form["notification"]) ? rgget("from", $form["notification"]) : rgget($form["notification"]["fromField"], $lead);
 
@@ -920,7 +931,7 @@ class GFCommon{
 
         if(!$raw_response){
             //Getting version number
-            $options = array('method' => 'POST', 'timeout' => 3);
+            $options = array('method' => 'POST', 'timeout' => 20);
             $options['headers'] = array(
                 'Content-Type' => 'application/x-www-form-urlencoded; charset=' . get_option('blog_charset'),
                 'User-Agent' => 'WordPress/' . get_bloginfo("version"),
@@ -938,7 +949,11 @@ class GFCommon{
          else
          {
              $ary = explode("||", $raw_response['body']);
-             return array("is_valid_key" => $ary[0], "version" => $ary[1], "url" => $ary[2]);
+             $info = array("is_valid_key" => $ary[0], "version" => $ary[1], "url" => $ary[2]);
+             if(count($ary) == 4)
+                $info["expiration_time"] = $ary[3];
+
+             return $info;
          }
 
     }
@@ -1180,8 +1195,8 @@ class GFCommon{
                     $field_value .= "|" . GFCommon::to_number($choice["price"]);
 
 
-                if(empty($value) && RG_CURRENT_VIEW != "entry"){
-                    $checked = $choice["isSelected"] ? "checked='checked'" : "";
+                if(rgblank($value) && RG_CURRENT_VIEW != "entry"){
+                    $checked = rgar($choice,"isSelected") ? "checked='checked'" : "";
                 }
                 else{
                     $checked = RGFormsModel::choice_value_match($field, $choice, $value) ? "checked='checked'" : "";
@@ -1217,8 +1232,8 @@ class GFCommon{
                 if(rgget("enablePrice", $field))
                     $field_value .= "|" . GFCommon::to_number($choice["price"]);
 
-                if(empty($value) && RG_CURRENT_VIEW != "entry"){
-                    $selected = $choice["isSelected"] ? "selected='selected'" : "";
+                if(rgblank($value) && RG_CURRENT_VIEW != "entry"){
+                    $selected = rgar($choice,"isSelected") ? "selected='selected'" : "";
                 }
                 else{
                     $selected = RGFormsModel::choice_value_match($field, $choice, $value) ? "selected='selected'" : "";
@@ -1463,7 +1478,7 @@ class GFCommon{
             __('ZAMBIA', 'gravityforms') => "ZM" ,
             __('ZIMBABWE', 'gravityforms') => "ZW" );
 
-            return $codes[strtoupper($country_name)];
+            return rgar($codes, strtoupper($country_name));
     }
 
     public static function get_us_states(){
@@ -1629,7 +1644,7 @@ class GFCommon{
 
         $id = $field["id"];
         $field_id = IS_ADMIN || $form_id == 0 ? "input_$id" : "input_" . $form_id . "_$id";
-        $form_id = IS_ADMIN && empty($form_id) ? $_GET["id"] : $form_id;
+        $form_id = IS_ADMIN && empty($form_id) ? rgget("id") : $form_id;
 
         $size = $field["size"];
         $disabled_text = (IS_ADMIN && RG_CURRENT_VIEW != "entry") ? "disabled='disabled'" : "";
@@ -2032,6 +2047,7 @@ class GFCommon{
                 $street_address = sprintf("<span class='ginput_full$class_suffix' id='" . $field_id . "_1_container'><input type='text' name='input_%d.1' id='%s_1' value='%s' $tabindex %s/><label for='%s_1' id='" . $field_id . "_1_label'>" . apply_filters("gform_address_street_{$form_id}", apply_filters("gform_address_street",__("Street Address", "gravityforms"), $form_id), $form_id) . "</label></span>", $id, $field_id, $street_value, $disabled_text, $field_id);
 
                 //address line 2 field
+                $street_address2 = "";
                 $style = (IS_ADMIN && rgget("hideAddress2", $field)) ? "style='display:none;'" : "";
                 if(IS_ADMIN || !rgget("hideAddress2", $field)){
                     $tabindex = self::get_tabindex();
@@ -2547,6 +2563,8 @@ class GFCommon{
             case "checkbox" :
                 if(is_array($value)){
 
+                    $items = '';
+
                     foreach($value as $key => $item){
                         if(!empty($item)){
                             $items .= "<li>" . GFCommon::selection_display($item, $field, $currency, $use_text) . "</li>";
@@ -2574,6 +2592,13 @@ class GFCommon{
                     $value .= !empty($description) ? "<div>Description: $description</div>": "";
                 }
                 return $value;
+
+            case "post_category" :
+                $ary = explode(":", $value);
+                $cat_name = count($ary) > 0 ? $ary[0] : "";
+
+                return $cat_name;
+
             case "fileupload" :
                 $file_path = $value;
                 if(!empty($file_path)){
@@ -2585,7 +2610,7 @@ class GFCommon{
             break;
 
             case "date" :
-                return GFCommon::date_display($value, $field["dateFormat"]);
+                return GFCommon::date_display($value, rgar($field, "dateFormat"));
             break;
 
             case "radio" :

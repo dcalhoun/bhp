@@ -6,7 +6,7 @@ var W3tc_Lightbox = {
     create: function() {
         var me = this;
 
-        this.container = jQuery('<div class="lightbox lightbox-loading"><div class="lightbox-close">Close window</div><div class="lightbox-content"></div></div>').css( {
+        this.container = jQuery('<div class="lightbox lightbox-loading"><div class="lightbox-close">Close window</div><div class="lightbox-content"></div></div>').css({
             top: 0,
             left: 0,
             width: 0,
@@ -32,9 +32,7 @@ var W3tc_Lightbox = {
     },
 
     open: function(options) {
-        var me = this;
-
-        this.options = jQuery.extend( {
+        this.options = jQuery.extend({
             width: 400,
             height: 300,
             offsetTop: 100,
@@ -45,7 +43,7 @@ var W3tc_Lightbox = {
 
         this.create();
 
-        this.container.css( {
+        this.container.css({
             width: this.options.width,
             height: this.options.height
         });
@@ -68,12 +66,12 @@ var W3tc_Lightbox = {
     },
 
     resize: function() {
-        this.container.css( {
+        this.container.css({
             top: this.window.scrollTop() + this.options.offsetTop,
             left: this.window.scrollLeft() + this.window.width() / 2 - this.container.width() / 2
         });
 
-        jQuery('.lightbox-content', this.container).css( {
+        jQuery('.lightbox-content', this.container).css({
             width: this.width(),
             height: this.height()
         });
@@ -126,7 +124,7 @@ var W3tc_Overlay = {
     create: function() {
         var me = this;
 
-        this.container = jQuery('<div id="overlay" />').css( {
+        this.container = jQuery('<div id="overlay" />').css({
             top: 0,
             left: 0,
             width: 0,
@@ -159,7 +157,7 @@ var W3tc_Overlay = {
     },
 
     resize: function() {
-        this.container.css( {
+        this.container.css({
             top: this.window.scrollTop(),
             left: this.window.scrollLeft(),
             width: this.window.width(),
@@ -169,71 +167,10 @@ var W3tc_Overlay = {
 };
 
 function w3tc_lightbox_support_us() {
-    W3tc_Lightbox.open( {
-        width: 590,
-        height: 200,
-        url: 'admin.php?page=w3tc_general&w3tc_action=support_us',
-        callback: function(lightbox) {
-            jQuery('.button-tweet', lightbox.container).click(function(event) {
-                lightbox.close();
-                w3tc_lightbox_tweet();
-                return false;
-            });
-
-            jQuery('.button-rating', lightbox.container).click(function() {
-                window.open('http://wordpress.org/extend/plugins/w3-total-cache/', '_blank');
-            });
-
-            jQuery('form').submit(function() {
-                if (jQuery('select :selected', this).val() == '') {
-                    alert('Please select link location!');
-                    return false;
-                }
-            });
-        }
-    });
-
-}
-
-function w3tc_lightbox_tweet() {
-    W3tc_Lightbox.open( {
-        width: 550,
-        height: 340,
-        url: 'admin.php?page=w3tc_general&w3tc_action=tweet',
-        callback: function(lightbox) {
-            jQuery('form', lightbox.container).submit(function() {
-                var me = this, username = jQuery('#tweet_username').val(), password = jQuery('#tweet_password').val();
-
-                if (username == '') {
-                    alert('Please enter your twitter.com username.');
-                    return false;
-                }
-
-                if (password == '') {
-                    alert('Please enter your twitter.com password.');
-                    return false;
-                }
-
-                jQuery('input', this).attr('disabled', 'disabled');
-
-                jQuery.post('admin.php?page=w3tc_general', {
-                    w3tc_action: 'twitter_status_update',
-                    username: username,
-                    password: password
-                }, function(data) {
-                    jQuery('input', me).attr('disabled', '');
-
-                    if (data.result) {
-                        lightbox.close();
-                        alert('Nice! Thanks for telling your friends about us!');
-                    } else {
-                        alert('Uh oh, seems that that #failed. Please try again.');
-                    }
-                }, 'json');
-
-                return false;
-            });
-        }
+    W3tc_Lightbox.open({
+        width: 500,
+        height: 230,
+        url: 'admin.php?page=w3tc_general&w3tc_action=support_us'
     });
 }
 
@@ -251,17 +188,15 @@ function w3tc_lightbox_minify_recommendations() {
         height = max_height;
     }
 
-    W3tc_Lightbox.open( {
+    W3tc_Lightbox.open({
         width: 1000,
         height: height,
         url: 'admin.php?page=w3tc_minify&w3tc_action=minify_recommendations',
         callback: function(lightbox) {
-            jQuery('#recom_container').css('height', height - 50);
-
             var theme = jQuery('#recom_theme').val();
 
             if (jQuery.ui && jQuery.ui.sortable) {
-                jQuery("#recom_js_files,#recom_css_files").sortable( {
+                jQuery("#recom_js_files,#recom_css_files").sortable({
                     axis: 'y',
                     stop: function() {
                         jQuery(this).find('li').each(function(index) {
@@ -363,7 +298,7 @@ function w3tc_lightbox_minify_recommendations() {
 
 function w3tc_lightbox_self_test() {
     var min_height = 200;
-    var max_height = 800;
+    var max_height = 1000;
 
     var height = jQuery(window).height() - 220;
 
@@ -373,13 +308,11 @@ function w3tc_lightbox_self_test() {
         height = max_height;
     }
 
-    W3tc_Lightbox.open( {
+    W3tc_Lightbox.open({
         width: 800,
         height: height,
         url: 'admin.php?page=w3tc_general&w3tc_action=self_test',
         callback: function(lightbox) {
-            jQuery('#self_test_container').css('height', height - 50);
-
             jQuery('.button-primary', lightbox.container).click(function() {
                 lightbox.close();
             });
@@ -387,12 +320,20 @@ function w3tc_lightbox_self_test() {
     });
 }
 
-jQuery(function() {
-    jQuery('.button-tweet').click(function() {
-        w3tc_lightbox_tweet();
-        return false;
+function w3tc_lightbox_cdn_s3_bucket_location(type) {
+    W3tc_Lightbox.open({
+        width: 500,
+        height: 150,
+        url: 'admin.php?page=w3tc_general&w3tc_action=cdn_s3_bucket_location&type=' + type,
+        callback: function(lightbox) {
+            jQuery('.button', lightbox.container).click(function() {
+                lightbox.close();
+            });
+        }
     });
+}
 
+jQuery(function() {
     jQuery('.button-minify-recommendations').click(function() {
         w3tc_lightbox_minify_recommendations();
         return false;
@@ -400,6 +341,19 @@ jQuery(function() {
 
     jQuery('.button-self-test').click(function() {
         w3tc_lightbox_self_test();
+        return false;
+    });
+
+    jQuery('.button-cdn-s3-bucket-location,.button-cdn-cf-bucket-location').click(function() {
+        var type = '';
+
+        if (jQuery(this).hasClass('cdn_s3')) {
+            type = 's3';
+        } else if (jQuery(this).hasClass('cdn_cf')) {
+            type = 'cf';
+        }
+
+        w3tc_lightbox_cdn_s3_bucket_location(type);
         return false;
     });
 });

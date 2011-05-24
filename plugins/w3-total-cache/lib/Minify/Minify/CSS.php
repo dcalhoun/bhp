@@ -72,11 +72,15 @@ class Minify_CSS {
                 ,$options['currentDir']
                 ,isset($options['docRoot']) ? $options['docRoot'] : $_SERVER['DOCUMENT_ROOT']
                 ,isset($options['symlinks']) ? $options['symlinks'] : array()
-            );  
+                ,isset($options['browserCacheId']) ? $options['browserCacheId'] : 0
+                ,isset($options['browserCacheExtensions']) ? $options['browserCacheExtensions'] : array()
+            );
         } else {
             return Minify_CSS_UriRewriter::prepend(
                 $css
                 ,$options['prependRelativePath']
+                ,isset($options['browserCacheId']) ? $options['browserCacheId'] : 0
+                ,isset($options['browserCacheExtensions']) ? $options['browserCacheExtensions'] : array()
             );
         }
     }

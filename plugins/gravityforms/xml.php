@@ -14,21 +14,24 @@ class RGXML{
     }
 
     public function serialize($parent_node_name, $data, $path=""){
+        $xml = "";
         if(empty($path)){
             $path = $parent_node_name;
             $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         }
 
         //if this element is marked as hidden, ignore it
-        if($this->options[$path]["is_hidden"])
+        $option = rgar($this->options, $path);
+        if(rgar($option,"is_hidden"))
             return "";
 
         $padding = $this->indent($path);
 
         //if the content is not an array, simply render the node
-        if(!is_array($data))
-            return strlen($data) == 0 && !$this->options[$path]["allow_empty"] ? "" : "$padding<$parent_node_name>" . $this->xml_value($parent_node_name, $data) . "</$parent_node_name>";
-
+        if(!is_array($data)){
+            $option = rgar($this->options,$path);
+            return strlen($data) == 0 && !rgar($option, "allow_empty") ? "" : "$padding<$parent_node_name>" . $this->xml_value($parent_node_name, $data) . "</$parent_node_name>";
+        }
         $is_associative = $this->is_assoc($data);
         $is_empty = true;
 
@@ -42,7 +45,8 @@ class RGXML{
                 $child_path = "$path/$key";
                 if($this->is_attribute($child_path)){
                     $value = $this->xml_attribute($obj);
-                    if(strlen($value) > 0 || $this->options[$child_path]["allow_empty"]){
+                    $option = rgar($this->options, $child_path);
+                    if(strlen($value) > 0 || rgar($option, "allow_empty")){
                         $xml .= " $key=\"$value\"";
                         $is_empty = false;
                     }
@@ -53,7 +57,7 @@ class RGXML{
         $xml .= ">";
 
         //for a regular array, the child element (if not specified in the options) will be the singular vesion of the parent element(i.e. <forms><form>...</form><form>...</form></forms>)
-        $child_node_name = isset($this->options["array_tag"]) ? $this->options["array_tag"] : $this->to_singular($parent_node_name);
+        $child_node_name = isset($this->options[$path]["array_tag"]) ? $this->options[$path]["array_tag"] : $this->to_singular($parent_node_name);
 
         //adding other properties as elements
         foreach($data as $key => $obj){
@@ -77,7 +81,7 @@ class RGXML{
 
     public function unserialize($xml_string){
         $xml_string = trim($xml_string);
-        
+
         $xml_parser = xml_parser_create();
         $values = array();
         xml_parser_set_option($xml_parser, XML_OPTION_CASE_FOLDING, false);
@@ -155,7 +159,8 @@ class RGXML{
     }
 
     private function is_attribute($path){
-        return $this->options[$path]["is_attribute"];
+        $option = rgar($this->options, $path);
+        return rgar($option,"is_attribute");
     }
 
     private function xml_value($node_name, $value){
@@ -200,6 +205,14 @@ class RGXML{
             return substr($str, 0, strlen($str)-1);
         }
     }
+}
+if(!function_exists("rgar")){
+function rgar($array, $name){
+    if(isset($array[$name]))
+        return $array[$name];
+
+    return '';
+}
 }
 
 ?>

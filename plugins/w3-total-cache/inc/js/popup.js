@@ -74,13 +74,13 @@ var W3tc_Popup_Cdn_Export_File = {
 
         this.upload_files = [];
 
-        for ( var i = this.offset, l = this.files.length, j = 0; i < l && j < this.limit; i++, j++) {
+        for (var i = this.offset, l = this.files.length, j = 0; i < l && j < this.limit; i++,j++) {
             this.upload_files.push(this.files[i]);
         }
 
         var me = this;
         if (this.upload_files.length) {
-            jQuery.ajax( {
+            jQuery.ajax({
                 type: 'POST',
                 url: 'admin.php?page=w3tc_cdn',
                 data: {
@@ -118,7 +118,7 @@ var W3tc_Popup_Cdn_Export_File = {
 
     process_callback: function(data) {
         var failed = false;
-        for ( var i = 0; i < data.results.length; i++) {
+        for (var i = 0; i < data.results.length; i++) {
             this.add_log(data.results[i].remote_path, data.results[i].result, data.results[i].error);
             if (data.results[i].result == -1) {
                 failed = true;
@@ -239,7 +239,7 @@ var W3tc_Popup_Cdn_Export_Library = {
         }
 
         var me = this;
-        jQuery.ajax( {
+        jQuery.ajax({
             type: 'POST',
             url: 'admin.php?page=w3tc_cdn',
             data: {
@@ -283,7 +283,7 @@ var W3tc_Popup_Cdn_Export_Library = {
         this.set_progress((this.offset * 100 / data.total).toFixed(0));
 
         var failed = false;
-        for ( var i = 0; i < data.results.length; i++) {
+        for (var i = 0; i < data.results.length; i++) {
             this.add_log(data.results[i].remote_path, data.results[i].result, data.results[i].error);
             if (data.results[i].result == -1) {
                 failed = true;
@@ -426,7 +426,7 @@ var W3tc_Popup_Cdn_Import_Library = {
         }
 
         var me = this;
-        jQuery.ajax( {
+        jQuery.ajax({
             type: 'POST',
             url: 'admin.php?page=w3tc_cdn',
             data: {
@@ -470,7 +470,7 @@ var W3tc_Popup_Cdn_Import_Library = {
         this.set_progress((this.offset * 100 / data.total).toFixed(0));
 
         var failed = false;
-        for ( var i = 0; i < data.results.length; i++) {
+        for (var i = 0; i < data.results.length; i++) {
             this.add_log(data.results[i].src, data.results[i].result, data.results[i].error);
             if (data.results[i].result == 1) {
                 this.add_rule(data.results[i].src, data.results[i].dst);
@@ -589,7 +589,7 @@ var W3tc_Popup_Cdn_Rename_Domain = {
         }
 
         var me = this;
-        jQuery.ajax( {
+        jQuery.ajax({
             type: 'POST',
             url: 'admin.php?page=w3tc_cdn',
             data: {
@@ -634,7 +634,7 @@ var W3tc_Popup_Cdn_Rename_Domain = {
         this.set_progress((this.offset * 100 / data.total).toFixed(0));
 
         var failed = false;
-        for ( var i = 0; i < data.results.length; i++) {
+        for (var i = 0; i < data.results.length; i++) {
             this.add_log(data.results[i].old, data.results[i].result, data.results[i].error);
             if (data.results[i].result == -1) {
                 failed = true;
@@ -698,6 +698,21 @@ var W3tc_Popup_Cdn_Rename_Domain = {
     }
 };
 
+function w3tc_ps_expand(expand) {
+    jQuery('.ps-rule').each(function() {
+        var e = jQuery(this).find('.ps-expander');
+        var a = jQuery(this).find('.ps-expand a');
+
+        if (!expand) {
+            e.hide();
+            a.html('+');
+        } else {
+            e.show();
+            a.html('-');
+        }
+    });
+}
+
 jQuery(function() {
     jQuery('.tab').click(function() {
         jQuery('.tab').removeClass('tab-selected');
@@ -712,5 +727,36 @@ jQuery(function() {
 
     jQuery('.cdn_queue_empty').click(function() {
         return confirm('Are you sure you want to empty the queue?');
+    });
+
+    jQuery('.ps-rule').click(function() {
+        var e = jQuery(this).find('.ps-expander');
+        var a = jQuery(this).find('.ps-expand a');
+
+        if (e.is(':visible')) {
+            e.hide();
+            a.html('+');
+        } else {
+            e.show();
+            a.html('-');
+        }
+
+        return false;
+    });
+
+    jQuery('.ps-rule p a,.ps-expander').click(function(event) {
+        event.stopPropagation();
+    });
+
+    jQuery('.ps-expand-all').click(function() {
+        w3tc_ps_expand(1);
+    });
+
+    jQuery('.ps-collapse-all').click(function() {
+        w3tc_ps_expand(0);
+    });
+
+    jQuery('.ps-refresh').click(function() {
+        document.location.href = 'admin.php?page=w3tc_general&w3tc_action=pagespeed_results&force=1';
     });
 });

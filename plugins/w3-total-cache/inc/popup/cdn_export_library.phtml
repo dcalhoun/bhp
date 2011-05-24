@@ -1,6 +1,6 @@
 <?php include W3TC_DIR . '/inc/popup/common/header.phtml'; ?>
 
-<script type="text/javascript">
+<script>
 /*<![CDATA[*/
 jQuery(function() {
 	W3tc_Popup_Cdn_Export_Library.init();
@@ -33,7 +33,7 @@ jQuery(function() {
 </table>
 
 <p>
-	<input id="cdn_export_library_start" class="button" type="button" value="Start"<?php if (! $total): ?> disabled="disabled"<?php endif; ?> />
+	<input id="cdn_export_library_start" class="button-primary" type="button" value="Start"<?php if (! $total): ?> disabled="disabled"<?php endif; ?> />
 </p>
 
 <div id="cdn_export_library_progress" class="progress">

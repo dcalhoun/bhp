@@ -21,32 +21,14 @@
 	
 	<hr />
 	
-	<?php if ($document_root_rules || $home_root_rules || $pgcache_rules || $minify_rules || $cdn_rules): ?>
+	<?php if (count($rewrite_rules)): ?>
 	<h3>Rewrite rules</h3>
-	<?php if ($document_root_rules): ?>
-	<p><strong><?php echo htmlspecialchars($document_root_htaccess); ?>:</strong></p>
-	<pre class="code"><?php echo htmlspecialchars($document_root_rules); ?></pre>
-	<?php endif; ?>
-    
-	<?php if ($home_root_rules): ?>
-	<p><strong><?php echo htmlspecialchars($home_root_htaccess); ?>:</strong></p>
-	<pre class="code"><?php echo htmlspecialchars($home_root_rules); ?></pre>
-	<?php endif; ?>
 
-	<?php if ($pgcache_rules): ?>
-	<p><strong><?php echo htmlspecialchars($pgcache_htaccess); ?>:</strong></p>
-	<pre class="code"><?php echo htmlspecialchars($pgcache_rules); ?></pre>
-	<?php endif; ?>
+	<?php foreach ($rewrite_rules as $path => $rules): ?>
+	<p><strong><?php echo htmlspecialchars($path); ?>:</strong></p>
+	<pre class="code"><?php echo htmlspecialchars($rules); ?></pre>
+	<?php endforeach; ?>
 
-	<?php if ($minify_rules): ?>
-	<p><strong><?php echo htmlspecialchars($minify_htaccess); ?>:</strong></p>
-	<pre class="code"><?php echo htmlspecialchars($minify_rules); ?></pre>
-	<?php endif; ?>
-    
-	<?php if ($cdn_rules): ?>
-	<p><strong><?php echo htmlspecialchars($cdn_htaccess); ?>:</strong></p>
-	<pre class="code"><?php echo htmlspecialchars($cdn_rules); ?></pre>
-	<?php endif; ?>
 	<hr />
 	<?php endif; ?>
         
@@ -78,6 +60,10 @@
         <li>
         	Make sure ZLIB is fully installed:
 			<pre class="console"># yum install zlib-devel</pre>
+		</li>
+        <li>
+        	Make sure PCRE is fully installed:
+			<pre class="console"># yum install pcre-devel</pre>
 		</li>
     </ol>
 
@@ -160,12 +146,6 @@
 		</li>
     </ol>
      
-    <p>For windows users we recommend checking the following site(s) for more installation tips:</p>
-     
-    <ul> 
-        <li><a href="http://pureform.wordpress.com/2008/01/10/installing-memcache-on-windows-for-php/" target="_blank">Installing memcache on Windows for <acronym title="Hypertext Preprocessor">PHP</acronym></a></li>
-    </ul>
-     
 	<hr />
 	
 	<p id="APC"><strong><acronym title="PHP Extension Community Library">PECL</acronym> Alternative PHP Cache (<acronym title="Alternative PHP Cache">APC</acronym>) Installation (Recommended):</strong><br /><em>Time required: 1 minute</em></p>
@@ -177,7 +157,7 @@
         </li>
         <li>
         	Or via compilation. Download the <a href="http://pecl.php.net/package/APC" target="_blank">latest stable version</a> and extract:
-			<pre class="console"># cd /usr/local/src &amp;&amp; wget <a href="http://pecl.php.net/get/APC-3.0.19.tgz" target="_blank">http://pecl.php.net/get/APC-3.0.19.tgz</a> &amp;&amp; tar -xzf APC-3.0.19.tgz &amp;&amp; cd APC-3.0.19</pre>
+			<pre class="console"># cd /usr/local/src &amp;&amp; wget <a href="http://pecl.php.net/get/APC-3.1.6.tgz" target="_blank">http://pecl.php.net/get/APC-3.1.6.tgz</a> &amp;&amp; tar -xzf APC-3.0.19.tgz &amp;&amp; cd APC-3.1.6</pre>
 		</li>
 		<li>
 			Note the paths returned for the following commands:
@@ -203,12 +183,6 @@
 			<pre class="console"># php -r 'phpinfo();' | grep 'apc'</pre>
 		</li>
     </ol>
-    
-    <p>For windows users we recommend checking the following site(s) for more installation tips:</p>
-    
-    <ul> 
-        <li><a href="http://www.sitebuddy.com/PHP/Accelerators/apc_windows_binaries_builds" target="_blank"><acronym title="Alternative PHP Cache">APC</acronym> binaries for <acronym title="Hypertext Preprocessor">PHP</acronym> 5.x (windows builds)</a></li>
-    </ul>
     
 	<hr />
 	
@@ -276,32 +250,26 @@
 		</li>
     </ol>
     
-    <p>For windows users we recommend checking the following site(s) for more installation tips:</p>
-    
-    <ul> 
-        <li><a href="http://www.sitebuddy.com/PHP/Accelerators/eAccelerator_windows_binaries_builds" target="_blank">eAccelerator binaries for <acronym title="Hypertext Preprocessor">PHP</acronym> 5.x (windows builds)</a></li>
-    </ul>
-    
     <hr />
     
-	<fieldset>
-		<legend>Note(s):</legend>
-
+    <div class="metabox-holder">
+        <?php echo $this->postbox_header('Note(s):'); ?>
         <table class="form-table">
-        	<tr>
-        		<th valign="top" colspan="2">
-					<ul>
-						<li>The provided instructions are for 32-bit CentOS, however we can provide others based on <a href="mailto:wordpressexperts@w3-edge.com">your requests</a>.</li>
-						<li>In the case where Apache is not used, the .htaccess file located in the root directory of the WordPress installation, wp-content/w3tc/pgcache/.htaccess and wp-content/w3tc/min/.htaccess contain directives that must be re-created for your web server software.</li>
-						<li>Restarting the web server will empty the opcode cache, which means it will have to be rebuilt over time and your site's performance will suffer during this period. Still, an opcode cache should be installed in any case to maximize WordPress performance.</li>
-						<li>Consider using memcached for objects that must persist across web server restarts or that you wish to share amongst your pool of servers (or cluster), e.g.: database objects or page cache.</li>
-						<li>Some yum or mirrors may not have the necessary packages, in such cases you may have to do a manual installation.</li>
-					</ul>
-        		</th>
-        	</tr>
+            <tr>
+                <th colspan="2">
+                    <ul>
+                        <li>The provided instructions are for 32-bit CentOS, however we can provide others based on <a href="mailto:wordpressexperts@w3-edge.com">your requests</a>.</li>
+						<li>Best compatibility with <a href="http://www.iis.net/" target="_blank">IIS</a> is realized via <a href="http://www.microsoft.com/web/webmatrix/" target="_blank">WebMatrix</a>, which also includes the supported <a href="http://www.iis.net/download/wincacheforphp" target="_blank">WinCache</a> opcode cache.</li>
+                        <li>In the case where Apache is not used, the .htaccess file located in the root directory of the WordPress installation, wp-content/w3tc/pgcache/.htaccess and wp-content/w3tc/min/.htaccess contain directives that must be manually created for your web server software.</li>
+                        <li>Restarting the web server will empty the opcode cache, which means it will have to be rebuilt over time and your site's performance will suffer during this period. Still, an opcode cache should be installed in any case to maximize WordPress performance.</li>
+                        <li>Consider using memcached for objects that must persist across web server restarts or that you wish to share amongst your pool of servers (or cluster), e.g.: database objects or page cache.</li>
+                        <li>Some yum or mirrors may not have the necessary packages, in such cases you may have to do a manual installation.</li>
+                    </ul>
+                </th>
+            </tr>
         </table>
-	</fieldset>
-    
+        <?php echo $this->postbox_footer(); ?>
+    </div>
 </div>
 
 <?php include W3TC_DIR . '/inc/options/common/footer.phtml'; ?>

@@ -6,7 +6,7 @@
 	</th>
 </tr>
 <tr>
-	<th style="width:300px;"><label for="cdn_ftp_host"><acronym title="File Transfer Protocol">FTP</acronym> hostname:</label></th>
+	<th style="width: 300px;"><label for="cdn_ftp_host"><acronym title="File Transfer Protocol">FTP</acronym> hostname:</label></th>
 	<td>
 		<input id="cdn_ftp_host" type="text" name="cdn.ftp.host" value="<?php echo htmlspecialchars($this->_config->get_string('cdn.ftp.host')); ?>" size="30" /><br />
 		<span class="description">Specify the server's address, e.g.: "ftp.domain.com". Try "127.0.0.1" if using a sub-domain on the same server as your site.</span>
@@ -15,13 +15,13 @@
 <tr>
 	<th><label for="cdn_ftp_user"><acronym title="File Transfer Protocol">FTP</acronym> username:</label></th>
 	<td>
-		<input id="cdn_ftp_user" type="text" name="cdn.ftp.user" value="<?php echo htmlspecialchars($this->_config->get_string('cdn.ftp.user')); ?>" size="30" />
+		<input id="cdn_ftp_user" class="w3tc-ignore-change" type="text" name="cdn.ftp.user" value="<?php echo htmlspecialchars($this->_config->get_string('cdn.ftp.user')); ?>" size="30" />
 	</td>
 </tr>
 <tr>
 	<th><label for="cdn_ftp_pass"><acronym title="File Transfer Protocol">FTP</acronym> password:</label></th>
 	<td>
-		<input id="cdn_ftp_pass" type="password" name="cdn.ftp.pass" value="<?php echo htmlspecialchars($this->_config->get_string('cdn.ftp.pass')); ?>" size="30" />
+		<input id="cdn_ftp_pass" class="w3tc-ignore-change" type="password" name="cdn.ftp.pass" value="<?php echo htmlspecialchars($this->_config->get_string('cdn.ftp.pass')); ?>" size="30" />
 	</td>
 </tr>
 <tr>
@@ -43,7 +43,7 @@
 	</td>
 </tr>
 <tr>
-	<th><label for="cdn_cnames">Replace site's hostname with:</label></th>
+	<th>Replace site's hostname with:</th>
 	<td>
 		<?php $cnames = $this->_config->get_array('cdn.ftp.domain'); include W3TC_DIR . '/inc/options/cdn/common/cnames.phtml'; ?>
 		<br /><span class="description">Enter the hostname or CNAME(s) of your FTP server configured above, these values will replace your site's hostname in the <acronym title="Hypertext Markup Language">HTML</acronym>.</span>

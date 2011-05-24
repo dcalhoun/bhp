@@ -15,9 +15,8 @@
 </form>
 
 <form action="admin.php?page=<?php echo $this->_page; ?>" method="post">
-	<fieldset>
-		<legend>General</legend>
-
+    <div class="metabox-holder">
+		<?php echo $this->postbox_header('General'); ?>
         <table class="form-table">
         	<tr>
         		<th>
@@ -51,19 +50,17 @@
         		<th>
         			<input type="hidden" name="pgcache.cache.404" value="0" />
         			<label><input type="checkbox" name="pgcache.cache.404" value="1"<?php checked($this->_config->get_boolean('pgcache.cache.404'), true); ?> /> Cache 404 (not found) pages</label><br />
-    				<span class="description">Reduce server load by caching 404 pages. The "Do not process 404 errors for static objects with WordPress" Browser Cache option is recommended.</span>
+    				<span class="description">Reduce server load by caching 404 pages. The "Do not process 404 errors for static objects with WordPress" <a href="admin.php?page=w3tc_browsercache">Browser Cache</a> option is also recommended.</span>
         		</th>
         	</tr>
         </table>
 
         <p class="submit">
-        	<input type="submit" name="options_save" class="button-primary" value="Save changes" />
+        	<input type="submit" name="options_save" class="w3tc-button-save button-primary" value="Save all settings" />
         </p>
-	</fieldset>
+	    <?php echo $this->postbox_footer(); ?>
 
-	<fieldset>
-		<legend>Advanced</legend>
-
+		<?php echo $this->postbox_header('Advanced'); ?>
         <table class="form-table">
         	<?php if ($this->_config->get_string('pgcache.engine') == 'memcached'): ?>
         	<tr>
@@ -84,50 +81,48 @@
     			</td>
         	</tr>
         	<tr>
-        		<th valign="top"><label for="pgcache_reject_ua">Rejected User Agents:</label></th>
+        		<th><label for="pgcache_reject_ua">Rejected User Agents:</label></th>
         		<td>
         			<textarea id="pgcache_reject_ua" name="pgcache.reject.ua" cols="40" rows="5"><?php echo htmlspecialchars(implode("\r\n", $this->_config->get_array('pgcache.reject.ua'))); ?></textarea><br />
         			<span class="description">Never send cache pages for these user agents.</span>
         		</td>
         	</tr>
         	<tr>
-        		<th valign="top"><label for="pgcache_reject_cookie">Rejected Cookies:</label></th>
+        		<th><label for="pgcache_reject_cookie">Rejected Cookies:</label></th>
         		<td>
         			<textarea id="pgcache_reject_cookie" name="pgcache.reject.cookie" cols="40" rows="5"><?php echo htmlspecialchars(implode("\r\n", $this->_config->get_array('pgcache.reject.cookie'))); ?></textarea><br />
         			<span class="description">Never cache pages that use the specified cookies.</span>
         		</td>
         	</tr>
         	<tr>
-        		<th valign="top"><label for="pgcache_reject_uri">Never cache the following pages:</label></th>
+        		<th><label for="pgcache_reject_uri">Never cache the following pages:</label></th>
         		<td>
         			<textarea id="pgcache_reject_uri" name="pgcache.reject.uri" cols="40" rows="5"><?php echo htmlspecialchars(implode("\r\n", $this->_config->get_array('pgcache.reject.uri'))); ?></textarea><br />
         			<span class="description">Always ignore the specified pages / directories.</span>
         		</td>
         	</tr>
         	<tr>
-        		<th valign="top"><label for="pgcache_accept_files">Cache exception list:</label></th>
+        		<th><label for="pgcache_accept_files">Cache exception list:</label></th>
         		<td>
         			<textarea id="pgcache_accept_files" name="pgcache.accept.files" cols="40" rows="5"><?php echo htmlspecialchars(implode("\r\n", $this->_config->get_array('pgcache.accept.files'))); ?></textarea><br />
         			<span class="description">Cache the specified pages / directories even if listed in the "never cache the following pages" field.</span>
         		</td>
         	</tr>
         	<tr>
-        		<th valign="top"><label for="pgcache_cache_headers">Specify page headers:</label></th>
+        		<th><label for="pgcache_cache_headers">Specify page headers:</label></th>
         		<td>
-        			<textarea id="pgcache_cache_headers" name="pgcache.cache.headers" cols="40" rows="5"<?php if (! W3TC_PHP5 || $this->_config->get_string('pgcache.engine') == 'file_pgcache'): ?> disabled="disabled"<?php endif; ?>><?php echo htmlspecialchars(implode("\r\n", $this->_config->get_array('pgcache.cache.headers'))); ?></textarea><br />
+        			<textarea id="pgcache_cache_headers" name="pgcache.cache.headers" cols="40" rows="5"<?php if (!W3TC_PHP5 || $this->_config->get_string('pgcache.engine') == 'file_pgcache'): ?> disabled="disabled"<?php endif; ?>><?php echo htmlspecialchars(implode("\r\n", $this->_config->get_array('pgcache.cache.headers'))); ?></textarea><br />
         			<span class="description">Specify additional page headers to cache.</span>
         		</td>
         	</tr>
         </table>
 
         <p class="submit">
-        	<input type="submit" name="options_save" class="button-primary" value="Save changes" />
+        	<input type="submit" name="options_save" class="w3tc-button-save button-primary" value="Save all settings" />
         </p>
-	</fieldset>
-	
-    <fieldset>
-    	<legend>Cache Preload</legend>
+	    <?php echo $this->postbox_footer(); ?>
 
+    	<?php echo $this->postbox_header('Cache Preload'); ?>
         <table class="form-table">
         	<tr>
         		<th colspan="2">
@@ -156,44 +151,79 @@
         			<span class="description">A <a href="http://www.xml-sitemaps.com/validate-xml-sitemap.html" target="_blank">compliant</a> sitemap can be used to specify the pages to maintain in the primed cache. Pages will be cached according to the priorities specified in the <acronym title="Extensible Markup Language">XML</acronym> file. <a href="http://wordpress.org/extend/plugins/google-sitemap-generator/" target="_blank">Google <acronym title="Extensible Markup Language">XML</acronym> Sitemaps</a> is recommended for use with this feature.</span>
     			</td>
         	</tr>
-        	
         </table>
 
         <p class="submit">
-        	<input type="submit" name="options_save" class="button-primary" value="Save changes" />
+        	<input type="submit" name="options_save" class="w3tc-button-save button-primary" value="Save all settings" />
         </p>
-	</fieldset>
+    	<?php echo $this->postbox_footer(); ?>
 
-    <fieldset>
-    	<legend>Varnish</legend>
-    	
+    	<?php echo $this->postbox_header('Purge Policy'); ?>
+        <table class="form-table">
+            <tr>
+                <th colspan="2">
+                    <p>Specify the pages and feeds to purge when posts are created, edited, or comments posted. The defaults are recommended because additional options may reduce server performance:</p>
+
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th style="padding-left: 0;">
+                                <input type="hidden" name="pgcache.purge.home" value="0" />
+                                <input type="hidden" name="pgcache.purge.post" value="0" />
+                                <input type="hidden" name="pgcache.purge.feed.blog" value="0" />
+                                <label><input type="checkbox" name="pgcache.purge.home" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.home'), true); ?> /> Home page</label><br />
+                                <label><input type="checkbox" name="pgcache.purge.post" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.post'), true); ?> /> Post page</label><br />
+                                <label><input type="checkbox" name="pgcache.purge.feed.blog" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.feed.blog'), true); ?> /> Blog feed</label><br />
+                            </th>
+                            <th>
+                                <input type="hidden" name="pgcache.purge.comments" value="0" />
+                                <input type="hidden" name="pgcache.purge.author" value="0" />
+                                <input type="hidden" name="pgcache.purge.terms" value="0" />
+                                <label><input type="checkbox" name="pgcache.purge.comments" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.comments'), true); ?> /> Post comments pages</label><br />
+                                <label><input type="checkbox" name="pgcache.purge.author" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.author'), true); ?> /> Post author pages</label><br />
+                                <label><input type="checkbox" name="pgcache.purge.terms" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.terms'), true); ?> /> Post terms pages</label><br />
+                            </th>
+                            <th>
+                                <input type="hidden" name="pgcache.purge.feed.comments" value="0" />
+                                <input type="hidden" name="pgcache.purge.feed.author" value="0" />
+                                <input type="hidden" name="pgcache.purge.feed.terms" value="0" />
+                                <label><input type="checkbox" name="pgcache.purge.feed.comments" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.feed.comments'), true); ?> /> Post comments feed</label><br />
+                                <label><input type="checkbox" name="pgcache.purge.feed.author" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.feed.author'), true); ?> /> Post author feed</label><br />
+                                <label><input type="checkbox" name="pgcache.purge.feed.terms" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.feed.terms'), true); ?> /> Post terms feeds</label>
+                            </th>
+                            <th>
+                                <input type="hidden" name="pgcache.purge.archive.daily" value="0" />
+                                <input type="hidden" name="pgcache.purge.archive.monthly" value="0" />
+                                <input type="hidden" name="pgcache.purge.archive.yearly" value="0" />
+                                <label><input type="checkbox" name="pgcache.purge.archive.daily" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.archive.daily'), true); ?> /> Daily archive pages</label><br />
+                                <label><input type="checkbox" name="pgcache.purge.archive.monthly" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.archive.monthly'), true); ?> /> Monthly archive pages</label><br />
+                                <label><input type="checkbox" name="pgcache.purge.archive.yearly" value="1"<?php checked($this->_config->get_boolean('pgcache.purge.archive.yearly'), true); ?> /> Yearly archive pages</label><br />
+                            </th>
+                        </tr>
+                    </table>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <p>Specify the feed types to purge:</p>
+                    <input type="hidden" name="pgcache.purge.feed.types" value="" /> 
+                    <?php foreach($feeds as $feed): ?>
+                        <label><input type="checkbox" name="pgcache.purge.feed.types[]" value="<?php echo $feed; ?>"<?php checked(in_array($feed, $this->_config->get_array('pgcache.purge.feed.types')), true); ?> />
+                        <?php echo $feed; ?>
+                        <?php if ($feed == $default_feed): ?>(default)<?php endif; ?></label><br />
+                    <?php endforeach; ?>
+                </th>
+            </tr>
+        </table>
+
+        <p class="submit">
+        	<input type="submit" name="options_save" class="w3tc-button-save button-primary" value="Save all settings" />
+        </p>
+    	<?php echo $this->postbox_footer(); ?>
+
+		<?php echo $this->postbox_header('Note(s):'); ?>
         <table class="form-table">
         	<tr>
         		<th colspan="2">
-            		<input type="hidden" name="pgcache.varnish.enabled" value="0" />
-            		<label><input type="checkbox" name="pgcache.varnish.enabled" value="1"<?php checked($this->_config->get_boolean('pgcache.varnish.enabled'), true); ?> /> Enable varnish cache purging</label><br />
-        		</th>
-        	</tr>
-         	<tr>
-         		<th valign="top"><label for="pgcache_varnish_servers">Varnish servers:</label></th>
-         		<td>
-        			<textarea id="pgcache_varnish_servers" name="pgcache.varnish.servers" cols="40" rows="5"><?php echo htmlspecialchars(implode("\r\n", $this->_config->get_array('pgcache.varnish.servers'))); ?></textarea><br />
-        			<span class="description">Specify the IP addresses of your varnish instances above. Your <acronym title="Varnish Configuration Language">VCL</acronym>'s <acronym title="Access Control List">ACL</acronym> must allow this request.</span>
-        		</td>
-        	</tr>
-        </table>
-
-        <p class="submit">
-        	<input type="submit" name="options_save" class="button-primary" value="Save changes" />
-        </p>
-	</fieldset>
-
-	<fieldset>
-		<legend>Note(s):</legend>
-
-        <table class="form-table">
-        	<tr>
-        		<th valign="top" colspan="2">
 					<ul>
 						<li>Enable <acronym title="Hypertext Transfer Protocol">HTTP</acronym> compression in the "<acronym title="Hypertext Markup Language">HTML</acronym>" section on <a href="admin.php?page=w3tc_browsercache">Browser Cache</a> Settings tab.</li>
 						<li>The <acronym title="Time to Live">TTL</acronym> of page cache files is set via the "Expires header lifetime" field in the "<acronym title="Hypertext Markup Language">HTML</acronym>" section on <a href="admin.php?page=w3tc_browsercache">Browser Cache</a> Settings tab.</li>
@@ -201,8 +231,8 @@
         		</th>
         	</tr>
         </table>
-	</fieldset>
-	
+    	<?php echo $this->postbox_footer(); ?>
+    </div>
 </form>
 
 <?php include W3TC_DIR . '/inc/options/common/footer.phtml'; ?>

@@ -5,9 +5,8 @@
 </p>
 
 <form action="admin.php?page=<?php echo $this->_page; ?>" method="post">
-    <fieldset>
-        <legend>General</legend>
-        
+    <div class="metabox-holder">
+        <?php echo $this->postbox_header('General'); ?>
         <p>Specify global browser cache policy.</p>
 
         <table class="form-table">
@@ -43,13 +42,19 @@
             </tr>
             <tr>
                 <th colspan="2">
+                    <label><input id="browsercache_replace" type="checkbox" name="replace" value="1"<?php checked($browsercache_replace, true); ?> /> Prevent caching of objects after settings change</label>
+                    <br /><span class="description">Whenever settings are changed, a new query string will be generated and appended to objects allowing the new policy to be applied.</span>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="2">
                     <input type="hidden" name="browsercache.no404wp" value="0" />
-                    <label><input type="checkbox" name="browsercache.no404wp" value="1"<?php checked($this->_config->get_boolean('browsercache.no404wp'), true); ?> /> Do not process 404 errors for static objects with WordPress</label>
+                    <label><input type="checkbox" name="browsercache.no404wp" value="1"<?php checked($this->_config->get_boolean('browsercache.no404wp'), true); ?><?php if (!w3_can_check_rules()): ?> disabled="disabled"<?php endif; ?> /> Do not process 404 errors for static objects with WordPress</label>
                     <br /><span class="description">Reduce server load by allowing the web server to handle 404 (not found) errors for static files (images etc).</span>
                 </th>
             </tr>
         	<tr>
-        		<th valign="top"><label for="browsercache_no404wp_exceptions">404 error exception list:</label></th>
+        		<th><label for="browsercache_no404wp_exceptions">404 error exception list:</label></th>
         		<td>
         			<textarea id="browsercache_no404wp_exceptions" name="browsercache.no404wp.exceptions" cols="40" rows="5"><?php echo htmlspecialchars(implode("\r\n", $this->_config->get_array('browsercache.no404wp.exceptions'))); ?></textarea><br />
         			<span class="description">Never process 404 (not found) events for the specified files.</span>
@@ -58,13 +63,11 @@
         </table>
 
         <p class="submit">
-            <input type="submit" name="options_save" class="button-primary" value="Save changes" />
+            <input type="submit" name="options_save" class="w3tc-button-save button-primary" value="Save all settings" />
         </p>
-    </fieldset>
+        <?php echo $this->postbox_footer(); ?>
     
-    <fieldset>
-        <legend>Cascading Style Sheets &amp; JavaScript</legend>
-        
+        <?php echo $this->postbox_header('Cascading Style Sheets &amp; JavaScript'); ?>
         <p>Specify browser cache policy for cascading style sheets and JavaScript files.</p>
         
         <table class="form-table">
@@ -76,7 +79,7 @@
                 </th>
             </tr>
             <tr>
-                <th valign="top">
+                <th>
                     <label for="browsercache_cssjs_lifetime">Expires header lifetime:</label>
                 </th>
                 <td>
@@ -91,7 +94,7 @@
                 </th>
             </tr>
             <tr>
-            	<th valign="top">
+            	<th>
                     <label for="browsercache_cssjs_cache_policy">Cache Control policy:</label> 
             	</th>
                 <td>
@@ -126,16 +129,21 @@
                     <br /><span class="description">Reduce the download time for text-based files.</span>
                 </th>
             </tr>
+            <tr>
+                <th colspan="2">
+                    <input type="hidden" name="browsercache.cssjs.replace" value="0" />
+                    <label><input class="browsercache_replace" type="checkbox" name="browsercache.cssjs.replace" value="1"<?php checked($this->_config->get_boolean('browsercache.cssjs.replace'), true); ?> /> Prevent caching of objects after settings change</label>
+                    <br /><span class="description">Whenever settings are changed, a new query string will be generated and appended to objects allowing the new policy to be applied.</span>
+                </th>
+            </tr>
         </table>
 
         <p class="submit">
-            <input type="submit" name="options_save" class="button-primary" value="Save changes" />
+            <input type="submit" name="options_save" class="w3tc-button-save button-primary" value="Save all settings" />
         </p>
-    </fieldset>
+        <?php echo $this->postbox_footer(); ?>
     
-    <fieldset>
-        <legend><acronym title="Hypertext Markup Language">HTML</acronym></legend>
-        
+        <?php echo $this->postbox_header('<acronym title="Hypertext Markup Language">HTML</acronym>'); ?>
         <p>Specify browser cache policy for posts, pages, feeds and text-based files.</p>
         
         <table class="form-table">
@@ -147,7 +155,7 @@
                 </th>
             </tr>
             <tr>
-                <th valign="top" style="width: 250px;">
+                <th style="width: 250px;">
                     <label for="browsercache_html_lifetime">Expires header lifetime:</label>
                 </th>
                 <td>
@@ -162,7 +170,7 @@
                 </th>
             </tr>
             <tr>
-            	<th valign="top">
+            	<th>
                     <label for="browsercache_html_cache_policy">Cache Control policy:</label> 
             	</th>
                 <td>
@@ -200,13 +208,11 @@
         </table>
 
         <p class="submit">
-            <input type="submit" name="options_save" class="button-primary" value="Save changes" />
+            <input type="submit" name="options_save" class="w3tc-button-save button-primary" value="Save all settings" />
         </p>
-    </fieldset>
+        <?php echo $this->postbox_footer(); ?>
     
-    <fieldset>
-        <legend>Media &amp; Other Files</legend>
-        
+        <?php echo $this->postbox_header('Media &amp; Other Files'); ?>
         <table class="form-table">
             <tr>
                 <th colspan="2">
@@ -216,7 +222,7 @@
                 </th>
             </tr>
             <tr>
-                <th valign="top" style="width: 250px;">
+                <th style="width: 250px;">
                     <label for="browsercache_other_lifetime">Expires header lifetime:</label>
                 </th>
                 <td>
@@ -231,7 +237,7 @@
                 </th>
             </tr>
             <tr>
-            	<th valign="top">
+            	<th>
                     <label for="browsercache_other_cache_policy">Cache Control policy:</label> 
             	</th>
                 <td>
@@ -266,12 +272,20 @@
                     <br /><span class="description">Reduce the download time for text-based files.</span>
                 </th>
             </tr>
+            <tr>
+                <th colspan="2">
+                    <input type="hidden" name="browsercache.other.replace" value="0" />
+                    <label><input class="browsercache_replace" type="checkbox" name="browsercache.other.replace" value="1"<?php checked($this->_config->get_boolean('browsercache.other.replace'), true); ?> /> Prevent caching of objects after settings change</label>
+                    <br /><span class="description">Whenever settings are changed, a new query string will be generated and appended to objects allowing the new policy to be applied.</span>
+                </th>
+            </tr>
         </table>
 
         <p class="submit">
-            <input type="submit" name="options_save" class="button-primary" value="Save changes" />
+            <input type="submit" name="options_save" class="w3tc-button-save button-primary" value="Save all settings" />
         </p>
-    </fieldset>
+        <?php echo $this->postbox_footer(); ?>
+    </div>
 </form>
 
 <?php include W3TC_DIR . '/inc/options/common/footer.phtml'; ?>
