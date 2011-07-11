@@ -23,10 +23,11 @@
     <div class="date">
       <span class="month"><?php the_time('M'); ?></span>
       <span class="day"><?php the_time('d'); ?></span>
-    </div>
+    </div>    
+    <?php echo the_post_thumbnail(array(620,1000), array('class' => 'post-thumbnail')); ?>
     <?php the_content('Read More &raquo;'); ?>
     
-    <?php //comments_template( '', true ); ?>
+    <?php comments_template( '', true ); ?>
     
   </article>
   

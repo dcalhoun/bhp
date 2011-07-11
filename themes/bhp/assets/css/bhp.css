@@ -14,7 +14,7 @@ Default HTML elements styling.
 body {
   background: url('../images/bg.gif') repeat 0 0;
   color: #666;
-  font: 15px/19px 'Delicious', Arial, serif;
+  font: 15px/1.5 'Delicious', Arial, serif;
 }
 div.all-content a, div.all-content a:visited, div.all-content a:active {
   color: #ae1f33;
@@ -36,7 +36,7 @@ em { font-style: italic; }
 small { font-size: 80%; }
 h1 {
   color: #ae1351;
-  font: 24px/30px 'Arvo', Georgia, serif;
+  font: 24px/1.5 'Arvo', Georgia, serif;
   text-shadow: 0 1px 0 #fff;
   text-transform: lowercase;
 }
@@ -61,11 +61,11 @@ h1.logo:hover {
     width: 100%;
   }
 h2 {
-  font: 18px/24px 'Arvo', Georgia, serif;
+  font: 18px/1.5 'Arvo', Georgia, serif;
   text-shadow: 0 1px 0 #fff;
 }
 h3 {
-  font: 17px/19px 'DeliciousBold', Arial, sans-serif;
+  font: 17px/1.5 'DeliciousBold', Arial, sans-serif;
 }
   h3.widget-title {
     margin-bottom: 5px;
@@ -242,7 +242,15 @@ Styling for structure of the site.
           font-size: 24px;
           line-height: 20px;
         }
-      a.comment-count {
+      div.post-info {
+        border: 1px solid #ccc;
+        border-right: none;
+        border-left: none;
+        font-size: 13px;
+        margin: -10px 0 10px 0;
+        padding: 5px 0;
+      }
+      /*a.comment-count {
         display: block;
         font-size: 24px;
         left: -60px;
@@ -251,7 +259,11 @@ Styling for structure of the site.
       }
       a.comment-count:hover {
         opacity: 0.75;
-      }
+      }*/
+    #page ol.commentlist li {
+      list-style: none;
+      margin: 0;
+    }
     #page a.more-link {
       display: block;
       margin-top: 10px;
