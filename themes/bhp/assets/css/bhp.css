@@ -91,7 +91,7 @@ form ul li {
   list-style: none;
 }
 div.all-content input[type=text], div.all-content input[type=email], div.all-content input[type=tel], div.all-content textarea {
-  border: 1px solid rgb(235,235,235);
+  border: 1px solid #E0E0E0;
   background: #ebebeb; /* For IE */
   background: rgba(235,235,235,.4);
   color: #666;
@@ -121,6 +121,10 @@ div.all-content input[type=submit]:hover {
   background: #ae3f54;
   color: #fff;
   cursor: pointer;
+}
+.gform_wrapper#gform_wrapper_1 .ginput_complex input,
+.gform_wrapper#gform_wrapper_1 .ginput_complex select {
+  width: 93% !important;
 }
 
 /* @end */
