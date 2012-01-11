@@ -23,7 +23,7 @@ get_header(); ?>
   </div>
   <nav id="social-links" class="grid_3 omega">
     <ul>
-      <li><a href="http://twitter.com/ha1eyrobin" title="Follow me on Twitter" class="twitter" target="_blank">Twitter</a></li>
+      <li><a href="http://twitter.com/haleyrobin" title="Follow me on Twitter" class="twitter" target="_blank">Twitter</a></li>
       <li><a href="http://www.facebook.com/photosbyheart" title="Like me on Facebook" class="facebook" target="_blank">Facebook</a></li>
       <li><a href="http://www.flickr.com/photos/haleyrobin" title="Follow me on Flickr" class="flickr" target="_blank">Flickr</a></li>
     </ul>
