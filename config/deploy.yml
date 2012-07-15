@@ -1,11 +1,5 @@
 production:
-  domain: "deployment_user@staging.mydomain.com"
-  deploy_to: "/path/to/where/i/deploy/staging.mydomain.com"
-  repository: "https://github.com/username/project.git"
+  domain: "haley@bhp"
+  deploy_to: "/home/haley/bhp"
+  repository: "git@github.com:dcalhoun/bhp.git"
   branch: "master"
-
-staging:
-  domain: "deployment_user@staging.mydomain.com"
-  deploy_to: "/path/to/where/i/deploy/staging.mydomain.com"
-  repository: "https://github.com/username/project.git"
-  branch: "staging"
