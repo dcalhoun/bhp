@@ -3,3 +3,9 @@ production:
   deploy_to: "/home/haley/bhp"
   repository: "git@github.com:dcalhoun/bhp.git"
   branch: "master"
+
+staging:
+  domain: "davidcalhoun.me@s115810.gridserver.com"
+  deploy_to: "/home/115810/users/.home/domains/davidcalhoun.me/clients/bhp"
+  repository: "git@github.com:dcalhoun/bhp.git"
+  branch: "master"
