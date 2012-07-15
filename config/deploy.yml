@@ -1,5 +1,5 @@
 production:
   domain: "haley@bhp"
   deploy_to: "/home/haley/bhp"
-  repository: "https://github.com/dcalhoun/bhp.git"
+  repository: "git@github.com:dcalhoun/bhp.git"
   branch: "master"
