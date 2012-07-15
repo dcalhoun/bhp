@@ -1,8 +1,8 @@
   <div class="grid_1">&nbsp;</div>
   <footer role="site" class="grid_11">
-    <p><a href="<?php bloginfo('url'); ?>/wp-admin" class="admin">&copy;</a> Copyright <?php echo date('Y'); ?> <?php bloginfo('site_title'); ?>. All Rights Reserved. Site by <a href="http://davidcalhoun.me" title="David Calhoun" target="_blank">David Calhoun</a>.</p>
+    <p><a href="<?php bloginfo('url'); ?>/wp-admin" class="admin">&copy;</a> Copyright <?php echo date('Y'); ?> <?php bloginfo('site_title'); ?> &bull; Birmingham, AL Photography &bull; Site by <a href="http://davidcalhoun.me" title="David Calhoun" target="_blank">David Calhoun</a></p>
   </footer>
-  
+
 </div> <!-- #wrapper -->
 
 <!-- ### Scripts ### -->
@@ -13,7 +13,7 @@
 <script src="<?php bloginfo('template_directory'); ?>/assets/js/jquery.easing-1.3.pack.js" type="text/javascript"></script>
 <script src="<?php bloginfo('template_directory'); ?>/assets/js/jquery.mousewheel-3.0.4.pack.js" type="text/javascript"></script>
 <script>
-  jQuery(document).ready(function($){    
+  jQuery(document).ready(function($){
     $('div.fancybox a').fancybox();
   });
 </script>
